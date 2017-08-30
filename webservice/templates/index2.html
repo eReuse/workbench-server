@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>eReuse's Workbench GUI</title>
+
+    <link href="/static/libs/bootstrap/3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="/static/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="/static/libs/css-toggle-switch/4.0.2/dist/toggle-switch.css" rel="stylesheet">
+
+    <link href="/static/imgs/favicon.ico" rel="icon">
+    <style>
+      video {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container-fluid">
+      <h1>
+        eReuse's Workbench GUI 
+        <small class="pull-right"><a href="#" @click.prevent="edit_config_ini"><i class="fa fa-gear"></i></a></small>
+      </h1>
+      <div class="row">
+        <plugged-usbs class="col-xs-12 col-md-6"></plugged-usbs> <simulator class="col-xs-12 col-md-6"></simulator>
+      </div>
+      <div class="row">
+        <inventories class="col-xs-12"></inventories>
+      </div>
+
+      <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Title</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/libs/jquery/jquery-3.2.1.min.js"></script>
+    
+    <script src="/static/libs/bootstrap/3.3.7/dist/js/bootstrap.min.js"></script>
+
+    <script src="/static/libs/momentjs/2.18.1/moment-with-locales.js"></script>
+    
+    <script src="/static/libs/vuejs/2.4.2/dist/vue.min.js"></script>
+    <script src="/static/libs/vuex/2.3.0/dist/vuex.min.js"></script>
+
+    <script src="/static/libs/instascan/1.0.0/dist/instascan.min.js"></script>
+    
+    <script src="/static/js/qr.js"></script>
+
+    <script type="text/x-template" id="pluggedUsbs">
+      <div class="plugged-usbs">
+        <h3>Plugged usbs</h3>
+        <ul class="list-unstyled">
+          <li v-for="(usb, inventory) in usbs" key="inventory">
+            <div class="media">
+              <div class="media-left media-middle"><i class="fa fa-usb fa-2x"></i></div>
+              <div class="media-body">
+                <h4 class="media-headding">{{ usb["vendor"] }} {{ usb["product"] }}</h4>
+                <div>{{ usb["usb"] }}</div>
+                <div>{{ inventory }}</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="simulator">
+      <div class="simulator">
+        <h3>Simulator <small><a href="#" @click.prevent="toggleMe"><i class="fa fa-toggle-on"></i></a></small></h3>
+        <ul class="list-unstyled">
+          <li v-for="(data, inventory) in simulations['inventories']" key="inventory">
+            <div class="media">
+              <div class="media-left media-middle text-center">
+                <div>
+                  <a href="#" @click.prevent="launchInventory(inventory, $event)"><i class="fa fa-rocket fa-2x"></i></a>
+                </div>
+                <div>
+                  <a href="#" @click.prevent="toggleTimed"><i class="fa fa-hourglass-half"></i></a>
+                </div>
+              </div>
+              <div class="media-body">
+                <h4 class="media-headding">
+                  <i class="fa" :class="deviceIcon(data[0]['device']['type'])"></i>
+                  {{ data[0]["device"]["manufacturer"] }} {{ data[0]["device"]["model"] }}
+                  <small>{{ inventory }}</small>
+                </h4>
+                <div class="usb" v-for="(usb, serial) in simulations['usbs']" key="serial">
+                  <i class="fa fa-usb"></i> 
+                  {{ usb["vendor"] }} {{ usb["product"] }} <small>{{ serial }}</small>
+                  <a href="#" @click.prevent="toggleUsb(inventory, serial, $event)">
+                    <i class="fa" :class="isPlugged(inventory, serial) ? 'fa-toggle-on' : 'fa-toggle-off'"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </script>
+
+    <script type="text/x-template" id="inventories">
+      <div class="inventories">
+        <h3>Inventories</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th><i class="fa fa-usb"></i></th>
+              <th>Created</th>
+              <th>Device</th>
+              <th>Identification</th>
+              <th>Grades</th>
+              <th>Phases</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="(inventory, index) in inventories" key="inventory['id']">
+              <tr v-if="renderHeader(index)">
+                <th colspan="6" class="text-center">{{ (inventory["json"]["created"] || inventory["json"]["date"]) | moment("LL") }}</th>
+              </tr>
+              <tr>
+                <td v-if="hasPlugged(inventory['id'])">
+                  <a href="#" @click.prevent="tag_computer(inventory['id'], plugged_usbs[inventory['id']]['usb'])">{{ plugged_usbs[inventory["id"]]["vendor"] }} {{ plugged_usbs[inventory["id"]]["product"] }}</a>
+                </td>
+                <td v-else>&nbsp;</td>
+                <td>{{ (inventory["json"]["created"] || inventory["json"]["date"]) | moment("HH:mm:ss") }}</td>
+                <td>
+                  <i class="fa" :class="deviceIcon(inventory['json']['device']['type'])"></i>
+                  {{ inventory["json"]["device"]["manufacturer"] }} {{ inventory["json"]["device"]["model"] }}
+                </td>
+                <td>{{ getIdentification(inventory["json"]) }}</td>
+                <td v-html="getGrades(inventory['json'])"></td>
+                <td class="text-center" :class="getStatusClass(inventory['json'])" v-html="getStatusIcon(inventory['json'])"></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </script>
+
+    <script>
+      Vue.config.devtools = true;
+
+      Vue.mixin({
+        methods: {
+          deviceIcon: function(type) {
+            choices = {
+              "Desktop": "fa-desktop",
+              "Laptop": "fa-laptop",
+              "Netbook": "fa-laptop netbook",
+              "Server": "fa-server",
+              "Microtower": "fa-building-o"
+            }
+            return choices[type] || "fa-question";
+          }
+        }
+      })
+
+      Vue.filter("moment", function(value, format) {
+        if(typeof format === "undefined") {
+          format = "LLLL";
+        }
+
+        return moment(value).format(format)
+      })
+
+      var store = new Vuex.Store({
+        state: {
+          plugged_usbs: {},
+          simulator: {},
+          inventories: []
+        },
+        mutations: {
+          setPluggedUsbs: function(state, usbs) {
+            state.plugged_usbs = usbs;
+          },
+          setSimulator: function(state, data) {
+            state.simulator = data;
+          },
+          setInventories: function(state, data) {
+            data.sort(function(a, b) {
+              return new Date(b["json"]["created"] || b["json"]["date"]) - new Date(a["json"]["created"] || a["json"]["date"]);
+            });
+
+            if(JSON.stringify(state.inventories) !== JSON.stringify(data)) {
+              state.inventories = data;  
+            }
+          }
+        },
+        actions: {
+          getPluggedUsbs: function(store) {
+            $.get("/usbs").then(function(response) {
+              if("acknowledge" in response && response["acknowledge"]) {
+                store.commit("setPluggedUsbs", response["usbs"]);
+              }
+            }).catch(function(error) {
+              console.log(error);
+            });
+          },
+          getSimulator: function(store) {
+            $.get("/simulated_inventories").then(function(response) {
+              if("acknowledge" in response && response["acknowledge"]) {
+                store.commit("setSimulator", response["data"]);
+              }
+            }).catch(function(error) {
+              console.log(error);
+            });
+          },
+          getInventories: function(store) {
+            $.get("/new_inventories").then(function(response) {
+              if("acknowledge" in response && response["acknowledge"]) {
+                store.commit("setInventories", response["inventories"]);
+              }
+            }).catch(function(error) {
+              console.log(error);
+            });
+          },
+          plugUsb: function(store, payload) {
+            $.get("/add_usb", {usb: payload["serial"], inventory: payload["inventory"]}).catch(function(error) {
+              console.log(error);
+            });
+          },
+          unplugUsb: function(store, payload) {
+            $.get("/del_usb", {inventory: payload["inventory"]}).catch(function(error) {
+              console.log(error);
+            });
+          }
+        },
+        getters: {
+          plugged_usbs: function(state) {
+            return state.plugged_usbs;
+          },
+          simulations: function(state) {
+            return state.simulator;
+          },
+          inventories: function(state) {
+            return state.inventories;
+          }
+        }
+      });
+
+      Vue.component("plugged-usbs", {
+        template: "#pluggedUsbs",
+        store: store,
+        computed: {
+          usbs: function() {
+            return this.$store.getters.plugged_usbs;
+          }
+        }
+      });
+
+      Vue.component("simulator", {
+        template: "#simulator",
+        store: store,
+        methods: {
+          toggleMe: function(e) {
+
+          },
+          isPlugged: function(inventory, serial) {
+            var plugged = this.$store.getters.plugged_usbs;
+            return (inventory in plugged && plugged[inventory]["usb"] === serial);
+          },
+          toggleUsb: function(inventory, serial, e) {
+            var btn = $(e.target);
+            if(this.isPlugged(inventory, serial)) {
+              btn.toggleClass("fa-toggle-on fa-pulse fa-spinner");
+              this.$store.dispatch("unplugUsb", {inventory: inventory, serial: serial});  
+            } else {
+              btn.toggleClass("fa-toggle-off fa-pulse fa-spinner");
+              this.$store.dispatch("plugUsb", {inventory: inventory, serial: serial});
+            }
+          },
+          toggleTimed: function(e) {
+            $(e.target).toggleClass("fa-hourglass-half fa-hourglass-o");
+          },
+          launchInventory: function(inventory, e) {
+            var btn = $(e.target), normal = "fa-rocket", loading = "fa-spinner fa-pulse", 
+                ok = "fa-check text-success", fail = "fa-close text-danger",
+                timed = (btn.parents("div:first").next().find("i").hasClass("fa-hourglass-half"));
+            btn.removeClass(normal).addClass(loading);
+
+            $.post("/simulate_inventory", {inventory: inventory, timed: timed}).then(function() {
+              btn.removeClass(loading).addClass(ok);
+
+              setTimeout(function() {
+                btn.removeClass(ok).addClass(normal);
+              }, 5000);
+            }).catch(function() {
+              btn.removeClass(loading).addClass(fail);
+
+              setTimeout(function() {
+                btn.removeClass(fail).addClass(normal);
+              }, 5000);
+            });
+          }
+        },
+        computed: {
+          simulations: function() {
+            return this.$store.getters.simulations;
+          }
+        }
+      });
+
+      Vue.component("inventories", {
+        template: "#inventories",
+        store: store,
+        methods: {
+          getIdentification: function(json) {
+            ident = [];
+            
+            if("label" in json) {
+              ident.push(json["label"]);
+            }
+
+            if("pid" in json) {
+              ident.push(json["pid"]);
+            }
+
+            if("_id" in json) {
+              ident.push(json["_id"]);
+            }
+
+            return ident.join(" - ") || "Not identified"; 
+          },
+          getGrades: function(json) {
+            if("condition" in json) {
+              var visual = '<i class="fa fa-eye"></i>', functional = '<i class="fa fa-wrench"></i>';
+              return visual + " " + json["condition"]["appearance"]["general"] + " " + functional + " " + json["condition"]["functionality"]["general"];
+            } else {
+              return "Not rated";
+            }
+          },
+          getStatus: function(json) {
+            if("date" in json) {
+              return ("uploaded" in json) ? "Uploaded" : "Finished";
+            } else if("iso" in json["times"]) {
+              return "Not rated";
+            } else {
+              return "Not finished";
+            }
+          },
+          getStatusClass: function(json) {
+            return {
+              "Not finished": "bg-danger",
+              "Not rated": "bg-warning",
+              "Finished": "bg-info",
+              "Uploaded": "bg-success"
+            }[this.getStatus(json)]
+          },
+          getStatusIcon: function(json) {
+            var status = this.getStatus(json);
+            if(status === "Uploaded") {
+              return '<i class="fa fa-cloud-upload"></i>';
+            } else if(status == "Finished") {
+              return '<i class="fa fa-check text-success"></i>';
+            } else {
+              return Object.keys(json["times"]).length;
+            }
+          },
+          renderHeader: function(index) {
+            if(index === 0) {
+              return true;
+            } else {
+              var previousDate = new Date(this.inventories[index - 1].json["created"] || this.inventories[index - 1].json["date"]),
+                  currentDate = new Date(this.inventories[index].json["created"] || this.inventories[index].json["date"]);
+              previousDate.setHours(0, 0, 0, 0);
+              currentDate.setHours(0, 0, 0, 0);
+
+              return (currentDate.valueOf() !== previousDate.valueOf());
+            }
+          },
+          hasPlugged: function(inventory) {
+            return (inventory in this.plugged_usbs);
+          },
+          tag_computer: function(inventory, serial) {
+            var $modal = $("#modal"), usb = this.plugged_usbs[inventory];
+            $modal.on("show.bs.modal", function(e) {
+              $modal.find(".modal-title").html("Tag computer on <small>" + inventory + "</small> with " + usb["vendor"] + " " + usb["product"] + " <small>" + serial + "</small>");
+
+              $.get("/tag_computer_form").then(function(data) {
+                $modal.find(".modal-body").html(data);
+                $(".fa-qrcode").parent().on("click", toggleQRscanner);
+              });
+
+              $modal.find(".modal-footer .btn-primary").html("Tag it").on("click", function() {
+                $.post("/tag_computer", $modal.find("form").serialize()).done(function(data) {
+
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                  $modal.find(".modal-body").html(errorThrown);
+                });
+              });
+            }).modal("show");
+          }
+        },
+        computed: {
+          inventories: function() {
+            return this.$store.getters.inventories;
+          },
+          plugged_usbs: function() {
+            return this.$store.getters.plugged_usbs;
+          }
+        }
+      })
+
+      var app = new Vue({
+        el: "#app",
+        store: store,
+        methods: {
+          refreshData: function() {
+            this.$store.dispatch("getPluggedUsbs");
+            this.$store.dispatch("getInventories");
+          },
+          edit_config_ini: function(e) {
+            var config_btn = $(e.target), $modal = $("#modal");
+             
+            $modal.on("show.bs.modal", function(e) {
+              $modal.find(".modal-title").html("Edit Workbench configuration");
+              $.get("/edit_config_form").then(function(data) {
+                $modal.find(".modal-body").html(data);
+              });
+
+              $modal.find(".modal-footer .btn-primary").html("Edit it").on("click", function() {
+                $.post("/edit_config", $modal.find("form").serialize()).done(function(data) {
+                  if("acknowledge" in data && data["acknowledge"]) {
+                    config_btn.removeClass("fa-gear").addClass("fa-check text-success");
+                    $modal.modal("hide");
+                    setTimeout(function() {
+                      config_btn.prop("class", "fa fa-gear");
+                    }, 5000);
+                  }
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                  $modal.find(".modal-body").html(errorThrown);
+                });
+              });
+
+            }).modal("show");
+          }
+        },
+        mounted: function() {
+          this.refreshData();
+          this.$store.dispatch("getSimulator"); 
+          setInterval(this.refreshData, 5000);
+        }
+      })
+    </script>
+  </body>
+</html>

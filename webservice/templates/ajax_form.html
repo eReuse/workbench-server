@@ -1,0 +1,12 @@
+{%- from "forms.html" import error_panel -%}
+{%- from "forms.html" import render_field -%}
+
+<form id="form">
+  {%- if form.errors -%}
+    {{ error_panel(form) }}
+  {%- endif -%}
+
+  {%- for field in form -%}
+    {{ render_field(field) }}
+  {%- endfor -%}
+</form>

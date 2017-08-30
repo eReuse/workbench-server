@@ -1,0 +1,1476 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"class",
+				"classList"
+			],
+			[
+				"fa-tog",
+				"fa-toggle-on"
+			],
+			[
+				"clas",
+				"classList"
+			],
+			[
+				"nextS",
+				"nextSibling\t: Node Node"
+			],
+			[
+				"inven",
+				"inventories"
+			],
+			[
+				"do",
+				"dockerfile"
+			],
+			[
+				"tag_",
+				"tag_computer_form"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"getElement",
+				"getElementsByTagName\t( localName: DOMString ): HTMLCollection Document"
+			],
+			[
+				"Vue",
+				"VueFormGenerator"
+			],
+			[
+				"inti",
+				"initScan"
+			],
+			[
+				"getEle",
+				"getElementsByClassName\t( classNames: DOMString ): HTMLCollection Document"
+			],
+			[
+				"phase",
+				"phaseClass"
+			],
+			[
+				"ident",
+				"identification"
+			],
+			[
+				"seria",
+				"serialize"
+			],
+			[
+				"plugg",
+				"plugged_usbs"
+			],
+			[
+				"data",
+				"dataTransfer\t: DataTransfer DragEvent"
+			],
+			[
+				"text",
+				"text-center"
+			],
+			[
+				"inve",
+				"inventory"
+			],
+			[
+				"inv",
+				"inventories"
+			],
+			[
+				"deviceIcon",
+				"deviceIconMixin"
+			],
+			[
+				"med",
+				"media-middle"
+			],
+			[
+				"media",
+				"media-headding"
+			],
+			[
+				"fa",
+				"fa-2x"
+			],
+			[
+				"medi",
+				"media-body"
+			],
+			[
+				"getP",
+				"getPluggedUsbs"
+			],
+			[
+				"Plugg",
+				"plugged_usbs"
+			],
+			[
+				"plug",
+				"plugged_usbs"
+			],
+			[
+				"plugge",
+				"plugged-usbs"
+			],
+			[
+				"invent",
+				"inventory"
+			],
+			[
+				"previd",
+				"previousNode\t(): Node TreeWalker"
+			],
+			[
+				"inde",
+				"indexOf\t( searchElement: any, fromIndex?: int ): int Array"
+			],
+			[
+				"peñq",
+				"pequeño"
+			],
+			[
+				"col",
+				"col-xs-6"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"line",
+				"lineno\t: unsigned long ErrorEvent"
+			],
+			[
+				"w",
+				"wave"
+			],
+			[
+				"sym",
+				"symbols"
+			],
+			[
+				"gold",
+				"goldenHourEnd"
+			],
+			[
+				"invento",
+				"inventories"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"fa-hou",
+				"fa-hourglass-half"
+			],
+			[
+				"e",
+				"error\t: any ErrorEvent"
+			],
+			[
+				"getElem",
+				"getElementById\t( elementId: DOMString ): Element Document"
+			],
+			[
+				"scan",
+				"scanner.start"
+			],
+			[
+				"le",
+				"length\t: int Array"
+			],
+			[
+				"Ins",
+				"Instascan"
+			],
+			[
+				"usb",
+				"usb-updated"
+			],
+			[
+				"els",
+				"else_if"
+			],
+			[
+				"fa-f",
+				"fa-hourglass-half"
+			],
+			[
+				"plugged",
+				"plugged_usbs"
+			],
+			[
+				"setTime",
+				"setTimeout\t( handler: any, timeout?: long, arguments_..: any ): long Window"
+			],
+			[
+				"deac",
+				"deactivate_this"
+			],
+			[
+				"me",
+				"media-heading"
+			],
+			[
+				"usbs",
+				"usbs_list\tfunction"
+			],
+			[
+				"new_",
+				"new_phases\tstatement"
+			],
+			[
+				"new",
+				"new_uuid\tstatement"
+			],
+			[
+				"uu",
+				"uuid4\tfunction"
+			],
+			[
+				"preven",
+				"preventDefault\t(): void Event"
+			],
+			[
+				"fa-t",
+				"fa-toggle-on"
+			],
+			[
+				"col-",
+				"col-xs-12"
+			],
+			[
+				"bt",
+				"btn-default"
+			],
+			[
+				"Co",
+				"ConfigParser\tmodule"
+			],
+			[
+				"funct",
+				"functional_grades"
+			],
+			[
+				"visual_",
+				"visual_grades"
+			],
+			[
+				"comp",
+				"computer_types\tstatement"
+			],
+			[
+				"btn",
+				"btn-primary"
+			],
+			[
+				"res",
+				"resolved_tasks\tstatement"
+			],
+			[
+				"ph",
+				"phase5\tstatement"
+			],
+			[
+				"pha",
+				"phase3\tstatement"
+			],
+			[
+				"p",
+				"phase1\tstatement"
+			],
+			[
+				"phas",
+				"phase0\tstatement"
+			],
+			[
+				"get",
+				"get_url"
+			],
+			[
+				"log",
+				"_log\tstatement"
+			],
+			[
+				"yay",
+				"yay_url"
+			],
+			[
+				"el",
+				"elasticsearch_primary"
+			],
+			[
+				"moon_phas",
+				"moon_phase_2\tfunction"
+			],
+			[
+				"moon",
+				"moon_phase_light\tfunction"
+			],
+			[
+				"moon_pha",
+				"moon_phase_name"
+			],
+			[
+				"after",
+				"afterPostAdd"
+			],
+			[
+				"first",
+				"firstFormChild"
+			],
+			[
+				"FLASK",
+				"FALSK_DEBUG"
+			],
+			[
+				"F",
+				"FALSK_APP"
+			],
+			[
+				"or",
+				"orig\tparam"
+			],
+			[
+				"ori",
+				"orig_col\tstatement"
+			],
+			[
+				"cre",
+				"create_app\tfunction"
+			],
+			[
+				"Fl",
+				"FlaskGroup\timport"
+			],
+			[
+				"remo",
+				"removeAttr\t.removeAttr()"
+			],
+			[
+				"can",
+				"cancelReorder"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"inser",
+				"insertBefore\t.insertBefore()"
+			],
+			[
+				"reo",
+				"reorderOptions"
+			],
+			[
+				"O",
+				"ObjectId\timport"
+			],
+			[
+				"ap",
+				"appendTo\t.appendTo()"
+			],
+			[
+				"mar",
+				"marked2copy"
+			],
+			[
+				"child",
+				"children\t.children()"
+			],
+			[
+				"edit",
+				"editName"
+			],
+			[
+				"aft",
+				"afterPostAdd"
+			],
+			[
+				"btnA",
+				"btnAccept"
+			],
+			[
+				"btnAcc",
+				"btnAcceptIcon"
+			],
+			[
+				"getpa",
+				"get_paper_by_url\tfunction"
+			],
+			[
+				"get_p",
+				"get_paper_by_url\tfunction"
+			],
+			[
+				"selec",
+				"selectCallback"
+			],
+			[
+				"remov",
+				"removeClass\t.removeClass()"
+			],
+			[
+				"activ",
+				"activate"
+			],
+			[
+				"marg",
+				"margin-top"
+			],
+			[
+				"get_pa",
+				"get_papers_icons\tfunction"
+			],
+			[
+				"ask",
+				"askAddtion"
+			],
+			[
+				"paddi",
+				"padding-top"
+			],
+			[
+				"border",
+				"border-width"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"code",
+				"codemirror"
+			],
+			[
+				"bre",
+				"breadcrumb-toggler"
+			],
+			[
+				"defa",
+				"defaultMapExtension"
+			],
+			[
+				"cancel",
+				"cancelFlashes"
+			],
+			[
+				"action",
+				"actionUrl"
+			],
+			[
+				"cs",
+				"csrf_token"
+			],
+			[
+				"remove",
+				"removeAttr\t.removeAttr()"
+			],
+			[
+				"codeMiror",
+				"codeMirrorMap"
+			],
+			[
+				"codemi",
+				"codemirror"
+			],
+			[
+				"trigge",
+				"triggers"
+			],
+			[
+				"proper",
+				"property"
+			],
+			[
+				"list-gr",
+				"list-group"
+			],
+			[
+				"list-g",
+				"list-group"
+			],
+			[
+				"list-",
+				"list-group-item"
+			],
+			[
+				"select",
+				"select_last"
+			],
+			[
+				"paddin",
+				"padding-base-horizontal"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "webservice/app.py",
+			"settings":
+			{
+				"buffer_size": 14008,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "webservice/forms.py",
+			"settings":
+			{
+				"buffer_size": 6307,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/src/main.js",
+			"settings":
+			{
+				"buffer_size": 1453,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/src/store.js",
+			"settings":
+			{
+				"buffer_size": 2768,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/src/components/simulator.vue",
+			"settings":
+			{
+				"buffer_size": 3578,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"ssjs",
+				"Set Syntax: JSON"
+			],
+			[
+				"ssh",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"SSH",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"p",
+				"Package Control: Install Package"
+			],
+			[
+				"sspy",
+				"Set Syntax: Python"
+			],
+			[
+				"ssp",
+				"Set Syntax: Python"
+			],
+			[
+				"ssja",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"ssba",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"ssj",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"pi",
+				"Package Control: Install Package"
+			],
+			[
+				"prem",
+				"Package Control: Remove Package"
+			],
+			[
+				"pa",
+				"Package Control: Remove Package"
+			],
+			[
+				"i",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"s",
+				"Set Syntax: Jinja2"
+			],
+			[
+				"js",
+				"Set Syntax: JSON"
+			],
+			[
+				"f",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"for",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"ssmus",
+				"Set Syntax: HTML with mustaches"
+			],
+			[
+				"ssjavas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"sja",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"sjavas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"sjso",
+				"Set Syntax: JSON"
+			],
+			[
+				"sscss",
+				"Set Syntax: CSS"
+			],
+			[
+				"ssjp",
+				"Set Syntax: Java Properties"
+			],
+			[
+				"isnta",
+				"Package Control: Install Package"
+			],
+			[
+				"ss",
+				"Set Syntax: Jinja2"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"ssht",
+				"Set Syntax: HTML"
+			],
+			[
+				"sshm",
+				"Set Syntax: HTML"
+			],
+			[
+				"ssmust",
+				"Set Syntax: HTML with mustaches"
+			],
+			[
+				"ssg",
+				"Set Syntax: Git"
+			],
+			[
+				"ssjso",
+				"Set Syntax: JSON"
+			],
+			[
+				"ss js",
+				"Set Syntax: JSON"
+			],
+			[
+				"Pa",
+				"Package Control: List Packages"
+			],
+			[
+				"sscs",
+				"Set Syntax: CSS"
+			],
+			[
+				"fo",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"py",
+				"Set Syntax: Python"
+			],
+			[
+				"ssn",
+				"Set Syntax: nginx"
+			],
+			[
+				"ssjin",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"form",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"con",
+				"Package Control: Install Package"
+			],
+			[
+				"contro",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 457.0
+	},
+	"console":
+	{
+		"height": 432.0,
+		"history":
+		[
+			"import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(\"/Users/garito/Library/Application Support/Anaconda/0.3/anaconda.sock\")",
+			"import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(/Users/garito/Library/Application Support/Anaconda/0.3/anaconda.sock)",
+			"import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(\"/Users/garito/Library/Application Support/Anaconda/0.3/anaconda.sock\")",
+			"import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(/Users/garito/Library/Application Support/Anaconda/0.3/anaconda.sock)",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read()) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/garito/Work/eReuse/ACeleryWB",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice"
+	],
+	"file_history":
+	[
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Config.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/config.ini",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Tag.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/inventories.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Inventories.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/usbs.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/forms.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/router.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/docker/backend-dockerfile",
+		"/Users/garito/Work/eReuse/ACeleryWB/docker/frontend-dockerfile",
+		"/Users/garito/Work/eReuse/ACeleryWB/docker-compose.yml",
+		"/Users/garito/Work/eReuse/ACeleryWB/docker/nginx.conf",
+		"/Users/garito/Work/eReuse/ACeleryWB/docker/worker-dockerfile",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/SwitchField.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/qr.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build/webpack.base.conf.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/App.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/index.html",
+		"/Users/garito/Downloads/I Ching/tiradas.txt",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/package.json",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/index2.html",
+		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/forms.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/config.py",
+		"/Users/garito/Work/eReuse/workbench/erwb/eraser.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/index.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/ajax_form.html",
+		"/Users/garito/Desktop/IChingVuejsComponent.html",
+		"/Users/garito/Desktop/TzolkinVuejsComponent.html",
+		"/Users/garito/Desktop/SunMoonVuejsComponent.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/base.html",
+		"/Users/garito/Desktop/FIRMA GALÁCTICA.htm",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/simulator.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/simulatorconf.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/configini.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/tag_computer.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/vuetest.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/usbs.js",
+		"/Users/garito/Work/eReuse/WorkbenchFS/templates/snippets.html",
+		"/Users/garito/Work/eReuse/WorkbenchFS/templates/inventory.html",
+		"/Users/garito/Work/eReuse/WorkbenchFS/templates/inventories.html",
+		"/Users/garito/Work/eReuse/WorkbenchFS/blueprints/inventory.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/remote_producer.py",
+		"/Users/garito/Work/eReuse/WorkbenchFS/app.py",
+		"/Users/garito/Downloads/asustek-computer-inc,1000h,8boaaq191999,phase0.json",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/simulator.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/tag_computer2.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/configini2.html",
+		"/Users/garito/Work/eReuse/ACeleryWB/jsons/asustek-computer-inc,1000h,8boaaq191999.json",
+		"/Users/garito/Work/eReuse/WorkbenchFS/models.py",
+		"/Users/garito/.bash_profile",
+		"/Users/garito/Work/eReuse/WorkbenchFS/templates/baseForm.html",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/User/Anaconda.sublime-settings",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/User/Side Bar.sublime-settings",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/Users/garito/Work/eReuse/ACeleryWB/producer.py",
+		"/Users/garito/eReuse/WorkbenchFS/models.py",
+		"/Users/garito/Downloads/to-be-filled-by-o-e-m,to-be-filled-by-o-e-m,to-be-filled-by-o-e-m,consolidated.json",
+		"/Users/garito/p3/yFlask/Runner.py",
+		"/Users/garito/p3/yFlask/extensions.py",
+		"/Users/garito/p3/yFlask/Paper.py",
+		"/Users/garito/p3/yFlask/factory.py",
+		"/Users/garito/Desktop/I Ching/tiradas.txt",
+		"/Users/garito/p3/yFlask/static/js/time-moments.js",
+		"/Users/garito/p3/yFlask/templates/base.html",
+		"/Users/garito/p3/yFlask/treeapp.py",
+		"/Users/garito/p3/yFlask/queries.py",
+		"/Users/garito/p3/yFlask/templates/simpleForm.html",
+		"/Users/garito/p3/yFlask/jinja_utils.py",
+		"/Users/garito/p3/yFlask/dict2wtforms.py",
+		"/Users/garito/p3/yFlask/templates/forms.html",
+		"/Users/garito/p3/yFlask/static/js/sidebar.js",
+		"/Users/garito/p3/yFlask/templates/snippets.html",
+		"/Users/garito/p3/yFlask/less/styles.less",
+		"/Users/garito/p3/yFlask/utils.py",
+		"/Users/garito/p3/yFlask/static/js/codemirror-viewer.js",
+		"/Users/garito/p3/yFlask/static/js/code.js",
+		"/Users/garito/dockers/flask-mongo-elastic/docker-compose-elastic-cluster.yml",
+		"/Users/garito/dockers/flask-mongo-elastic/data/elastic/.gitkeep",
+		"/Users/garito/p3/yFlask/static/js/yde-viewer.js",
+		"/Users/garito/p3/yFlask/static/js/yde.js",
+		"/Users/garito/p3/yFlask/static/js/forms.js",
+		"/Users/garito/Downloads/moonlight.py",
+		"/Users/garito/Desktop/moonphases.py",
+		"/Users/garito/Downloads/Programas/Backup/Yanged 2012-10-31/Yanged/Yanged/yUtils.py",
+		"/Users/garito/dockers/flask-mongo-elastic/docker-compose.yml",
+		"/Users/garito/p3/yFlask/app.py",
+		"/Users/garito/p3/yFlask/less/yde.less",
+		"/Users/garito/p3/yFlask/config.py",
+		"/Users/garito/p3/yFlask/env/bin/activate",
+		"/Users/garito/p3/yFlask/cli.py",
+		"/Users/garito/.ssh/known_hosts",
+		"/Users/garito/p3/yFlask/setup.py",
+		"/Users/garito/p3/yFlask/cli2.py",
+		"/Users/garito/p3/yFlask/static/js/yde2.js",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/static/js/yDE.js",
+		"/Users/garito/p3/yFlask/static/js/HumanInputMaps.js",
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/variables.less",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/GoSublime/CHANGELOG.md",
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/breadcrumbs.less",
+		"/Users/garito/p3/yFlask/static/js/category.js",
+		"/Users/garito/p3/yFlask/static/js/breadcrumb.js",
+		"/Users/garito/p3/yFlask/static/js/flashes.js",
+		"/Users/garito/p3/yFlask/static/js/some-maps.js",
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/list-group.less",
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/navbar.less",
+		"/Users/garito/p3/yFlask/static/css/yde.css",
+		"/Users/garito/p3/yFlask/static/css/styles.css",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/__init__.py",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/runner.py",
+		"/Users/garito/p3/yFlask/less/libs/snippets.less",
+		"/Users/garito/p3/yFlask/docker/docker-compose.yml",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/static/js/yDEViewer.js",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/paper.py",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/static/js/mystuff.js",
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/static/js/Gantt.js",
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/bootstrap.less",
+		"/Users/garito/p3/yFlask.sublime-workspace",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/User/less2css.sublime-settings",
+		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/Less2Css/README.md",
+		"/Users/garito/Pepe/compose2/docker-compose.yml",
+		"/Volumes/eReuseOS/casper/filesystem.manifest",
+		"/Volumes/eReuseOS/isolinux/txt.cfg",
+		"/Volumes/eReuseOS/isolinux/prompt.cfg",
+		"/Volumes/eReuseOS/isolinux/menu.cfg"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"<project>,<current file>,<open files>,<open folders>,-*/env/*,-*/static/*",
+			"./*,-*/env/*,*/static/*",
+			"<open folders>, <open files>,-*/env/*,*/static/*",
+			"./*,-*/env/*,*/static/*",
+			"-*/env/*,*/static/*",
+			"-./env/*",
+			"./env/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -/Users/garito/TimeFounder/App/0.3/TimeFounder/static/*, -/Users/garito/TimeFounder/App/0.3/TimeFounder/translations/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -/Users/garito/TimeFounder/App/0.3/TimeFounder/static/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/, -/Users/garito/TimeFounder/App/0.3/TimeFounder/static/",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -/Users/garito/TimeFounder/App/0.3/TimeFounder/static/",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -/Users/garito/TimeFounder/App/0.3/TimeFounder/static/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -*.css, -*.map, -*.js",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -*.css, -*.map",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*, -*.css",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env",
+			"/Users/garito/TimeFounder/App/0.3/*.py,-/Users/garito/TimeFounder/App/0.3/env/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env/*",
+			"/Users/garito/TimeFounder/App/0.3,-/Users/garito/TimeFounder/App/0.3/env",
+			"/Users/garito/TimeFounder/App/0.3,-env",
+			"/Users/garito/TimeFounder/App/0.3",
+			"/Users/garito/TimeFounder/App/0.2/env/lib/python2.7/site-packages/langdetect/profiles"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"start_response",
+			"data",
+			"dispatch",
+			"push",
+			"_cache",
+			"do_erasure",
+			"en su trabajo",
+			"bg-warning",
+			"keys",
+			"celery_usbs",
+			".get()",
+			"self.redis",
+			"dumps",
+			"data",
+			"config",
+			"langdetect",
+			"SwitcherField",
+			"choices",
+			"ftype",
+			"slugify",
+			"#  ",
+			"obj.get_url",
+			"url_for",
+			"setup_error_email",
+			"setup_error_email()",
+			"root",
+			"get_root",
+			"url_for",
+			"list-inline",
+			"PAPERS_PATH",
+			"bulk",
+			"gray-lighter",
+			"disabled",
+			"breadcrumb",
+			"padding",
+			"navbar",
+			"getForm",
+			"get_flashed",
+			"spin",
+			"brand",
+			"nav",
+			"endmacro",
+			"base_url",
+			">\n",
+			"json_partial",
+			"inline_",
+			"padding",
+			"20",
+			"stopSubmits",
+			"submit",
+			"base_url",
+			"padding",
+			"@",
+			"settings",
+			"nav",
+			"dict",
+			"available",
+			"factory",
+			"get_paper_by_url",
+			"runAs",
+			"paper",
+			"category",
+			"archive",
+			"yFlask",
+			"archive",
+			"traverse",
+			"\"papers\"",
+			"render_template",
+			"index",
+			"ry:\n   app.es.indices.put_mapping(doc_type = name, body = mapping, index = index)\n  except Exception as e:\n   app.logger.debug(dumps(mapping, indent = 2))\n  ",
+			"classUrl",
+			"paperUrl",
+			"_paperUrl",
+			"_classUrl",
+			"_paperUrl",
+			"_classUrl",
+			"_cache_emails",
+			"_alias",
+			"yFlaskJSONEncoder",
+			"jinja",
+			"validators",
+			"required",
+			"FlaskForm",
+			"Form",
+			"From",
+			"tf",
+			"tfGroups",
+			"OrderedDict",
+			"locale",
+			"_content",
+			"Elastic",
+			"elastic",
+			"g\\.",
+			"g",
+			"loginManager",
+			"partial",
+			"Coroutine",
+			"generate_match_query",
+			"locale",
+			"log",
+			"dict",
+			"Anoy",
+			"Paper",
+			"query(",
+			"Response",
+			"request_processor",
+			"cm.output",
+			"with",
+			"from os.path import split\n\nfrom logging import getLogger\n\nfrom json import dumps\n\nclass Paper(object):\n  def __init__(self, factory, **kwargs):\n    self._factory = factory\n\n    self._data = kwargs[\"_source\"]\n    self._id = kwargs[\"_id\"]\n    self._class = kwargs[\"_type\"]\n\n  def __getattr__(self, name):\n    if name.startswith(\"_\"):\n      raise AttributeError\n\n    if name in self._data:\n      return self._data[name]\n\n  def get_class(self):\n    return self._class\n\n  def get_id(self):\n    return self._id\n\n  def get_url(self):\n    return self._factory.generate_url(self._data[\"path\"], self._data[\"slug\"])\n\n  def get_parent(self):\n    return self.get_parents()[-1]\n\n  def get_parents(self):\n    if not hasattr(self, \"_parents\"):\n      segs = self._data[\"path\"].split(\"/\")\n      urls = [\"/\".join(segs[:i+1]) if i+1 > 1 else \"/\" for i in range(len(segs))]\n\n      self._parents = self._factory.get_urls(urls)\n\n    return self._parents\n\n  def get_content(self):\n    if not hasattr(self, \"_content\"):\n      self._content = self._factory.get_path(self.get_url(), self.orderslugs, \"section\")\n      \n    return self._content\n\n  def __repr__(self):\n    return \"<Paper3 {} @ {}>\".format(self._class, self.get_url())\n\nclass Factory(object):\n  def __init__(self, es, index, log=None):\n    self._cache = {\"urls\": {}}\n    self._es = es\n    self._es_index = index\n    self._log = log or getLogger(__name__)\n\n  def generate_url(self, path, slug):\n    if path == \"\":\n      return \"/\"\n    elif path == \"/\":\n      return \"/{}\".format(slug)\n    else:\n      return \"{}/{}\".format(path, slug)\n\n  def generate_url_query(self, path, slug, doc_type=None):\n    if path == \"/\" and slug == \"\":\n      query = {\n        \"query\": {\n          \"match_phrase\": {\n            \"path.raw\": \"\"}}}\n    else:\n      query = {\n        \"query\": {\n          \"bool\": {\n            \"must\": [\n              {\"match_phrase\": {\"path.raw\": path}},\n              {\"match_phrase\": {\"slug.raw\": slug}}\n            ]}}}\n\n    header = {\"index\": self._es_index}\n    if isinstance(doc_type, str):\n      header[\"type\"] = doc_type\n    \n    return \"{}\\n{}\".format(dumps(header), dumps(query))\n\n  def get_urls(self, urls):\n    objs = []\n    queries = []\n    for url in urls:\n      parts = url.split(\":\")\n      if len(parts) > 1:\n        doc_type = parts[0]\n        url = parts[1]\n      else:\n        doc_type = None\n\n      if url in self._cache[\"urls\"]:\n        objs.append(self._cache[\"urls\"][url])\n      else:\n        queries.append(self.generate_url_query(*split(url), doc_type))\n        objs.append(url)\n\n    responses = self._es.msearch(index=self._es_index, body=\"\\n\".join(queries))\n\n    for response in responses[\"responses\"]:\n      if response[\"hits\"][\"total\"]:\n        hit = response[\"hits\"][\"hits\"][0]\n        url = self.generate_url(hit[\"_source\"][\"path\"], hit[\"_source\"][\"slug\"])\n        obj = Paper(self, **hit)\n        objs[objs.index(url)] = obj\n        self._cache[\"urls\"][url] = obj\n\n    return objs\n\n  def get_by_url(self, url):\n    return self._cache[\"urls\"][url] if url in self._cache[\"urls\"] else self.get_urls([url])[0]\n\n  def get_root(self):\n    return self.get_by_url(\"/\")\n\n  def get_path(self, path, order = None, doc_type = None):\n    query = {\n      \"query\": {\n        \"match_phrase\": {\n          \"path.raw\": path}}}\n\n    if order:\n      query[\"size\"] = len(order)\n      query[\"sort\"] = {\n        \"_script\": {\n          \"script\": \"{}.indexOf(_source.slug)\".format(dumps(order)),\n          \"type\": \"number\",\n          \"order\": \"asc\"}}\n\n    if doc_type:\n      hits = self._es.search(index=self._es_index, doc_type=doc_type, body=query)\n    else:\n      hits = self._es.search(index=self._es_index, body=query)\n\n    if hits[\"hits\"][\"total\"]:\n      result = []\n      for hit in hits[\"hits\"][\"hits\"]:\n        url = self.generate_url(hit[\"_source\"][\"path\"], hit[\"_source\"][\"slug\"])\n        if url in self._cache[\"urls\"]:\n          obj = self._cache[\"urls\"][url]\n        else:\n          obj = Paper(self, **hit)\n          self._cache[\"urls\"][url] = obj\n\n        result.append(obj)\n\n    return result\n\n  def get_tree(self, path, doc_type = None):\n    childQuery = {\n      \"sort\": [{\"path.raw\": {\"order\": \"asc\"}}],\n      \"size\": 100000,\n      \"query\": {\n        \"match\": {\n          \"path\": path}}}\n\n    if path in self._cache[\"urls\"]:\n      root = self._cache[\"urls\"][path]\n\n      if doc_type:\n        childrenHits = self._es.search(index=self._es_index, doc_type=doc_type, body=childQuery)[\"hits\"][\"hits\"]\n      else:\n        childrenHits = self._es.search(index=self._es_index, body=childQuery)[\"hits\"][\"hits\"]\n    else:\n      header = {\"index\": self._es_index}\n      if doc_type:\n        header[\"type\"] = doc_type\n\n      query = \"{}\\n{}\\n{}\".format(self.generate_url_query(*split(path), doc_type), dumps(header), dumps(childQuery))\n\n      responses = self._es.msearch(body=query)[\"responses\"]\n\n      root = Paper(self, **responses[0][\"hits\"][\"hits\"][0])\n\n      childrenHits = responses[1][\"hits\"][\"hits\"]\n\n    children = []\n    for child in childrenHits:\n      url = self.generate_url(child[\"_source\"][\"path\"], child[\"_source\"][\"slug\"])\n      if url in self._cache[\"urls\"]:\n        children.append(self._cache[\"urls\"])\n      else:\n        paper = Paper(self, **child)\n        children.append(paper)\n        self._cache[url] = paper\n    \n    self._log.warning(root)\n    self._log.warning(children)\n\n  def get_info(self):\n    host = self._es.transport.hosts[0]\n    info = {\n      \"elasticsearch\": \"{}://{}:{}\".format(host[\"scheme\"], host[\"host\"], host[\"port\"]),\n      \"index\": self._es_index,\n      \"cache\": self._cache\n    }\n\n    return info\n\n  def __repr__(self):\n    host = self._es.transport.hosts[0]\n    return \"<Factory {}://{}:{} -> {}>\".format(host[\"scheme\"], host[\"host\"], host[\"port\"], self._es_index)",
+			"generate_url",
+			"tearDownModule",
+			"set",
+			"obj.get_url\\(\\)",
+			"get_url",
+			"Paper",
+			"status",
+			"obj.finished",
+			"yDEClosed",
+			"yDEOpened",
+			"yDE",
+			"rootPaper",
+			"factory",
+			"factory(",
+			"factory",
+			"emailhandleruser",
+			"if cls == \"User\":\n    #   if \"tfUsers\" not in g.tfCache:\n    #     g.tfCache[\"tfUsers\"] = {}\n    #   g.tfCache[\"tfUsers\"][result.email] = \"{}/{}\".format(result.path, result.slug)",
+			"active",
+			"objsDict"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"bg-info",
+			"\"",
+			"'",
+			"\"",
+			"localSecurity",
+			"\"",
+			">",
+			"<",
+			"\"",
+			"\\\"",
+			"\"",
+			" self.app_context",
+			"self.app.request_context",
+			"self.app_context",
+			"\"",
+			"get_content",
+			"\"",
+			"\\n",
+			"\\\\\"",
+			"\\\"",
+			"\\\\\"",
+			"\\\"",
+			"\"",
+			"current_app",
+			"\"",
+			"'",
+			"\"",
+			"'",
+			"\"",
+			"'",
+			"\"",
+			"'",
+			"total_movements",
+			"investment_query",
+			"investment_results",
+			"\"",
+			"\\\"",
+			"\"",
+			"\\\"",
+			"\"",
+			"%s",
+			"",
+			"\"/Recursos/Cliente/Imgs/y",
+			"Wizard",
+			"\""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "webservice/app.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14008,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8695,
+								8695
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 749.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "webservice/forms.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5556,
+								5556
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1374.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "frontend/src/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1453,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1369,
+								1404
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "frontend/src/store.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2768,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1433,
+								1433
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 657.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "frontend/src/components/simulator.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3578,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2056,
+								2056
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 587.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.GoSublime-output":
+	{
+		"height": 122.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 118.0
+	},
+	"pinned_build_system": "",
+	"project": "WorkbenchCelery.sublime-project",
+	"replace":
+	{
+		"height": 72.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"edi",
+				"0.3/TimeFounder/static/js/edition.js"
+			],
+			[
+				"__",
+				"0.3/TimeFounder/__init__.py"
+			],
+			[
+				"paper",
+				"0.3/TimeFounder/paper.py"
+			],
+			[
+				"man",
+				"0.3/manage.py"
+			],
+			[
+				"_",
+				"0.3/TimeFounder/__init__.py"
+			],
+			[
+				"dash",
+				"0.3/TimeFounder/templates/actions/section/dashboard.html"
+			],
+			[
+				"my",
+				"0.3/TimeFounder/templates/actions/user/myDashboard.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/Lab/IChing/IChing.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 400.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"$create"
+			],
+			[
+				"__ini",
+				"__init__"
+			]
+		],
+		"width": 502.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 251.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

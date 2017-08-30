@@ -1,0 +1,21 @@
+{
+  "name": "css-toggle-switch",
+  "version": "4.0.2",
+  "main": "dist/toggle-switch.css",
+  "author": "Ionut Colceriu",
+  "ignore": [
+    "**/*",
+    "!dist/**",
+    "!src/**",
+    "!LICENSE",
+    "!README.md"
+  ],
+  "devDependencies": {
+    "bootstrap": "^3.3.5",
+    "bourbon": "^4.2.5",
+    "foundation-sites": "~6.2.4",
+    "normalize-css": "^5.0.0",
+    "prism": "^1.5.0",
+    "qunit": "^2.0.1"
+  }
+}

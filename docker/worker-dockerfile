@@ -1,0 +1,7 @@
+FROM python:alpine3.6
+
+WORKDIR /app
+
+RUN pip install celery redis python-dateutil
+
+CMD ["celery", "worker", "-A", "worker", "--loglevel=info"]
