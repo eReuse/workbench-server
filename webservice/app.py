@@ -392,16 +392,17 @@ if __name__ == "__main__":
             "level": "INFO",
             # "formatter": "standard",
             "stream": "ext://sys.stdout"
-          },
-          "file": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "level": "INFO",
-            # "formatter": "standard",
-            "filename": "log.log",
-            "mode": "a",
-            "maxBytes": 10485760,
-            "backupCount": 5
           }
+          # ,
+          # "file": {
+          #   "class": "logging.handlers.RotatingFileHandler",
+          #   "level": "INFO",
+          #   # "formatter": "standard",
+          #   "filename": "log.log",
+          #   "mode": "a",
+          #   "maxBytes": 10485760,
+          #   "backupCount": 5
+          # }
         },
         "formatters": {
           "standard": {

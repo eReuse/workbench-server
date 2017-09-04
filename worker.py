@@ -3,6 +3,7 @@ from datetime import timedelta
 from json import dumps, loads
 
 from celery import Celery
+# from celery.utils.log import get_task_logger
 
 from redis import StrictRedis
 
@@ -20,6 +21,8 @@ redis_usb = StrictRedis(host = serverIP, db = 2)
 redis_consolidated = StrictRedis(host = serverIP, db = 3)
 
 json_path = "./jsons"
+
+# log = get_task_logger(__name__)
 
 @queue.task
 def consume_phase(json):

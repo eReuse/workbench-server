@@ -1,7 +1,7 @@
 <template>
   <div class="simulator">
     <h3>
-      Simulator 
+      Simulator
       <small>
         <a href="#" @click.prevent="toggleMe">
           <i class="fa" :class="visible ? 'fa-toggle-on' : 'fa-toggle-off'"></i>
