@@ -422,4 +422,4 @@ if __name__ == "__main__":
     }
   }
 
-  run_simple("localhost", 8090, factory(config), use_debugger = True, use_reloader = True)
+  run_simple("0.0.0.0", 8090, factory(config), use_debugger = True, use_reloader = True)
