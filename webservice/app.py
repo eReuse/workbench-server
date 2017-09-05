@@ -352,19 +352,19 @@ if __name__ == "__main__":
 
   config = {
     "celery": {
-      # "broker": "redis://redis:6379/0",
+      "broker": "redis://192.168.2.2:6379/0",
       "queue": "workbench"
     },
     "redis_inventories": {
-      # "host": "redis",
+      "host": "192.168.2.2",
       "db": 1
     },
     "redis_usbs": {
-      # "host": "redis",
+      "host": "192.168.2.2",
       "db": 2
     },
     "redis_consolidated": {
-      # "host": "redis",
+      "host": "192.168.2.2",
       "db": 3
     },
     "routes": {

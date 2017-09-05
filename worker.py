@@ -10,8 +10,9 @@ from redis import StrictRedis
 from dateutil.parser import parse
 
 # serverIP = "192.168.99.100"
-serverIP = "localhost"
+# serverIP = "localhost"
 # serverIP = "redis"
+serverIP = "192.168.2.2"
 redisBroker = "redis://{}:6379/0".format(serverIP)
 
 queue = Celery("workbench", broker = redisBroker)
