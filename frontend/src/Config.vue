@@ -14,7 +14,8 @@ import axios from 'axios'
 
 import 'css-toggle-switch/dist/toggle-switch.css'
 
-const server = 'http://localhost:8090'
+// const server = 'http://localhost:8090'
+const server = 'http://192.168.2.2:8090'
 
 export default {
   name: 'config',
