@@ -34,7 +34,7 @@ def consume_phase(json):
 
   aggregated_json = redis.get(_uuid)
   if aggregated_json is not None:
-    aggregated_json = loads(aggregated_json)
+    aggregated_json = loads(str(aggregated_json, "utf-8"))
 
   if aggregated_json is None:
     aggregated_json = json

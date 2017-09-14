@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"BAS",
+				"BASE_ISO_URL"
+			],
+			[
+				"BASE_",
+				"BASE_ISO_SHA256"
+			],
+			[
 				"sv",
 				"service"
 			],
@@ -506,19 +514,37 @@
 			[
 				"remove",
 				"removeAttr\t.removeAttr()"
-			],
-			[
-				"codeMiror",
-				"codeMirrorMap"
-			],
-			[
-				"codemi",
-				"codemirror"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
+			"settings":
+			{
+				"buffer_size": 6400,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
+			"settings":
+			{
+				"buffer_size": 9821,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
+			"settings":
+			{
+				"buffer_size": 1620,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -766,24 +792,35 @@
 	"expanded_folders":
 	[
 		"/Users/garito/Work/eReuse/ACeleryWB",
-		"/Users/garito/Work/eReuse/ACeleryWB/webservice"
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src",
+		"/Users/garito/Work/eReuse/workbench",
+		"/Users/garito/Work/eReuse/workbench/scripts"
 	],
 	"file_history":
 	[
+		"/Users/garito/Desktop/SunMoonVuejsComponent.html",
+		"/Users/garito/Library/Application Support/Baskup-Records/delociously@gmail.com",
+		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_ova.sh",
+		"/Users/garito/Library/Messages/Archive/02-09-2017/Delociously Lab el 01-09-2017 a las 23.04.28.ichat",
+		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
+		"/Users/garito/Work/eReuse/workbench/erwb/config.ini",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/store.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Config.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Tag.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/.gitignore",
 		"/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
 		"/Users/garito/Work/eReuse/WorkbenchSneaky/sneak.py",
 		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
 		"/Users/garito/Work/eReuse/workbench/requirements.txt",
-		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
 		"/Users/garito/Work/eReuse/workbench/setup.py",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/store.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/router.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/remote_producer.py",
 		"/Users/garito/Work/eReuse/workbench/erwb/__init__.py",
 		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/inventories.vue",
-		"/Users/garito/Work/eReuse/workbench/erwb/config.ini",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/backend-dockerfile",
 		"/Users/garito/Work/eReuse/workbench/erwb/inventory.py",
 		"/Users/garito/Work/eReuse/workbench/wbDockerfile",
@@ -791,10 +828,7 @@
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/usbs.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/main.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/forms.py",
-		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Config.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/config.ini",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Tag.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Inventories.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/frontend-dockerfile",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker-compose.yml",
@@ -815,7 +849,6 @@
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/ajax_form.html",
 		"/Users/garito/Desktop/IChingVuejsComponent.html",
 		"/Users/garito/Desktop/TzolkinVuejsComponent.html",
-		"/Users/garito/Desktop/SunMoonVuejsComponent.html",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/templates/base.html",
 		"/Users/garito/Desktop/FIRMA GALÁCTICA.htm",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/simulator.js",
@@ -893,11 +926,7 @@
 		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/navbar.less",
 		"/Users/garito/p3/yFlask/static/css/yde.css",
 		"/Users/garito/p3/yFlask/static/css/styles.css",
-		"/Users/garito/TimeFounder/App/0.3/TimeFounder/__init__.py",
-		"/Users/garito/TimeFounder/App/0.3/TimeFounder/runner.py",
-		"/Users/garito/p3/yFlask/less/libs/snippets.less",
-		"/Users/garito/p3/yFlask/docker/docker-compose.yml",
-		"/Users/garito/TimeFounder/App/0.3/TimeFounder/static/js/yDEViewer.js"
+		"/Users/garito/TimeFounder/App/0.3/TimeFounder/__init__.py"
 	],
 	"find":
 	{
@@ -939,6 +968,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"log",
 			"full_reqs",
 			"full_reqs = read_requirements('requirements-full.txt')",
 			"eReuse",
@@ -1065,8 +1095,7 @@
 			"yDEClosed",
 			"yDEOpened",
 			"yDE",
-			"rootPaper",
-			"factory"
+			"rootPaper"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1129,8 +1158,99 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6400,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5397,
+								5397
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3439.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9821,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								958,
+								958
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 888.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1620,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 13.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -1229,7 +1349,7 @@
 		[
 			[
 				"",
-				"~/Lab/IChing/IChing.sublime-project"
+				"~/Lab/T-F/T-F.sublime-project"
 			]
 		],
 		"width": 380.0
