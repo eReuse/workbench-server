@@ -57,6 +57,8 @@ class Acelery(object):
     if "routes" in config:
       self.url_map = Map([Rule(url, endpoint = endpoint) for url, endpoint in config["routes"].items()])
 
+    self.config_ini = config["config.ini"] or "config.ini"
+
     self.tag_computer_url = config["tag_computer_url"] if "tag_computer_url" in config else "http://localhost:5555/api/task/async-apply/worker.tag_computer"
 
     if "logger" in config:
@@ -183,7 +185,7 @@ class Acelery(object):
 
   def read_config(self):
     config = ConfigParser()
-    config.read("config.ini")
+    config.read(self.config_ini)
     sections = ["DEFAULT"]
     sections.extend(config.sections())
 
@@ -228,7 +230,7 @@ class Acelery(object):
 
       config[section] = result
 
-    with open("config.ini", "w") as configfile:
+    with open(self.config_ini, "w") as configfile:
       config.write(configfile)
 
   def edit_config(self, request):
@@ -350,21 +352,25 @@ def factory(config = None):
 if __name__ == "__main__":
   from werkzeug.serving import run_simple
 
+  server = "192.168.2.2"
+  # server = "localhost"
+
   config = {
+    "config.ini": "/srv/ereuse-data/config.ini",
     "celery": {
-      "broker": "redis://192.168.2.2:6379/0",
+      "broker": "redis://{}:6379/0".format(server),
       "queue": "workbench"
     },
     "redis_inventories": {
-      "host": "192.168.2.2",
+      "host": server,
       "db": 1
     },
     "redis_usbs": {
-      "host": "192.168.2.2",
+      "host": server,
       "db": 2
     },
     "redis_consolidated": {
-      "host": "192.168.2.2",
+      "host": server,
       "db": 3
     },
     "routes": {
@@ -390,27 +396,13 @@ if __name__ == "__main__":
           "console": {
             "class": "logging.StreamHandler",
             "level": "INFO",
-            # "formatter": "standard",
             "stream": "ext://sys.stdout"
           }
-          # ,
-          # "file": {
-          #   "class": "logging.handlers.RotatingFileHandler",
-          #   "level": "INFO",
-          #   # "formatter": "standard",
-          #   "filename": "log.log",
-          #   "mode": "a",
-          #   "maxBytes": 10485760,
-          #   "backupCount": 5
-          # }
         },
         "formatters": {
           "standard": {
             "format": "%(asctime)s %(levelname)s %(module)s %(message)s"
           }
-          # "detailed": {
-          #     "format": "%(asctime)s %(module)-17s line:%(lineno)-4d %(levelname)-8s %(message)s"
-          # }
         },
         "loggers": {
           "app": {
@@ -422,4 +414,7 @@ if __name__ == "__main__":
     }
   }
 
-  run_simple("0.0.0.0", 8090, factory(config), use_debugger = True, use_reloader = True)
+  localIP = "0.0.0.0"
+  # localIP = "localhost"
+
+  run_simple(localIP, 8090, factory(config), use_debugger = True, use_reloader = True)
