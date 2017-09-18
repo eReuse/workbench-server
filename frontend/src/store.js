@@ -5,8 +5,7 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
-// const server = 'http://localhost:8090'
-const server = 'http://192.168.2.2:8090'
+const server = process.env.SERVER_URL || 'http://localhost:8090'
 
 const state = {
   plugged_usbs: {},

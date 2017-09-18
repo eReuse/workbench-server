@@ -40,8 +40,7 @@
 <script>
 import axios from 'axios'
 
-// const server = 'http://localhost:8090'
-const server = 'http://192.168.2.2:8090'
+const server = process.env.SERVER_URL || 'http://localhost:8090'
 
 export default {
   name: 'simulator',
@@ -94,6 +93,7 @@ export default {
   },
   computed: {
     simulations () {
+      console.log(process.env)
       return this.$store.getters.simulations
     },
     visible () {
