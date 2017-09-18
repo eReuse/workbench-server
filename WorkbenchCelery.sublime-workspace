@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"BASE_IS",
+				"BASE_ISO_URL"
+			],
+			[
 				"BAS",
 				"BASE_ISO_URL"
 			],
@@ -510,38 +514,24 @@
 			[
 				"cs",
 				"csrf_token"
-			],
-			[
-				"remove",
-				"removeAttr\t.removeAttr()"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
+			"file": "frontend/build/webpack.base.conf.js",
 			"settings":
 			{
-				"buffer_size": 6400,
-				"encoding": "UTF-8",
+				"buffer_size": 1836,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
+			"file": "frontend/build/webpack.prod.conf.js",
 			"settings":
 			{
-				"buffer_size": 9821,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
-			"settings":
-			{
-				"buffer_size": 1620,
+				"buffer_size": 3742,
 				"line_ending": "Unix"
 			}
 		}
@@ -793,33 +783,38 @@
 	[
 		"/Users/garito/Work/eReuse/ACeleryWB",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src",
-		"/Users/garito/Work/eReuse/workbench",
-		"/Users/garito/Work/eReuse/workbench/scripts"
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/config"
 	],
 	"file_history":
 	[
+		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/config/prod.env.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/config/dev.env.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Config.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Inventories.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Tag.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/store.js",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/App.vue",
+		"/Users/garito/Work/eReuse/ACeleryWB/WorkbenchCelery.sublime-project",
+		"/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
+		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
+		"/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
+		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
 		"/Users/garito/Desktop/SunMoonVuejsComponent.html",
 		"/Users/garito/Library/Application Support/Baskup-Records/delociously@gmail.com",
 		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_ova.sh",
 		"/Users/garito/Library/Messages/Archive/02-09-2017/Delociously Lab el 01-09-2017 a las 23.04.28.ichat",
-		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
-		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
 		"/Users/garito/Work/eReuse/workbench/erwb/config.ini",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/store.js",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Config.vue",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Tag.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/.gitignore",
-		"/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
 		"/Users/garito/Work/eReuse/WorkbenchSneaky/sneak.py",
-		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
 		"/Users/garito/Work/eReuse/workbench/requirements.txt",
 		"/Users/garito/Work/eReuse/workbench/setup.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/router.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/remote_producer.py",
 		"/Users/garito/Work/eReuse/workbench/erwb/__init__.py",
-		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/inventories.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/backend-dockerfile",
 		"/Users/garito/Work/eReuse/workbench/erwb/inventory.py",
@@ -829,7 +824,6 @@
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/main.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/forms.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/config.ini",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/Inventories.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/frontend-dockerfile",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker-compose.yml",
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/nginx.conf",
@@ -837,7 +831,6 @@
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/SwitchField.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/qr.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build/webpack.base.conf.js",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/App.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/index.html",
 		"/Users/garito/Downloads/I Ching/tiradas.txt",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/package.json",
@@ -922,11 +915,7 @@
 		"/Users/garito/p3/yFlask/static/js/breadcrumb.js",
 		"/Users/garito/p3/yFlask/static/js/flashes.js",
 		"/Users/garito/p3/yFlask/static/js/some-maps.js",
-		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/list-group.less",
-		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/navbar.less",
-		"/Users/garito/p3/yFlask/static/css/yde.css",
-		"/Users/garito/p3/yFlask/static/css/styles.css",
-		"/Users/garito/TimeFounder/App/0.3/TimeFounder/__init__.py"
+		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/list-group.less"
 	],
 	"find":
 	{
@@ -1158,76 +1147,16 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
+					"file": "frontend/build/webpack.base.conf.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6400,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5397,
-								5397
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3439.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9821,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								958,
-								958
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 888.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1620,
+						"buffer_size": 1836,
 						"regions":
 						{
 						},
@@ -1240,15 +1169,45 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 4,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 13.0,
+						"translation.y": 171.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "frontend/build/webpack.prod.conf.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3742,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1510.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
