@@ -520,18 +520,28 @@
 	"buffers":
 	[
 		{
-			"file": "frontend/build/webpack.base.conf.js",
+			"file": "webservice/app.py",
 			"settings":
 			{
-				"buffer_size": 1836,
+				"buffer_size": 13756,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "frontend/build/webpack.prod.conf.js",
+			"file": "/Users/garito/Work/ereuse-data-9.0.1b0/ereuse-data/config.ini",
 			"settings":
 			{
-				"buffer_size": 3742,
+				"buffer_size": 446,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "webservice/forms.py",
+			"settings":
+			{
+				"buffer_size": 6457,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -782,13 +792,14 @@
 	"expanded_folders":
 	[
 		"/Users/garito/Work/eReuse/ACeleryWB",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/config"
+		"/Users/garito/Work/eReuse/ACeleryWB/webservice",
+		"/Users/garito/Work/eReuse/workbench",
+		"/Users/garito/Work/eReuse/workbench/scripts"
 	],
 	"file_history":
 	[
 		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
+		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build/webpack.base.conf.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/simulator.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/config/prod.env.js",
@@ -830,7 +841,6 @@
 		"/Users/garito/Work/eReuse/ACeleryWB/docker/worker-dockerfile",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/src/components/SwitchField.vue",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/static/js/qr.js",
-		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build/webpack.base.conf.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/index.html",
 		"/Users/garito/Downloads/I Ching/tiradas.txt",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/package.json",
@@ -957,6 +967,8 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"config.ini",
+			"config.init",
 			"log",
 			"full_reqs",
 			"full_reqs = read_requirements('requirements-full.txt')",
@@ -1082,9 +1094,7 @@
 			"status",
 			"obj.finished",
 			"yDEClosed",
-			"yDEOpened",
-			"yDE",
-			"rootPaper"
+			"yDEOpened"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1147,46 +1157,57 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "frontend/build/webpack.base.conf.js",
+					"file": "webservice/app.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1836,
+						"buffer_size": 13756,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								13664,
+								13664
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 171.0,
+						"translation.y": 1984.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "frontend/build/webpack.prod.conf.js",
-					"semi_transient": true,
+					"file": "/Users/garito/Work/ereuse-data-9.0.1b0/ereuse-data/config.ini",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3742,
+						"buffer_size": 446,
 						"regions":
 						{
 						},
@@ -1199,15 +1220,52 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1510.0,
+						"translation.y": 722.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "webservice/forms.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6457,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3510,
+								3513
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 2.0,
+						"translation.y": 1482.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -1308,7 +1366,7 @@
 		[
 			[
 				"",
-				"~/Lab/T-F/T-F.sublime-project"
+				"~/Lab/T:F/T-F.sublime-workspace"
 			]
 		],
 		"width": 380.0

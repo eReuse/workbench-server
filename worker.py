@@ -30,7 +30,7 @@ def consume_phase(json):
   if(isinstance(json, str)):
     json = loads(json)
 
-  _uuid = json["_uuid"]
+  _uuid = json["device"]["_uuid"]
 
   aggregated_json = redis.get(_uuid)
   if aggregated_json is not None:
