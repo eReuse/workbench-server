@@ -114,6 +114,8 @@ class ConfigIniForm(Form):
 	SMART = RadioField("SMART test", choices = [("none", "Do not test"), ("short", "Short test"), ("long", "Long test")], default = "none")
 	STRESS = IntegerField("Stress test", default = 0, render_kw = {"group": "col-xs-6"})
 	SERVER = StringField("Server post phase URL", render_kw = {"group": "col-xs-6"})
+	BROKER = StringField("Celery broker url", render_kw = {"group": "col-xs-6"})
+	QUEUE = StringField("Celery queue", render_kw = {"group": "col-xs-6"})
 	ERASE = SwitcherField("Erase disk", choices = tipical_choices_4_config, render_kw = {"group": "col-xs-6"})
 	MODE = OnOffField("Erase mode", choices = ["Basic", "Secure"], false_values = ("no", "false", "EraseBasic"), render_kw = {"group": "col-xs-6"})
 	STEPS = IntegerField("Erase iterations", default = 1, render_kw = {"group": "col-xs-6"})
