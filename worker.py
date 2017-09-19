@@ -94,13 +94,10 @@ def del_usb(usb):
 
 @queue.task
 def tag_computer(json):
-  if(isinstance(json, str)):
-    json = loads(json)
-
   _uuid = json["_uuid"]
   aggregated_json = redis.get(_uuid)
   if aggregated_json is not None:
-    aggregated_json = loads(aggregated_json)
+    aggregated_json = loads(str(aggregated_json, "utf-8"))
 
     if "label" in json and json["label"]:
       aggregated_json["label"] = json["label"]
