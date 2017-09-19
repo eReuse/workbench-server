@@ -21,7 +21,8 @@ redis = StrictRedis(host = serverIP, db = 1)
 redis_usb = StrictRedis(host = serverIP, db = 2)
 redis_consolidated = StrictRedis(host = serverIP, db = 3)
 
-json_path = "./jsons"
+# json_path = "./jsons"
+json_path = "/srv/ereuse-data/inventory"
 
 # log = get_task_logger(__name__)
 
