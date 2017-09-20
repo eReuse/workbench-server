@@ -529,10 +529,11 @@
 			}
 		},
 		{
-			"file": "/Users/garito/Work/ereuse-data-9.0.1b0/ereuse-data/config.ini",
+			"file": "worker.py",
 			"settings":
 			{
-				"buffer_size": 446,
+				"buffer_size": 3965,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -540,7 +541,7 @@
 			"file": "webservice/forms.py",
 			"settings":
 			{
-				"buffer_size": 6457,
+				"buffer_size": 6449,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -792,12 +793,12 @@
 	"expanded_folders":
 	[
 		"/Users/garito/Work/eReuse/ACeleryWB",
-		"/Users/garito/Work/eReuse/ACeleryWB/webservice",
-		"/Users/garito/Work/eReuse/workbench",
-		"/Users/garito/Work/eReuse/workbench/scripts"
+		"/Users/garito/Work/eReuse/workbench"
 	],
 	"file_history":
 	[
+		"/Users/garito/Work/ereuse-data-9.0.1b0/ereuse-data/config.ini",
+		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/frontend/build/webpack.base.conf.js",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
@@ -813,7 +814,6 @@
 		"/Users/garito/Work/eReuse/workbench/scripts/configure-server.sh",
 		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
 		"/Users/garito/Work/eReuse/workbench/scripts/ereuse-data-refresh",
-		"/Users/garito/Work/eReuse/workbench/erwb/donator.py",
 		"/Users/garito/Desktop/SunMoonVuejsComponent.html",
 		"/Users/garito/Library/Application Support/Baskup-Records/delociously@gmail.com",
 		"/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_ova.sh",
@@ -924,8 +924,7 @@
 		"/Users/garito/p3/yFlask/static/js/category.js",
 		"/Users/garito/p3/yFlask/static/js/breadcrumb.js",
 		"/Users/garito/p3/yFlask/static/js/flashes.js",
-		"/Users/garito/p3/yFlask/static/js/some-maps.js",
-		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/list-group.less"
+		"/Users/garito/p3/yFlask/static/js/some-maps.js"
 	],
 	"find":
 	{
@@ -1173,8 +1172,8 @@
 						"selection":
 						[
 							[
-								13664,
-								13664
+								5780,
+								5780
 							]
 						],
 						"settings":
@@ -1188,6 +1187,10 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"syntax": "Packages/Python/Python.sublime-syntax",
@@ -1195,7 +1198,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1984.0,
+						"translation.y": 817.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
@@ -1203,27 +1206,29 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/Users/garito/Work/ereuse-data-9.0.1b0/ereuse-data/config.ini",
+					"file": "worker.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 446,
+						"buffer_size": 3965,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								667,
+								667
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 722.0,
+						"translation.y": 1198.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -1235,15 +1240,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6457,
+						"buffer_size": 6449,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3510,
-								3513
+								3522,
+								3522
 							]
 						],
 						"settings":
@@ -1261,7 +1266,7 @@
 							],
 							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
-						"translation.x": 2.0,
+						"translation.x": 0.0,
 						"translation.y": 1482.0,
 						"zoom_level": 1.0
 					},
@@ -1366,7 +1371,7 @@
 		[
 			[
 				"",
-				"~/Lab/T:F/T-F.sublime-workspace"
+				"~/Lab/T-F/T-F.sublime-project"
 			]
 		],
 		"width": 380.0

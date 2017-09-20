@@ -36,26 +36,25 @@ export default {
       var usb = this.$store.getters.plugged_usbs[inventory]
       return usb['vendor'] + ' ' + usb['product']
     },
-    toggleScan () {
-      var preview = document.getElementsByClassName('qr-preview')[0]
+    toggleScan (e) {
+      var preview = e.target.closest('.form-group').nextElementSibling
       if (this.camera === null) {
         preview.classList.remove('d-none')
-        this.initScan()
+        this.initScan(e.target)
       } else {
         preview.classList.add('d-none')
         this.scanner.stop()
+        this.scanner = null
         this.camera = null
       }
     },
-    initScan () {
-      if (this.scanner === null) {
-        this.scanner = new Instascan.Scanner({ video: document.getElementsByClassName('qr-preview')[0] })
-        this.scanner.addListener('scan', function (content) {
-          var parts = content.split('/')
-          document.getElementsByClassName('qr-input')[0].value = parts[parts.length - 1]
-          beep()
-        })
-      }
+    initScan (el) {
+      this.scanner = new Instascan.Scanner({ video: el.closest('.form-group').nextElementSibling })
+      this.scanner.addListener('scan', function (content) {
+        var parts = content.split('/')
+        el.closest('.input-group').querySelector('input').value = parts[parts.length - 1]
+        beep()
+      })
 
       Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 1) {
@@ -96,7 +95,11 @@ export default {
     axios.get(server + '/tag_computer_form').then(function (response) {
       this.html = response.data
     }.bind(this)).then(function () {
-      document.getElementsByClassName('fa-qrcode')[0].addEventListener('click', this.toggleScan.bind(this))
+      var qrFields = document.getElementsByClassName('fa-qrcode')
+      var vm = this
+      Array.from(qrFields).forEach(function (el) {
+        el.addEventListener('click', vm.toggleScan.bind(vm))
+      })
     }.bind(this))
   }
 }

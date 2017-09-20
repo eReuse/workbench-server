@@ -9,9 +9,7 @@ from redis import StrictRedis
 
 from dateutil.parser import parse
 
-# serverIP = "192.168.99.100"
 # serverIP = "localhost"
-# serverIP = "redis"
 serverIP = "192.168.2.2"
 redisBroker = "redis://{}:6379/0".format(serverIP)
 
@@ -100,12 +98,12 @@ def tag_computer(json):
   if aggregated_json is not None:
     aggregated_json = loads(str(aggregated_json, "utf-8"))
 
-    if "label" in json and json["label"]:
-      aggregated_json["label"] = json["label"]
-    if "pid" in json and json["pid"]:
-      aggregated_json["pid"] = json["pid"]
+    if "gid" in json and json["gid"]:
+      aggregated_json["gid"] = json["gid"]
     if "_id" in json and json["_id"]:
       aggregated_json["_id"] = json["_id"]
+    if "lot" in json and json["lot"]:
+      aggregated_json["lot"] = json["lot"]
 
     aggregated_json["device"]["type"] = json["device_type"]
     aggregated_json["condition"] = {"appearance": {"general": json["visual_grade"]}, "functionality": {"general": json["functional_grade"]}}

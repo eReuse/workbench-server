@@ -93,7 +93,6 @@ export default {
   },
   computed: {
     simulations () {
-      console.log(process.env)
       return this.$store.getters.simulations
     },
     visible () {

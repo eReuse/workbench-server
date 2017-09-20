@@ -93,9 +93,9 @@ class QRField(StringField):
 	widget = QRWidget()
 
 class ComputerForm(Form):
-	label = StringField("Label", render_kw = {"group": "col-xs-4"})
-	pid = StringField("PID", render_kw = {"group": "col-xs-4"})
-	id_ = QRField("_ID", render_kw = {"group": "col-xs-4"})
+	id_ = QRField("System ID", render_kw = {"group": "col-xs-6"})
+	gid = QRField("Giver ID", render_kw = {"group": "col-xs-6"})
+	lot = StringField("Lot")
 	device_type = SwitcherField("Device type", choices = computer_types)
 	visual_grade = RadioField("Visual grade", choices = visual_grades)
 	functional_grade = RadioField("Functional grade", choices = functional_grades)
