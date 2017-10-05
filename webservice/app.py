@@ -345,15 +345,17 @@ def factory(config = None):
   app = Acelery(config)
 
   app.wsgi_app = CORSMiddleware(SharedDataMiddleware(app.wsgi_app, {"/static": path.join(path.dirname(__file__), "static")}), "*")
-  # app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {"/static": path.join(path.dirname(__file__), "static")})
 
   return app
 
 if __name__ == "__main__":
   from werkzeug.serving import run_simple
-  
-  server = "192.168.2.2"
-  # server = "localhost"
+
+  # server = "192.168.2.2"
+  server = "localhost"
+
+  # localIP = "0.0.0.0"
+  localIP = "localhost"
 
   config = {
     "config.ini": "/srv/ereuse-data/config.ini",
@@ -413,8 +415,5 @@ if __name__ == "__main__":
       }
     }
   }
-
-  localIP = "0.0.0.0"
-  # localIP = "localhost"
 
   run_simple(localIP, 8090, factory(config), use_debugger = True, use_reloader = True)

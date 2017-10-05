@@ -9,20 +9,37 @@ from redis import StrictRedis
 
 from dateutil.parser import parse
 
-# serverIP = "localhost"
-serverIP = "192.168.2.2"
+from requests import post, ConnectionError, ConnectTimeout
+
+serverIP = "localhost"
+# serverIP = "192.168.2.2"
+
+json_path = "./jsons"
+# json_path = "/srv/ereuse-data/inventory"
+
 redisBroker = "redis://{}:6379/0".format(serverIP)
+
+deviceHubAuth = {'email': 'a@a.a', 'password': '1234'}
+deviceHubURLS = {
+  'auth': 'http://devicehub.ereuse.net/login',
+  'upload': 'http://devicehub.ereuse.net/{}/events/devices/snapshot'
+}
 
 queue = Celery("workbench", broker = redisBroker)
 queue.conf.update(worker_pool_restarts=True)
 redis = StrictRedis(host = serverIP, db = 1)
 redis_usb = StrictRedis(host = serverIP, db = 2)
 redis_consolidated = StrictRedis(host = serverIP, db = 3)
-
-# json_path = "./jsons"
-json_path = "/srv/ereuse-data/inventory"
+redis_uploaded = StrictRedis(host = serverIP, db = 4)
 
 # log = get_task_logger(__name__)
+
+queue.conf.beat_schedule = {
+  'try-to-upload': {
+    'task': 'worker.upload_jsons',
+    'schedule': 20.0
+  }
+}
 
 @queue.task
 def consume_phase(json):
@@ -103,10 +120,11 @@ def tag_computer(json):
     if "_id" in json and json["_id"]:
       aggregated_json["_id"] = json["_id"]
     if "lot" in json and json["lot"]:
-      aggregated_json["lot"] = json["lot"]
+      aggregated_json["group"] = {"@type": "Lot", "_id": json["lot"]}
 
     aggregated_json["device"]["type"] = json["device_type"]
-    aggregated_json["condition"] = {"appearance": {"general": json["visual_grade"]}, "functionality": {"general": json["functional_grade"]}}
+    aggregated_json["condition"] = {"appearance": {"general": json["visual_grade"]},
+                                    "functionality": {"general": json["functional_grade"]}}
 
     if json["comment"]:
       aggregated_json["comment"] = json["comment"]
@@ -115,3 +133,24 @@ def tag_computer(json):
 
     if len(aggregated_json["times"].keys()) > 5:
       consolidate_json(aggregated_json)
+
+# @queue.task(autoretry_for = (ConnectionError, ConnectTimeout), retry_backoff = True) // automatic retry a task with incremental time between retries
+@queue.task
+def upload_jsons():
+  headers = {"content-type": "application/json"}
+  login_r = post(deviceHubURLS['auth'], data = dumps(deviceHubAuth), headers = headers)
+
+  if login_r.ok:
+    login_json = login_r.json()
+
+    if "token" in login_json:
+      headers = {"content-type": "application/json", "accept": "application/json", "authorization": "Basic {}".format(login_json["token"])}
+
+      for json in redis_consolidated.mget(redis_consolidated.keys('*'))[:1]:
+        try:
+          result = post(deviceHubURLS["upload"].format(login_json["defaultDatabase"]), data = json.decode('utf-8'), headers = headers)
+          print(json.decode('utf-8'))
+          print(result.json())
+          print(result.text)
+        except (ConnectionError, ConnectTimeout) as e:
+          print(e)
