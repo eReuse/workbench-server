@@ -11,11 +11,11 @@ from dateutil.parser import parse
 
 from requests import post, ConnectionError, ConnectTimeout
 
-serverIP = "localhost"
-# serverIP = "192.168.2.2"
+# serverIP = "localhost"
+serverIP = "192.168.2.2"
 
-json_path = "./jsons"
-# json_path = "/srv/ereuse-data/inventory"
+# json_path = "./jsons"
+json_path = "/srv/ereuse-data/inventory"
 
 redisBroker = "redis://{}:6379/0".format(serverIP)
 
@@ -31,13 +31,14 @@ redis = StrictRedis(host = serverIP, db = 1)
 redis_usb = StrictRedis(host = serverIP, db = 2)
 redis_consolidated = StrictRedis(host = serverIP, db = 3)
 redis_uploaded = StrictRedis(host = serverIP, db = 4)
+redis_uploaderrors = StrictRedis(host = serverIP, db = 5)
 
 # log = get_task_logger(__name__)
 
 queue.conf.beat_schedule = {
   'try-to-upload': {
     'task': 'worker.upload_jsons',
-    'schedule': 20.0
+    'schedule': 60.0 * 5
   }
 }
 
@@ -146,11 +147,18 @@ def upload_jsons():
     if "token" in login_json:
       headers = {"content-type": "application/json", "accept": "application/json", "authorization": "Basic {}".format(login_json["token"])}
 
-      for json in redis_consolidated.mget(redis_consolidated.keys('*'))[:1]:
+      for json in redis_consolidated.mget(redis_consolidated.keys('*')):
+        json = loads(json.decode('utf-8'))
+        _uuid = json["_uuid"]
+        json = dumps(json)
         try:
-          result = post(deviceHubURLS["upload"].format(login_json["defaultDatabase"]), data = json.decode('utf-8'), headers = headers)
-          print(json.decode('utf-8'))
-          print(result.json())
-          print(result.text)
+          result = post(deviceHubURLS["upload"].format(login_json["defaultDatabase"]), data = json, headers = headers)
         except (ConnectionError, ConnectTimeout) as e:
           print(e)
+          break
+
+        if result.ok:
+          redis_uploaded.set(_uuid, json)
+          redis_consolidated.delete(_uuid)
+        else:
+          redis_uploaderrors.set(_uuid, {'json': json, 'response': result.json()})

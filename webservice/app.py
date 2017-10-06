@@ -351,11 +351,11 @@ def factory(config = None):
 if __name__ == "__main__":
   from werkzeug.serving import run_simple
 
-  # server = "192.168.2.2"
-  server = "localhost"
+  server = "192.168.2.2"
+  # server = "localhost"
 
-  # localIP = "0.0.0.0"
-  localIP = "localhost"
+  localIP = "0.0.0.0"
+  # localIP = "localhost"
 
   config = {
     "config.ini": "/srv/ereuse-data/config.ini",
