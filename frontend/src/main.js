@@ -12,13 +12,13 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome/css/font-awesome.css'
 
 import Usbs from '@/components/usbs'
-import Simulator from '@/components/simulator'
+// import Simulator from '@/components/simulator'
 import Inventories from '@/components/inventories'
 
 Vue.config.productionTip = false
 
 Vue.component('usbs', Usbs)
-Vue.component('simulator', Simulator)
+// Vue.component('simulator', Simulator)
 Vue.component('inventories', Inventories)
 
 Vue.mixin({

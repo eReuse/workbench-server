@@ -317,29 +317,29 @@ class Acelery(object):
 
     return Response(dumps({"acknowledge": True}), mimetype = "application/json")
 
-  def simulated_inventories(self, request):
-  	return Response(dumps({"acknowledge": True, "data": self.simulator.to_dict()}), mimetype = "application/json")
+  # def simulated_inventories(self, request):
+  # 	return Response(dumps({"acknowledge": True, "data": self.simulator.to_dict()}), mimetype = "application/json")
 
-  def simulate_inventory(self, request):
-    inventory = request.values["inventory"]
-    timed = loads(request.values.get("timed", "false"))
+  # def simulate_inventory(self, request):
+  #   inventory = request.values["inventory"]
+  #   timed = loads(request.values.get("timed", "false"))
 
-    self.redis_inventories.delete(inventory)
+  #   self.redis_inventories.delete(inventory)
 
-    for phase in self.simulator.inventories[inventory]:
-      self.celery.send_task("worker.consume_phase", [phase,])
-      sleep(1)
+  #   for phase in self.simulator.inventories[inventory]:
+  #     self.celery.send_task("worker.consume_phase", [phase,])
+  #     sleep(1)
 
-    return Response(dumps({"acknowledge": True}), mimetype = "application/json")
+  #   return Response(dumps({"acknowledge": True}), mimetype = "application/json")
 
-  def index(self, request):
-    return self.render_template("index.html", simulator = self.simulator)
+  # def index(self, request):
+  #   return self.render_template("index.html", simulator = self.simulator)
 
-  def index2(self, request):
-    with open("{}/templates/index2.html".format(path.abspath(path.dirname(__file__))), "r") as t:
-      content = t.read()
+  # def index2(self, request):
+  #   with open("{}/templates/index2.html".format(path.abspath(path.dirname(__file__))), "r") as t:
+  #     content = t.read()
 
-    return Response(content, mimetype = "text/html")
+  #   return Response(content, mimetype = "text/html")
 
 def factory(config = None):
   app = Acelery(config)
@@ -376,8 +376,8 @@ if __name__ == "__main__":
       "db": 3
     },
     "routes": {
-      "/": "index",
-      "/index2": "index2",
+      # "/": "index",
+      # "/index2": "index2",
       "/tag_computer": "tag_computer",
       "/tag_computer_form": "tag_computer_form",
       "/edit_config": "edit_config",
@@ -387,8 +387,8 @@ if __name__ == "__main__":
       "/usbs": "usbs",
       "/add_usb": "add_usb",
       "/del_usb": "del_usb",
-      "/simulated_inventories": "simulated_inventories",
-      "/simulate_inventory": "simulate_inventory"
+      # "/simulated_inventories": "simulated_inventories",
+      # "/simulate_inventory": "simulate_inventory"
     },
     "logger": {
       "name": "app",
