@@ -276,7 +276,21 @@ class Acelery(object):
     if keys:
       consolidated = [{"id": key.decode("utf-8"), "json": loads(inventory.decode("utf-8"))} for key, inventory in zip(keys, self.redis_consolidated.mget(keys))]
 
-    result.extend(consolidated)
+      result.extend(consolidated)
+
+    uploaded = []
+    keys = self.redis_uploaded.keys('*')
+    if keys:
+      uploaded = [{"id": key.decode("utf-8"), "json": loads(inventory.decode("utf-8"))} for key, inventory in zip(keys, self.redis_uploaded.mget(keys))]
+
+      result.extend(uploaded)
+
+    uploadederrors = []
+    keys = self.redis_uploadederrors.keys('*')
+    if keys:
+      uploadederrors = [{"id": key.decode("utf-8"), "json": loads(inventory.decode("utf-8"))} for key, inventory in zip(keys, self.redis_uploadederrors.mget(keys))]
+
+      result.extend(uploadederrors)
 
     return Response(dumps({"acknowledge": True, "inventories": result}), mimetype = "application/json")
 

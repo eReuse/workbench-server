@@ -38,7 +38,7 @@ redis_uploaderrors = StrictRedis(host = serverIP, db = 5)
 queue.conf.beat_schedule = {
   'try-to-upload': {
     'task': 'worker.upload_jsons',
-    'schedule': 60.0 * 5
+    'schedule': 1.0 * 5
   }
 }
 
