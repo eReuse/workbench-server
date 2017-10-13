@@ -286,9 +286,9 @@ class Acelery(object):
       result.extend(uploaded)
 
     uploadederrors = []
-    keys = self.redis_uploadederrors.keys('*')
+    keys = self.redis_uploaderrors.keys('*')
     if keys:
-      uploadederrors = [{"id": key.decode("utf-8"), "json": loads(inventory.decode("utf-8"))} for key, inventory in zip(keys, self.redis_uploadederrors.mget(keys))]
+      uploadederrors = [{"id": key.decode("utf-8"), "json": loads(inventory.decode("utf-8"))} for key, inventory in zip(keys, self.redis_uploaderrors.mget(keys))]
 
       result.extend(uploadederrors)
 
