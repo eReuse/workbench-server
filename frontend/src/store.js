@@ -9,8 +9,6 @@ const server = process.env.SERVER_URL || 'http://localhost:8090'
 
 const state = {
   plugged_usbs: {},
-  withSimulator: true,
-  simulator: {},
   inventories: [],
   flash: null
 }
@@ -18,12 +16,6 @@ const state = {
 const mutations = {
   setPluggedUsbs (state, usbs) {
     state.plugged_usbs = usbs
-  },
-  setWithSimulator (state, data) {
-    state.withSimulator = data
-  },
-  setSimulator (state, data) {
-    state.simulator = data
   },
   setInventories (state, data) {
     data.sort(function (a, b) {
@@ -59,18 +51,6 @@ const actions = {
       console.log(error)
     })
   },
-  toggleSimulator (store) {
-    store.commit('setWithSimulator', !store.getters.withSimulator)
-  },
-  getSimulator (store) {
-    axios.get(server + '/simulated_inventories').then(function (response) {
-      if ('acknowledge' in response['data'] && response['data']['acknowledge']) {
-        store.commit('setSimulator', response['data']['data'])
-      }
-    }).catch(function (error) {
-      console.log(error)
-    })
-  },
   getInventories (store) {
     axios.get(server + '/new_inventories').then(function (response) {
       if ('acknowledge' in response['data'] && response['data']['acknowledge']) {
@@ -94,12 +74,6 @@ const getters = {
   },
   plugged_usbs (state) {
     return state.plugged_usbs
-  },
-  withSimulator (state) {
-    return state.withSimulator
-  },
-  simulations (state) {
-    return state.simulator
   },
   inventories (state) {
     return state.inventories

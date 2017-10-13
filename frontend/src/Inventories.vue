@@ -11,7 +11,6 @@
     </div>
     <div class="row">
       <usbs class="col-xs-12 col-md-12"></usbs>
-      <!-- simulator class="col-xs-12 col-md-6"></simulator -->
     </div>
     <div class="row">
       <inventories class="col-xs-12 col-md-12"></inventories>

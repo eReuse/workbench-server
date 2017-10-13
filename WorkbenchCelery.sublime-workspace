@@ -520,27 +520,37 @@
 	"buffers":
 	[
 		{
-			"file": "worker.py",
+			"file": "webservice/app.py",
 			"settings":
 			{
-				"buffer_size": 5594,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/garito/Work/eReuse/workbench/erwb/serializers.py",
-			"settings":
-			{
-				"buffer_size": 1986,
+				"buffer_size": 13686,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "webservice/app.py",
+			"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
 			"settings":
 			{
-				"buffer_size": 13644,
+				"buffer_size": 9527,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/src/Inventories.vue",
+			"settings":
+			{
+				"buffer_size": 752,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "frontend/src/main.js",
+			"settings":
+			{
+				"buffer_size": 1459,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -796,12 +806,14 @@
 	"expanded_folders":
 	[
 		"/Users/garito/Work/eReuse/workbench",
-		"/Users/garito/Work/eReuse/workbench/erwb"
+		"/Users/garito/Work/eReuse/workbench/scripts"
 	],
 	"file_history":
 	[
-		"/Users/garito/Downloads/I Ching/tiradas.txt",
+		"/Users/garito/Work/eReuse/ACeleryWB/.gitignore",
+		"/Users/garito/Work/eReuse/workbench/erwb/serializers.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/worker.py",
+		"/Users/garito/Downloads/I Ching/tiradas.txt",
 		"/Users/garito/.bash_prompt.sh",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/app.py",
 		"/Users/garito/Work/eReuse/ACeleryWB/webservice/forms.py",
@@ -925,9 +937,7 @@
 		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/variables.less",
 		"/Users/garito/Library/Application Support/Sublime Text 3/Packages/GoSublime/CHANGELOG.md",
 		"/Users/garito/p3/yFlask/less/libs/bootstrap/3.3.7/breadcrumbs.less",
-		"/Users/garito/p3/yFlask/static/js/category.js",
-		"/Users/garito/p3/yFlask/static/js/breadcrumb.js",
-		"/Users/garito/p3/yFlask/static/js/flashes.js"
+		"/Users/garito/p3/yFlask/static/js/category.js"
 	],
 	"find":
 	{
@@ -969,6 +979,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"docker",
 			"uuid",
 			"logical_name",
 			"lot",
@@ -1095,8 +1106,7 @@
 			"set",
 			"obj.get_url\\(\\)",
 			"get_url",
-			"Paper",
-			"status"
+			"Paper"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1164,19 +1174,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "worker.py",
+					"file": "webservice/app.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5594,
+						"buffer_size": 13686,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								76,
+								54
 							]
 						],
 						"settings":
@@ -1185,7 +1195,7 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
+						"translation.x": 6.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -1194,40 +1204,29 @@
 				},
 				{
 					"buffer": 1,
-					"file": "/Users/garito/Work/eReuse/workbench/erwb/serializers.py",
+					"file": "/Users/garito/Work/eReuse/workbench/scripts/build_ereuse_iso.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1986,
+						"buffer_size": 9527,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								843,
-								847
+								2804,
+								2804
 							]
 						],
 						"settings":
 						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 285.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1235,32 +1234,62 @@
 				},
 				{
 					"buffer": 2,
-					"file": "webservice/app.py",
+					"file": "frontend/src/Inventories.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 13644,
+						"buffer_size": 752,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12110,
-								12110
+								419,
+								419
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
+							"syntax": "Packages/Vuejs Complete Package/vue.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 6783.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "frontend/src/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1459,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								578,
+								578
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 22.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]

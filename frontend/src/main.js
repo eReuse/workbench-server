@@ -12,13 +12,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome/css/font-awesome.css'
 
 import Usbs from '@/components/usbs'
-// import Simulator from '@/components/simulator'
 import Inventories from '@/components/inventories'
 
 Vue.config.productionTip = false
 
 Vue.component('usbs', Usbs)
-// Vue.component('simulator', Simulator)
 Vue.component('inventories', Inventories)
 
 Vue.mixin({
@@ -59,6 +57,5 @@ new Vue({
   mounted () {
     this.refreshData()
     setInterval(this.refreshData, 5000)
-    this.$store.dispatch('getSimulator')
   }
 })

@@ -159,6 +159,7 @@ def upload_jsons():
 
         if result.ok:
           redis_uploaded.set(_uuid, json)
-          redis_consolidated.delete(_uuid)
         else:
           redis_uploaderrors.set(_uuid, {'json': json, 'response': result.json()})
+
+        redis_consolidated.delete(_uuid)
