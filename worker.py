@@ -150,6 +150,7 @@ def upload_jsons():
       for json in redis_consolidated.mget(redis_consolidated.keys('*')):
         json = loads(json.decode('utf-8'))
         _uuid = json["_uuid"]
+        del json['device']['_uuid']
         json = dumps(json)
         try:
           result = post(deviceHubURLS["upload"].format(login_json["defaultDatabase"]), data = json, headers = headers)
