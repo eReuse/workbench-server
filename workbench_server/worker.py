@@ -1,3 +1,4 @@
+import locale
 from collections import namedtuple
 from datetime import timedelta
 from json import dumps, loads
@@ -18,17 +19,25 @@ class Worker:
 
     def __init__(self, host='192.168.2.2', json_path='/srv/ereuse-data/inventory', first_db: int = 1) -> None:
         """
+        Instantiates the tasks, redis and celery. Call to ``start()`` method after to run the celery
+        service::
+
+            Worker().start()
+
         :param host: Where redis resides in.
         :param json_path: Where to save the resulting json files. The worker tries to upload them to a DeviceHub and
         saves them in a file too, so they can be accessed locally easily.
         :param first_db: The first redis database number. We create 5 databases so we will use the next following 5
         redis databases.
         """
+        if locale.getpreferredencoding().lower() != 'utf-8':
+            raise OSError('Worker needs UTF-8 systems, but yours is {}'.format(locale.getpreferredencoding()))
+
         self.json_path = json_path
         redisBroker = 'redis://{}:6379/0'.format(host)
-        queue = Celery('workbench', broker=redisBroker)
-        queue.conf.update(worker_pool_restarts=True)
-        queue.conf.beat_schedule = {
+        self.queue = Celery('workbench', broker=redisBroker)
+        self.queue.conf.update(worker_pool_restarts=True)
+        self.queue.conf.beat_schedule = {
             'try-to-upload': {
                 'task': 'worker.upload_snapshots',
                 'schedule': 1.0 * 5
@@ -46,25 +55,29 @@ class Worker:
         # lambda doesn't work for queue.task
         # todo make this better (like with queue.task()(self.consume_phase))
 
-        @queue.task
+        @self.queue.task
         def consume_phase(json):
             return self.consume_phase(json)
 
-        @queue.task
+        @self.queue.task
         def add_usb(usb):
             return self.add_usb(usb)
 
-        @queue.task
+        @self.queue.task
         def del_usb(usb):
             return self.del_usb(usb)
 
-        @queue.task
+        @self.queue.task
         def tag_computer(json):
             return self.tag_computer(json)
 
-        @queue.task
+        @self.queue.task
         def upload_snapshots():
             return self.upload_snapshots()
+
+    def start(self):
+        """Initiates the celery service with needed options for running in linux."""
+        self.queue.worker_main(['worker', '-s', '/tmp/workbench-scheduler', '--loglevel=info'])
 
     def consume_phase(self, json):
         """

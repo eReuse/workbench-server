@@ -3,11 +3,11 @@ import sys
 
 from assertpy import assert_that
 
-from workbench_server.tests import TestBase
 from workbench_server.tests.fixtures.phases import phases
+from workbench_server.tests.test_worker import TestWorker
 
 
-class TestConsumePhase(TestBase):
+class TestConsumePhase(TestWorker):
     def test_consume_phases(self):
         """
         Tests all phases when they are all performed

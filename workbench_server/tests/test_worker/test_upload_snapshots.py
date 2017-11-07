@@ -5,10 +5,10 @@ from assertpy import assert_that
 from requests import ConnectTimeout
 from requests_mock import Mocker
 
-from workbench_server.tests import TestBase
+from workbench_server.tests.test_worker import TestWorker
 
 
-class TestUploadSnapshots(TestBase):
+class TestUploadSnapshots(TestWorker):
     def setUp(self):
         super().setUp()
         self.snapshot = self.json('snapshot')
