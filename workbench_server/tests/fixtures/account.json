@@ -1,0 +1,14 @@
+{
+  "_id": "59f89671a0961e0d7ed6a42c",
+  "databases": {
+    "db2": "ad",
+    "db1": "ad"
+  },
+  "shared": [],
+  "email": "a@a.a",
+  "defaultDatabase": "db1",
+  "token": "a_token",
+  "role": "a",
+  "active": true,
+  "@type": "Account"
+}

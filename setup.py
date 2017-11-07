@@ -16,9 +16,7 @@ setup(
     # Updated in 2017-07-29
     install_requires=[],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
-    # http://setuptools.readthedocs.io/en/latest/setuptools.html#declaring-extras-optional-features-with-their-own-dependencies
-    # Install it with pip install .[docs] or pip install -e .[docs]
-    test_suite='ereuse_devicehub.tests',
+    test_suite='workbench_server.tests',
     tests_require=tests_require,
     include_package_data=True,
     classifiers=[
