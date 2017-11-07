@@ -1,0 +1,313 @@
+{%- extends "base.html" -%}
+
+{%- set title = "Workbench GUI" -%}
+{%- block title -%}{{ title }}{%- endblock -%}
+
+{%- block content -%}
+	<div class="container-fluid">
+		<h1>
+			{{ title  }}
+			<small class="pull-right">
+				<a href="/edit_config"><i class="fa fa-gear"></i></a>
+			</small>
+		</h1>
+		{{ show_bootstrap_flashes() | safe }}
+
+		<div class="row">
+			<div class="plugged_usbs col-xs-6">
+				<h3>Plugged usbs</h3>
+				<ol id="usbs-list" class="list-unstyled">
+					<li v-for="usb in usbs">
+							<div class="media">
+								<div class="media-left media-middle"><i class="fa fa-usb fa-2x"></i></div>
+								<div class="media-body">
+									<h4 class="media-heading">{{ "{{ usb.vendor }}" }} {{ "{{ usb.product }}" }}</h4>
+									<div>{{ "{{ usb.serial }}" }}</div>
+									<div>{{ "{{ usb.id }} " }}</div>
+								</div>
+							</div>
+					</li>
+				</ol>
+			</div>
+
+			<div id="simulator" class="col-xs-6">
+				<h3>Simulator</h3>
+				<div v-for="test in inventories" class="media inventory">
+					<div class="media-left media-middle text-center">
+						<a href="#" @click.prevent="launchInventory(test[0]['_uuid'], $event)"><i class="fa fa-rocket fa-2x"></i></a>
+						<a href="#" class="timed" @click.prevent="toggleTimed($event)"><i class="fa fa-hourglass-half"></i></a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">
+							<i class="fa" :class="computerIcon(test[0]['device']['type'])"></i> {{ "{{ test[0]['device']['manufacturer'] }}" }} {{ "{{ test[0]['device']['model'] }}" }}
+							<small>{{ "{{ test[0]['_uuid'] }}" }}</small>
+						</h4>
+						<ul class="list-unstyled">
+							<li v-for="(usb, serial) in usbs">
+								<i class="fa fa-usb"></i> 
+								{{ "{{ usb['vendor'] }}" }} {{ "{{ usb['product'] }}" }} <small>{{ "{{ serial }}" }}</small>
+								<a href="#" @click.prevent="toggleUsb(serial, test[0]['_uuid'], $event)">
+									<i class="fa" :class="[isPlugged(serial, test[0]['_uuid']) ? 'fa-toggle-on' : 'fa-toggle-off']"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="inventories-list">
+			<h3>Inventories</h3>
+			<table class="table">
+				<tr>
+					<th><i class="fa fa-usb"></i></th>
+					<th>Created</th>
+					<th>Device</th>
+					<th>Identification</th>
+					<th>Grades</th>
+					<th>Phases</th>
+				</tr>
+				<template v-for="inventory in sortedInv">
+					<tr v-if="renderHeader(inventory)">
+						<th colspan="6" class="text-center">{{ '{{ moment(inventory.json["created"] || inventory.json["date"]).format("LL") }}' }}</th>
+					</tr>
+					<tr>
+						<td v-if="inventory.id in usbs">
+							<a :href="{{ 'tag_url(inventory.id)' }}">{{ "{{ usb_label(inventory.id) }}" }}</a>
+						</td>
+						<td v-else>&nbsp;</td>
+						<td>
+							<time :datetime="{{ 'inventory.json[\'created\'] || inventory.json[\'date\']' }}">
+								{{ "{{ moment(inventory.json['created'] || inventory.json['created']).format('HH:mm:ss') }}" }}
+							</time>
+						</td>
+						<td>
+							<i class="fa" :class="computerIcon(inventory.json['device']['type'])"></i>
+							{{ "{{ inventory.json['device']['manufacturer'] }}" }} {{ "{{ inventory.json['device']['model'] }}" }}
+						</td>
+						<td v-if="'label' in inventory.json">{{ "{{ inventory.json['label'] }}" }}</td>
+						<td v-else-if="'pid' in inventory.json">{{ "{{ inventory.json['pid'] }}" }}</td>
+						<td v-else-if="'_id' in inventory.json">{{ "{{ inventory.json['_id'] }}" }}</td>
+						<td v-else>Not identified</td>
+						<td v-if="'condition' in inventory.json">
+							{{ "{{ inventory.json['condition']['appearance']['general'] }}" }} 
+							{{ "{{ inventory.json['condition']['functionality']['general'] }}" }}
+						</td>
+						<td v-else>Not rated</td>
+						<td v-if="'times' in inventory.json" class="text-center" :class="phase_color(Object.keys(inventory.json['times']).length)">
+							{{ "{{ Object.keys(inventory.json['times']).length }}" }}
+						</td>
+						<td v-else class="text-center text-success bg-success"><i class="fa fa-check"></i></td>
+					</tr>
+				</template>
+			</table>
+		</div>
+	</div>
+{%- endblock -%}
+
+{%- block scripts -%}
+	{{ super() }}
+	<script src="/static/libs/momentjs/2.18.1/moment-with-locales.js"></script>
+	<script src="/static/libs/vuejs/2.4.2/dist/vue.min.js"></script>
+
+	<script>
+		moment.locale(navigator.language || navigator.browserLanguage || navigator.systemLanguage || navigator.userLanguage || "es");
+
+		Vue.config.devtools = true;
+
+		var usbs = new Vue({
+			el: "#usbs-list",
+			data: {
+				"usbs": []
+			},
+			methods: {
+				loadData: function() {
+					$.getJSON("/usbs", {"vuejs": true}).done(function(data) {
+						if(JSON.stringify(this.usbs) !== JSON.stringify(data["usbs"])) {
+							this.usbs  = data["usbs"];
+						}
+					}.bind(this));
+				}
+			},
+			mounted: function() {
+				this.loadData();
+				setInterval(this.loadData, 5000);
+			}
+		});
+
+		var inventories = new Vue({
+			el: "#inventories-list",
+			data: {
+				"inventories": [],
+				"usbs": {}
+			},
+			methods: {
+				loadData: function() {
+					$.getJSON("/new_inventories").done(function(data) {
+						if(JSON.stringify(this.inventories) !== JSON.stringify(data["inventories"])) {
+							this.inventories = data["inventories"];	
+						}
+					}.bind(this));
+
+					$.getJSON("/usbs").done(function(data) {
+						if(JSON.stringify(this.usbs) !== JSON.stringify(data["usbs"])) {
+							this.usbs  = data["usbs"];
+						}
+					}.bind(this));
+				},
+				computerIcon: function(type) {
+					if(type == "Laptop") {
+						return "fa-laptop";
+					} else if (type == "Netbook") {
+						return "fa-laptop netbook";
+					} else if (type == "Server") {
+						return "fa-server";
+					} else if (type == "Microtower") {
+						return "fa-building-o";
+					} else {
+						return "fa-desktop";
+					}
+				},
+				moment: function(date) {
+					return moment(date);
+				},
+				phase_color: function(how_many) {
+					if(how_many < 3) {
+						return "bg-danger";
+					} else if (how_many == 3) {
+						return "bg-warning";
+					} else {
+						return "bg-success";
+					}
+				},
+				usb_label: function(id) {
+					return this.usbs[id]["vendor"] + " " + this.usbs[id]["product"];
+				},
+				tag_url: function(id) {
+					if(id in this.usbs) {
+						return "/tag_computer?inventory=" + id;
+					}
+				},
+				renderHeader: function(el) {
+					var index = this.inventories.indexOf(el);
+					if(index === 0) {
+						return true;
+					} else {
+						previousDate = new Date(this.inventories[index - 1].json["created"] || this.inventories[index - 1].json["date"]),
+						currentDate = new Date(el.json["created"] || el.json["date"]);
+						previousDate.setHours(0, 0, 0, 0);
+						currentDate.setHours(0, 0, 0, 0);
+
+						return (currentDate.valueOf() !== previousDate.valueOf());
+					}
+							
+				}
+			},
+			computed: {
+				sortedInv: function() {
+					this.inventories.sort(function(a, b) {
+						return new Date(b.json["created"] || b.json["date"]) - new Date(a.json["created"] || a.json["date"]);
+					});
+					return this.inventories;
+				}
+			},
+			mounted: function() {
+				this.loadData();
+				setInterval(this.loadData, 5000);
+			}
+		});
+
+		var simulator = new Vue({
+			el: "#simulator",
+			data: {
+				"usbs": [],
+				"inventories": [],
+				"plugged": {}
+			},
+			methods: {
+				loadData: function() {
+					$.getJSON("/usbs", {"vuejs": true}).done(function(data){
+						results = {};
+						for(usb in data["usbs"]) {
+							results[data["usbs"][usb]["serial"]] = data["usbs"][usb]["id"];
+						}
+						this.plugged = results;
+					}.bind(this));
+
+					$.getJSON("/simulated_inventories").done(function(data) {
+						this.usbs = data["data"]["usbs"];
+						this.inventories = data["data"]["inventories"];
+					}.bind(this));
+				},
+				computerIcon: function(type) {
+					if(type == "Laptop") {
+						return "fa-laptop";
+					} else if (type == "Netbook") {
+						return "fa-laptop netbook";
+					} else if (type == "Server") {
+						return "fa-server";
+					} else if (type == "Microtower") {
+						return "fa-building-o";
+					} else {
+						return "fa-desktop";
+					}
+				},
+				toggleUsb: function(serial, test, e) {
+					var icon = $(e.target);
+					if(icon.hasClass("fa-toggle-off")) {
+						if(serial in this.plugged) {
+							$.get("/del_usb", {"inventory": this.plugged[serial]});
+						}
+
+						$.get("/add_usb", {"usb": serial, "inventory": test}).done(function() { this.loadData(); }.bind(this));
+					} else {
+						$.get("/del_usb", {"inventory": test}).done(function() { this.loadData(); }).done(function() { this.loadData(); }.bind(this));
+					}
+					icon.toggleClass("fa-toggle-off fa-toggle-on");
+				},
+				isPlugged: function(serial, inventory) {
+					return (serial in this.plugged && this.plugged[serial] === inventory);
+				},
+				unPlugThemAll: function() {
+					if(Object.keys(this.plugged).length > 0) {
+						for(var key in this.plugged) {
+							$.get("/del_usb", {inventory: this.plugged[key]}).done(function() { this.loadData(); }.bind(this));
+						}
+					}
+				},
+				toggleTimed: function(e) {
+					$(e.target).toggleClass("fa-hourglass-half fa-hourglass-o");
+				},
+				launchInventory: function(inventory, e) {
+					var $icon = $(e.target), $inventory = $icon.parents(".inventory:first"), timed = $inventory.find(".timed > i").hasClass("fa-hourglass-half");
+					var rocket = "fa-rocket", spinner = "fa-spinner fa-pulse", ok = "fa-check text-success", fail = "fa-close text-danger";
+
+					$icon.removeClass(rocket);
+					$icon.addClass(spinner);
+
+					$.post("/simulate_inventory", {"inventory": inventory, "timed": timed}).done(function() {
+						$icon.removeClass(spinner);
+						$icon.addClass(ok);
+
+						setTimeout(function() {
+							$icon.removeClass(ok);
+							$icon.addClass(rocket);
+						}, 5000)
+					}).fail(function() {
+						$icon.removeClass(spinner);
+						$icon.addClass(fail);
+
+						setTimeout(function() {
+							$icon.removeClass(fail);
+							$icon.addClass(rocket);
+						}, 5000)
+					});
+				}
+			},
+			mounted: function() {
+				window.addEventListener("beforeunload", this.unPlugThemAll);
+				this.loadData();
+			}
+		});
+	</script>
+{%- endblock -%}
