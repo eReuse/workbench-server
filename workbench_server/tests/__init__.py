@@ -8,6 +8,7 @@ class TestBase(TestCase):
         """Instantiates the Worker, cleans the db and sets attributes."""
         super().setUp()
         self.fixtures = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fixtures')
+        self.FIRST_DB = 10
 
     def json(self, filename: str) -> dict:
         """

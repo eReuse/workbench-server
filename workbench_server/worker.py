@@ -1,10 +1,12 @@
+import json
 import locale
 from collections import namedtuple
 from datetime import timedelta
 from json import dumps, loads
-from pprint import pprint
+from pprint import pformat
 
 from celery import Celery
+from celery.utils.log import get_task_logger
 from dateutil.parser import parse
 from redis import StrictRedis
 from requests import ConnectTimeout, ConnectionError, HTTPError, post
@@ -17,7 +19,7 @@ class Worker:
     """
     Databases = namedtuple('Databases', ('redis', 'usb', 'consolidated', 'uploaded', 'upload_errors'))
 
-    def __init__(self, host='192.168.2.2', json_path='/srv/ereuse-data/inventory', first_db: int = 1) -> None:
+    def __init__(self, host='localhost', json_path='/srv/ereuse-data/inventory', first_db: int = 1) -> None:
         """
         Instantiates the tasks, redis and celery. Call to ``start()`` method after to run the celery
         service::
@@ -32,18 +34,13 @@ class Worker:
         """
         if locale.getpreferredencoding().lower() != 'utf-8':
             raise OSError('Worker needs UTF-8 systems, but yours is {}'.format(locale.getpreferredencoding()))
-
         self.json_path = json_path
         redisBroker = 'redis://{}:6379/0'.format(host)
         self.queue = Celery('workbench', broker=redisBroker)
         self.queue.conf.update(worker_pool_restarts=True)
-        self.queue.conf.beat_schedule = {
-            'try-to-upload': {
-                'task': 'worker.upload_snapshots',
-                'schedule': 1.0 * 5
-            }
-        }
-        self.dbs = self.Databases(*(StrictRedis(host=host, db=db) for db in range(first_db, first_db + 5)))
+        self.dbs = self.instantiate_dbs(host, first_db)
+        self.logger = get_task_logger('workbench')
+
         self.device_hub = {
             'host': 'http://devicehub.ereuse.net',
             'account': {
@@ -55,29 +52,33 @@ class Worker:
         # lambda doesn't work for queue.task
         # todo make this better (like with queue.task()(self.consume_phase))
 
-        @self.queue.task
+        @self.queue.task(name='worker.consume_phase')
         def consume_phase(json):
             return self.consume_phase(json)
 
-        @self.queue.task
+        @self.queue.task(name='worker.add_usb')
         def add_usb(usb):
+            self.logger.info('add usb!')
             return self.add_usb(usb)
 
-        @self.queue.task
+        @self.queue.task(name='worker.del_usb')
         def del_usb(usb):
             return self.del_usb(usb)
 
-        @self.queue.task
-        def tag_computer(json):
-            return self.tag_computer(json)
-
-        @self.queue.task
+        @self.queue.task(name='worker.upload_snapshots')
         def upload_snapshots():
             return self.upload_snapshots()
 
+        # Add periodic tasks (in seconds)
+        self.queue.add_periodic_task(60, upload_snapshots.s(), name='try to upload every minute')
+
+    @classmethod
+    def instantiate_dbs(cls, host: str, first_db: int = 1) -> Databases:
+        return cls.Databases(*(StrictRedis(host=host, db=db) for db in range(first_db, first_db + 5)))
+
     def start(self):
         """Initiates the celery service with needed options for running in linux."""
-        self.queue.worker_main(['worker', '-s', '/tmp/workbench-scheduler', '--loglevel=info'])
+        self.queue.worker_main(['worker', '-B', '-s', '/tmp/workbench-scheduler', '--loglevel=info'])
 
     def consume_phase(self, json):
         """
@@ -141,8 +142,11 @@ class Worker:
 
         self.dbs.redis.set(_uuid, dumps(aggregated_json))
 
-        if len(aggregated_json['times'].keys()) > 5 and 'condition' in aggregated_json:
-            self._consolidate_json(aggregated_json)
+        if 'install_image_ok' in json and 'condition' in aggregated_json:
+            # If we have passed the last phase (if we skipped it counts too)
+            # and we have linked with the app consolidate the json
+            # todo there is no way to consolidate if workbench client dies (ex: stress test did not pass)
+            self.consolidate_json(aggregated_json, self.dbs.redis, self.dbs.consolidated, self.json_path)
 
     def add_usb(self, usb):
         inventory = usb.pop('inventory')
@@ -150,33 +154,6 @@ class Worker:
 
     def del_usb(self, usb):
         self.dbs.usb.delete(usb['inventory'])
-
-    def tag_computer(self, json):
-        _uuid = json['_uuid']
-        aggregated_json = self.dbs.redis.get(_uuid)
-        if aggregated_json is not None:
-            aggregated_json = loads(str(aggregated_json, 'utf-8'))
-
-            if 'gid' in json and json['gid']:
-                aggregated_json['gid'] = json['gid']
-            if '_id' in json and json['_id']:
-                aggregated_json['_id'] = json['_id']
-            if 'lot' in json and json['lot']:
-                aggregated_json['group'] = {'@type': 'Lot', '_id': json['lot']}
-
-            aggregated_json['device']['type'] = json['device_type']
-            aggregated_json['condition'] = {
-                'appearance': {'general': json['visual_grade']},
-                'functionality': {'general': json['functional_grade']}
-            }
-
-            if json['comment']:
-                aggregated_json['comment'] = json['comment']
-
-            self.dbs.redis.set(_uuid, dumps(aggregated_json))
-
-            if len(aggregated_json['times'].keys()) > 5:
-                self._consolidate_json(aggregated_json)
 
     def upload_snapshots(self):
         """
@@ -188,51 +165,56 @@ class Worker:
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
-        try:
-            response = post('{}/login'.format(HOST), json=self.device_hub['account'], headers=headers)
-            response.raise_for_status()
-            account = response.json()
-            headers['Authentication'] = 'Basic {}'.format(account['token'])
-        except Exception as e:
-            pprint(e)
-        else:
-            for json in self.dbs.consolidated.mget(self.dbs.consolidated.keys('*')):
-                snapshot = loads(json.decode())
-                _uuid = snapshot['_uuid']
-                del snapshot['device']['_uuid']
-                try:
-                    url = '{}/{}/events/devices/snapshot'.format(HOST, account['defaultDatabase'])
-                    response = post(url, json=snapshot, headers=headers)
-                    response.raise_for_status()
-                except (ConnectionError, ConnectTimeout) as e:
-                    # Let's try to upload the snapshot again later
-                    pprint(e)
-                except HTTPError as e:
-                    # Error from server, mark the snapshot as erroneous
-                    pprint(e)
-                    result_snapshot = response.json()
-                    self.dbs.upload_errors.set(_uuid, {'json': json, 'response': result_snapshot})
-                else:
-                    self.dbs.uploaded.set(_uuid, json)
-                    self.dbs.consolidated.delete(_uuid)
+        keys = self.dbs.consolidated.keys('*')
+        self.logger.info('{} snapshots to upload.'.format(len(keys)))
+        if keys:  # Do we have something to upload?
+            try:
+                response = post('{}/login'.format(HOST), json=self.device_hub['account'], headers=headers)
+                response.raise_for_status()
+                account = response.json()
+                headers['Authentication'] = 'Basic {}'.format(account['token'])
+            except Exception as e:
+                self.logger.error('Login error to DeviceHub:\n{}'.format(pformat(e)))
+            else:
+                for json in self.dbs.consolidated.mget(keys):
+                    snapshot = loads(json.decode())
+                    _uuid = snapshot['_uuid']
+                    del snapshot['device']['_uuid']
+                    try:
+                        url = '{}/{}/events/devices/snapshot'.format(HOST, account['defaultDatabase'])
+                        response = post(url, json=snapshot, headers=headers)
+                        response.raise_for_status()
+                    except (ConnectionError, ConnectTimeout):
+                        # Let's try to upload the snapshot again later
+                        self.logger.warning('Snapshot {} to upload later due to connection error'.format(_uuid))
+                    except HTTPError:
+                        # Error from server, mark the snapshot as erroneous
+                        self.logger.error('Snapshot {} saved to upload_errors'.format(_uuid))
+                        result_snapshot = response.json()
+                        self.dbs.upload_errors.set(_uuid, {'device': json, 'response': result_snapshot})
+                    else:
+                        self.logger.info('Snapshot {} correctly uploaded'.format(_uuid))
+                        self.dbs.uploaded.set(_uuid, json)
+                        self.dbs.consolidated.delete(_uuid)
 
-    def _consolidate_json(self, json):
-        json['date'] = parse(json['created']).replace(microsecond=0).isoformat()
-        del json['created']
-        json['snapshotSoftware'] = 'Workbench'
-        json['inventory'] = {
-            'elapsed': str(parse(json['times']['iso']) - parse(json['times']['detection'])).split('.')[0]
+    @staticmethod
+    def consolidate_json(snapshot, redis, consolidated, json_path):
+        snapshot['date'] = parse(snapshot['created']).replace(microsecond=0).isoformat()
+        del snapshot['created']
+        snapshot['snapshotSoftware'] = 'Workbench'
+        snapshot['inventory'] = {
+            'elapsed': str(parse(snapshot['times']['iso']) - parse(snapshot['times']['detection'])).split('.')[0]
         }
-        del json['times']
+        del snapshot['times']
 
         dumped = None
-        if 'save_json' in json:
-            filename = json['save_json']['filename']
-            del json['save_json']
+        if 'save_json' in snapshot:
+            filename = snapshot['save_json']['filename']
+            del snapshot['save_json']
 
-            dumped = dumps(json)
-            with open('{}/{}'.format(self.json_path, filename), 'w') as f:
+            dumped = json.dumps(snapshot)
+            with open('{}/{}'.format(json_path, filename), 'w') as f:
                 f.write(dumped)
 
-        self.dbs.redis.delete(json['_uuid'])
-        self.dbs.consolidated.set(json['_uuid'], dumped or dumps(json))
+        redis.delete(snapshot['_uuid'])
+        consolidated.set(snapshot['_uuid'], dumped or json.dumps(snapshot))

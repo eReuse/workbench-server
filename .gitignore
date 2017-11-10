@@ -56,4 +56,6 @@ docs/_build/
 docs/modules
 
 # Local testing
-worker_app.py
+/worker_app.py
+/web_service_app.py
+/dummy.py
