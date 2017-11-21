@@ -1,9 +1,5 @@
 from setuptools import find_packages, setup
 
-tests_require = [
-    'assertpy'
-]
-
 setup(
     name='eReuse-WorkbenchServer',
     version='0.2',
@@ -14,10 +10,20 @@ setup(
     author_email='x.bustamante@ereuse.org',
     description='Workbench manager for servers',
     # Updated in 2017-07-29
-    install_requires=[],
+    install_requires=[
+        'celery',
+        'redis',
+        'requests',
+        'flask>=0.11',
+        'flask-cors',
+        'python-dateutil'
+    ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
-    tests_require=tests_require,
+    tests_require=[
+        'requests_mock',
+        'assertpy'
+    ],
     include_package_data=True,
     classifiers=[
         'Development Status :: 3 - Alpha',
