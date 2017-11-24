@@ -57,7 +57,7 @@ docs/modules
 
 # Local testing
 /worker_app.py
-#/web_service_app.py
+/web_service_app.py
 /dummy.py
 /cert.pem
 /key.pem
