@@ -6,7 +6,7 @@
   "ERASE": "no",
   "FUNCTIONAL_GRADE": "no",
   "ID_": "no",
-  "IMAGE_DIR": "/media/ereuse-data/images",
+  "IMAGE_DIR": "/media/workbench-data/images",
   "IMAGE_NAME": "foobar",
   "INSTALL": "no",
   "KEYBOARD_LAYOUT": "es",

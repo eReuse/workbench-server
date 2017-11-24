@@ -19,7 +19,7 @@ class Worker:
     """
     Databases = namedtuple('Databases', ('redis', 'usb', 'consolidated', 'uploaded', 'upload_errors'))
 
-    def __init__(self, host='localhost', json_path='/srv/ereuse-data/inventory', first_db: int = 1) -> None:
+    def __init__(self, host='localhost', json_path='/srv/workbench-data/inventory', first_db: int = 1) -> None:
         """
         Instantiates the tasks, redis and celery. Call to ``start()`` method after to run the celery
         service::
