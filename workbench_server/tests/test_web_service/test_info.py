@@ -4,6 +4,7 @@ from assertpy import assert_that
 
 from workbench_server.tests.fixtures.phases import phase0, phase1, phase2, phase3, phase4, phase5
 from workbench_server.tests.test_web_service import TestWebService
+from workbench_server.tests.test_web_service.test_pair_usbs import TestPairUsbs
 from workbench_server.tests.test_worker import TestWorker
 
 
@@ -15,6 +16,12 @@ class TestInfo(TestWebService, TestWorker):
 
     def test_get_info(self):
         """Ensures that the /info endpoint returns the correct values depending on each phase."""
+
+        # Let's name the USB
+        name_usbs = TestPairUsbs()
+        name_usbs.client = self.client
+        name_usbs.test_name_usb()
+
         # emptiness (before performing anything)
         response = self.info()
         assert_that(response).is_equal_to({'usbs': [], 'devices': []})
@@ -51,14 +58,14 @@ class TestInfo(TestWebService, TestWorker):
             'inventory': phase0['device']['_uuid'],
             'vendor': 'foo',
             'product': 'bar',
-            'usb': 'foobar'
+            'usb': 'foobar'  # Serial Number of USB
         }
         self.worker.add_usb(data)
         response3_usb = self.info()
         assert_that(response3_usb['devices']).is_length(1)
         assert_that(response3_usb['devices'][0]['val']['times']).is_length(4)
         assert_that(response3_usb['usbs']).is_length(1)
-        assert_that(response3_usb['usbs'][0]).has_vendor('foo')\
+        assert_that(response3_usb['usbs'][0]).has_vendor('foo') \
             .has_product('bar').has_usb('foobar').has__uuid(phase3['device']['_uuid'])
 
         # phase 4

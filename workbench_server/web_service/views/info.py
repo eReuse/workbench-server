@@ -2,6 +2,7 @@ from collections import OrderedDict
 from contextlib import suppress
 
 from flask import json, jsonify
+from werkzeug.exceptions import NotFound
 
 
 class Info:
@@ -24,21 +25,12 @@ class Info:
             for key, value in zip(keys, self.app.dbs.usb.mget(keys)):
                 usb = json.loads(value.decode())
                 usb['_uuid'] = key.decode()
+                with suppress(NotFound):
+                    usb['name'] = self.app.usbs.get_named_usb(usb['usb'])['name']
                 usbs.append(usb)
         response = {
             'devices': [{'key': k, 'val': v} for k, v in devices.items()],
-            'usbs': usbs
+            'usbs': usbs,
+            'names': self.app.usbs.get_all_named_usbs()
         }
-        with suppress(OSError):  # If no Internet
-            response['ip'] = self.local_ip()
         return jsonify(response)
-
-    @staticmethod
-    def local_ip():
-        """Gets the local IP of the interface that has access to the Internet."""
-        import socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        ip = s.getsockname()[0]
-        s.close()
-        return ip

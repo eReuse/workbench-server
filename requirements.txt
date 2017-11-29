@@ -1,6 +1,9 @@
+tinydb==3.7.0
 celery==4.1.0
 redis==2.10.5
 requests==2.18.3
 Flask==0.11.0
 Flask-Cors==3.0.3
 python-dateutil==2.6.1
+pydash==4.3.0
+pyusb==1.0.2

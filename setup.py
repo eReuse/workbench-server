@@ -16,7 +16,10 @@ setup(
         'requests',
         'flask>=0.11',
         'flask-cors',
-        'python-dateutil'
+        'python-dateutil',
+        'pydash',
+        'tinydb',
+        'pyusb'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
