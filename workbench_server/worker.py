@@ -143,8 +143,9 @@ class Worker:
         self.dbs.redis.set(_uuid, dumps(aggregated_json))
 
         if 'install_image_ok' in json and 'condition' in aggregated_json:
-            # If we have passed the last phase (if we skipped it counts too)
-            # and we have linked with the app consolidate the json
+            # install_image_ok: If we have passed the last phase (if we skipped it counts too)
+            # condition: we have linked with the app
+            # Then consolidate the json:
             # todo there is no way to consolidate if workbench client dies (ex: stress test did not pass)
             self.consolidate_json(aggregated_json, self.dbs.redis, self.dbs.consolidated, self.json_path)
 
@@ -199,22 +200,16 @@ class Worker:
 
     @staticmethod
     def consolidate_json(snapshot, redis, consolidated, json_path):
-        snapshot['date'] = parse(snapshot['created']).replace(microsecond=0).isoformat()
-        del snapshot['created']
+        snapshot['date'] = parse(snapshot.pop('created')).replace(microsecond=0).isoformat()
         snapshot['snapshotSoftware'] = 'Workbench'
+        times = snapshot.pop('times')
         snapshot['inventory'] = {
-            'elapsed': str(parse(snapshot['times']['iso']) - parse(snapshot['times']['detection'])).split('.')[0]
+            'elapsed': str(parse(times['iso']) - parse(times['detection'])).split('.')[0]
         }
-        del snapshot['times']
 
-        dumped = None
-        if 'save_json' in snapshot:
-            filename = snapshot['save_json']['filename']
-            del snapshot['save_json']
-
-            dumped = json.dumps(snapshot)
-            with open('{}/{}'.format(json_path, filename), 'w') as f:
-                f.write(dumped)
+        save_json = snapshot.pop('save_json')
+        with open('{}/{}'.format(json_path, save_json['filename']), 'w') as f:
+            json.dump(snapshot, f)
 
         redis.delete(snapshot['_uuid'])
-        consolidated.set(snapshot['_uuid'], dumped or json.dumps(snapshot))
+        consolidated.set(snapshot['_uuid'], json.dumps(snapshot))

@@ -26,12 +26,10 @@ class Link:
         if aggregated_json is not None:
             aggregated_json = json.loads(aggregated_json.decode())
 
-            if 'gid' in snapshot and snapshot['gid']:
+            if snapshot.get('gid', False):
                 aggregated_json['gid'] = snapshot['gid']
-            if '_id' in snapshot and snapshot['_id']:
+            if snapshot.get('_id', False):
                 aggregated_json['_id'] = snapshot['_id']
-            if 'lot' in snapshot and snapshot['lot']:
-                aggregated_json['group'] = {'@type': 'Lot', '_id': snapshot['lot']}
 
             aggregated_json['device']['type'] = snapshot['device_type']
             aggregated_json['condition'] = {
@@ -45,5 +43,6 @@ class Link:
             self.app.dbs.redis.set(_uuid, json.dumps(aggregated_json))
 
             if len(aggregated_json['times'].keys()) > 5:
+                # We have passed by all phases (regardless if we had to perform them)
                 Worker.consolidate_json(aggregated_json, self.app.dbs.redis, self.app.dbs.consolidated,
                                         self.app.json_path)

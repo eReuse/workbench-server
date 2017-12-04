@@ -22,3 +22,5 @@ class TestConsumePhase(TestWorker):
             except Exception as e:
                 print('Error in phase number {}'.format(i), file=sys.stderr)
                 raise e
+        # We didn't consolidate a JSON file because we have not linked it yet
+        assert_that(self.json_from_inventory).raises(AssertionError).when_called_with()

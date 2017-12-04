@@ -13,7 +13,7 @@ class TestWebService(TestBase):
         tmp_config_ini = path.join('/tmp', 'workbench_server_test_config.ini')
         copyfile(original_config_ini, tmp_config_ini)
         self.app = WorkbenchWebService(__name__, config_ini=tmp_config_ini, first_db=self.FIRST_DB,
-                                       usbs_path='/tmp/workbench_server_test_usbs.json')
+                                       usbs_path='/tmp/workbench_server_test_usbs.json', json_path=self.JSON_PATH)
         self.app.usbs.named_usbs.purge()
         self.app.testing = True
         self.client = self.app.test_client()

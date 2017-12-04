@@ -2,7 +2,7 @@ import json
 
 from assertpy import assert_that
 
-from workbench_server.tests.fixtures.phases import phase0
+from workbench_server.tests.fixtures.phases import phase0, phases
 from workbench_server.tests.test_web_service import TestWebService
 from workbench_server.tests.test_worker import TestWorker
 
@@ -28,3 +28,20 @@ class TestLink(TestWebService, TestWorker):
         assert_that(snapshot).has__id('123').has_gid('gid1')
         # this is where all fields should be in
         assert_that(snapshot['device']).has_type('Computer')
+
+    def test_link_and_consolidate(self):
+        """Tests that a JSON is saved in the system after linking it"""
+        for phase in phases:
+            self.worker.consume_phase(json.dumps(phase))
+        device = {
+            '_uuid': phase0['device']['_uuid'],  # This is passed-in by the client
+            '_id': '123',
+            'gid': 'gid1',
+            'device_type': 'Computer',
+            'visual_grade': 'A',
+            'functional_grade': 'B',
+            'comment': 'comment1'
+        }
+        self.client.post('/link', data=json.dumps(device), content_type='application/json')
+        snapshot_file = self.json_from_inventory()
+        assert_that(snapshot_file).has__id('123').has_gid('gid1')

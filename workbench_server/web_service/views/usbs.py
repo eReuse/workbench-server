@@ -2,8 +2,7 @@ import usb.core
 import usb.util
 from flask import Response, jsonify, request
 from pydash import find
-from tinydb import JSONStorage, Query, TinyDB
-from tinydb.middlewares import CachingMiddleware
+from tinydb import Query, TinyDB
 from usb import CLASS_MASS_STORAGE
 from werkzeug.exceptions import BadRequest, NotFound
 
@@ -23,7 +22,8 @@ class USBs:
             'named': self.get_all_named_usbs()
         })
 
-    def plugged_usbs(self) -> map:
+    @staticmethod
+    def plugged_usbs() -> map:
         class FindPenDrives(object):
             # From https://github.com/pyusb/pyusb/blob/master/docs/tutorial.rst
             def __init__(self, class_):

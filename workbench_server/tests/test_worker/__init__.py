@@ -1,4 +1,5 @@
-from celery import Celery
+from contextlib import suppress
+from os import mkdir
 
 from workbench_server.tests import TestBase
 from workbench_server.worker import Worker
@@ -9,7 +10,7 @@ class TestWorker(TestBase):
         """Instantiate worker and clean databases."""
         super().setUp()
         # Note that we don't touch production dbs
-        self.worker = Worker(host='localhost', json_path=self.fixtures, first_db=self.FIRST_DB)
+        self.worker = Worker(host='localhost', json_path=self.JSON_PATH, first_db=self.FIRST_DB)
         self.worker.device_hub['host'] = 'http://foo.bar'
         self.setUp_dbs()
 
