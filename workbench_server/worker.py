@@ -186,8 +186,8 @@ class Worker:
                         # Error from server, mark the snapshot as erroneous
                         self.logger.error('Snapshot {} saved to upload_errors'.format(_uuid))
                         result_snapshot = response.json()
-                        data = {'device': snapshot, 'response': result_snapshot}
-                        self.dbs.upload_errors.set(_uuid, json.dumps(data))
+                        snapshot['_response'] = result_snapshot
+                        self.dbs.upload_errors.set(_uuid, json.dumps(snapshot))
                     else:
                         self.logger.info('Snapshot {} correctly uploaded'.format(_uuid))
                         self.dbs.uploaded.set(_uuid, json)
