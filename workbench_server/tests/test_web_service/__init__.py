@@ -6,6 +6,9 @@ from workbench_server.web_service.flaskapp import WorkbenchWebService
 
 
 class TestWebService(TestBase):
+    CONTENT_TYPE_JSON = 'application/json'
+    HEADERS_ACCEPT_JSON = {'Accept': CONTENT_TYPE_JSON}
+
     def setUp(self):
         super().setUp()
         # As tests write in the config file we use a temporal one

@@ -17,7 +17,7 @@ class Worker:
     A set of Celery tasks to process, link and upload snapshot events from Workbench clients to DeviceHub.
     :ivar dbs: Redis databases being used.
     """
-    Databases = namedtuple('Databases', ('redis', 'usb', 'consolidated', 'uploaded', 'upload_errors'))
+    Databases = namedtuple('Databases', ('redis', 'consolidated', 'uploaded', 'upload_errors'))
 
     def __init__(self, host='localhost', json_path='/srv/workbench-data/inventory', first_db: int = 1) -> None:
         """
@@ -74,7 +74,8 @@ class Worker:
 
     @classmethod
     def instantiate_dbs(cls, host: str, first_db: int = 1) -> Databases:
-        return cls.Databases(*(StrictRedis(host=host, db=db) for db in range(first_db, first_db + 5)))
+        qty = len(cls.Databases._fields)
+        return cls.Databases(*(StrictRedis(host=host, db=db) for db in range(first_db, first_db + qty)))
 
     def start(self):
         """Initiates the celery service with needed options for running in linux."""
@@ -149,13 +150,6 @@ class Worker:
             # todo there is no way to consolidate if workbench client dies (ex: stress test did not pass)
             self.consolidate_json(aggregated_json, self.dbs.redis, self.dbs.consolidated, self.json_path)
 
-    def add_usb(self, usb):
-        inventory = usb.pop('inventory')
-        self.dbs.usb.set(inventory, dumps(usb))
-
-    def del_usb(self, usb):
-        self.dbs.usb.delete(usb['inventory'])
-
     def upload_snapshots(self):
         """
         a connection error, like being offline, but not when receiving an erroneous HTTP exception (ej 422).
@@ -192,7 +186,8 @@ class Worker:
                         # Error from server, mark the snapshot as erroneous
                         self.logger.error('Snapshot {} saved to upload_errors'.format(_uuid))
                         result_snapshot = response.json()
-                        self.dbs.upload_errors.set(_uuid, {'device': json, 'response': result_snapshot})
+                        data = {'device': snapshot, 'response': result_snapshot}
+                        self.dbs.upload_errors.set(_uuid, json.dumps(data))
                     else:
                         self.logger.info('Snapshot {} correctly uploaded'.format(_uuid))
                         self.dbs.uploaded.set(_uuid, json)
@@ -208,8 +203,9 @@ class Worker:
         }
 
         save_json = snapshot.pop('save_json')
+        snapshot_json = json.dumps(snapshot)
         with open('{}/{}'.format(json_path, save_json['filename']), 'w') as f:
-            json.dump(snapshot, f)
+            f.write(snapshot_json)
 
         redis.delete(snapshot['_uuid'])
-        consolidated.set(snapshot['_uuid'], json.dumps(snapshot))
+        consolidated.set(snapshot['_uuid'], snapshot_json)

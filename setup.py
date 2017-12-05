@@ -19,7 +19,8 @@ setup(
         'python-dateutil',
         'pydash',
         'tinydb',
-        'pyusb'
+        'pyusb',
+        'inflection'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',

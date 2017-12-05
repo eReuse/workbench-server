@@ -18,19 +18,15 @@ class Info:
             if keys:
                 for key, device in zip(keys, db.mget(keys)):
                     devices[key.decode()] = json.loads(device.decode())
-        # usbs
-        usbs = []
-        keys = self.app.dbs.usb.keys()
-        if keys:
-            for key, value in zip(keys, self.app.dbs.usb.mget(keys)):
-                usb = json.loads(value.decode())
-                usb['_uuid'] = key.decode()
-                with suppress(NotFound):
-                    usb['name'] = self.app.usbs.get_named_usb(usb['usb'])['name']
-                usbs.append(usb)
+
+        def add_usb_name(usb):
+            with suppress(NotFound):
+                usb['name'] = self.app.usbs.get_named_usb(usb['serialNumber'])['name']
+            return usb
+
         response = {
             'devices': [{'key': k, 'val': v} for k, v in devices.items()],
-            'usbs': usbs,
+            'usbs': [add_usb_name(usb) for _, usb in self.app.usbs.client_plugged.items()],
             'names': self.app.usbs.get_all_named_usbs()
         }
         return jsonify(response)
