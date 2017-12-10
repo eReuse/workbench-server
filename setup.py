@@ -11,16 +11,14 @@ setup(
     description='Workbench manager for servers',
     # Updated in 2017-07-29
     install_requires=[
-        'celery',
-        'redis',
         'requests',
         'flask>=0.11',
         'flask-cors',
-        'python-dateutil',
         'pydash',
         'tinydb',
         'pyusb',
-        'inflection'
+        'ereuse-utils [usb_flash_drive]',
+        'ereuse-utils [naming]'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
