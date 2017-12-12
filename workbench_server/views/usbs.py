@@ -1,8 +1,10 @@
+from contextlib import suppress
 from pathlib import Path
 
 from cachetools import TTLCache
 from ereuse_utils.usb_flash_drive import plugged_usbs
 from flask import Response, jsonify, request
+from prwlock import RWLock
 from pydash import find
 from tinydb import Query, TinyDB
 from werkzeug.exceptions import BadRequest, NotFound
@@ -22,6 +24,7 @@ class USBs:
         self.app = app
         self.named_usbs = TinyDB(str(settings_path.joinpath('usbs.json')))
         self.client_plugged = TTLCache(maxsize=150, ttl=5)  # Maxsize is just required, we won't have >150 plugged USB
+        self.client_plugged_lock = RWLock()
         """
         Pen-drives plugged on clients. 
         We will auto-remove the pen-drives in 7 seconds if we don't get any signal from the client.
@@ -66,10 +69,16 @@ class USBs:
         """
         usb = request.get_json()
         if request.method == 'POST':
-            self.client_plugged[usb_hid] = usb
+            if usb_hid in self.client_plugged:
+                self.client_plugged[usb_hid] = usb
+            else:
+                # Only lock if we need to create a new value as we are changing the size of the dict
+                with self.client_plugged_lock.writer_lock():
+                    self.client_plugged[usb_hid] = usb
         else:  # Delete
             try:
-                del self.client_plugged[usb_hid]
+                with self.client_plugged_lock.writer_lock():
+                    del self.client_plugged[usb_hid]
             except KeyError:
                 raise NotFound()
         return Response(status=204)
@@ -86,3 +95,13 @@ class USBs:
 
     def get_all_named_usbs(self):
         return self.named_usbs.all()
+
+    def get_client_plugged_usbs(self):
+        # devices
+        def add_usb_name(usb):
+            with suppress(NotFound):
+                usb['name'] = self.app.usbs.get_named_usb(usb['serialNumber'])['name']
+            return usb
+
+        with self.client_plugged_lock.reader_lock():
+            return [add_usb_name(usb) for _, usb in self.app.usbs.client_plugged.items()]

@@ -1,7 +1,6 @@
 from contextlib import suppress
 
 from flask import jsonify, request
-from werkzeug.exceptions import NotFound
 
 from workbench_server import flaskapp
 
@@ -17,16 +16,10 @@ class Info:
             self.app.db = request.args['db']
             self.app.auth = request.headers.get('Authorization')
 
-        # devices
-        def add_usb_name(usb):
-            with suppress(NotFound):
-                usb['name'] = self.app.usbs.get_named_usb(usb['serialNumber'])['name']
-            return usb
-
         response = {
             # We need to send snapshots as a list so Javascript can keep the order
             'snapshots': [{'_uuid': k, 'snapshot': v} for k, v in self.app.snapshots.snapshots.items()],
-            'usbs': [add_usb_name(usb) for _, usb in self.app.usbs.client_plugged.items()],
+            'usbs': self.app.usbs.get_client_plugged_usbs(),
             'names': self.app.usbs.get_all_named_usbs()
         }
         with suppress(OSError):  # If no Internet
