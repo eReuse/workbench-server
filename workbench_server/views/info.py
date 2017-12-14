@@ -18,9 +18,10 @@ class Info:
 
         response = {
             # We need to send snapshots as a list so Javascript can keep the order
-            'snapshots': [{'_uuid': k, 'snapshot': v} for k, v in self.app.snapshots.snapshots.items()],
+            'snapshots': self.app.snapshots.get_snapshots(),
             'usbs': self.app.usbs.get_client_plugged_usbs(),
-            'names': self.app.usbs.get_all_named_usbs()
+            'names': self.app.usbs.get_all_named_usbs(),
+            'attempts': self.app.snapshots.attempts
         }
         with suppress(OSError):  # If no Internet
             response['ip'] = self.local_ip()

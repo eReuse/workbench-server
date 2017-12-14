@@ -1,14 +1,17 @@
-import json
-from collections import OrderedDict
+from collections import defaultdict
 from copy import copy
+from multiprocessing import Queue
 from pathlib import Path
+from threading import Thread
+from time import sleep
 
-from ereuse_utils import DeviceHubJSONEncoder
-from ereuse_utils.naming import Naming
+import requests
 from ereuse_utils import now
-from flask import Response, jsonify, request
+from ereuse_utils.naming import Naming
+from flask import Response, json, jsonify, request
+from prwlock import RWLock
 from pydash import merge
-from requests import HTTPError, Session
+from requests import HTTPError, Session, Timeout
 from werkzeug.exceptions import NotFound
 
 from workbench_server import flaskapp
@@ -22,14 +25,18 @@ class Snapshots:
 
     def __init__(self, app: 'flaskapp.WorkbenchServer', public_folder: Path) -> None:
         self.app = app
-        self.snapshots = OrderedDict()
-        self.session = Session()
-        self.session.headers.update({'Content-Type': 'application/json'})
-        self.session.headers.update({'Accept': 'application/json'})
+        self.snapshots = defaultdict(dict)
+        self.snapshots_lock = RWLock()
         self.snapshot_folder = public_folder.joinpath('Snapshots')
         self.snapshot_folder.mkdir(exist_ok=True)
         self.snapshot_error_folder = public_folder.joinpath('Failed Snapshots')
         self.snapshot_error_folder.mkdir(exist_ok=True)
+
+        self.sender_queue = Queue()
+        self.sender = Thread(target=self.to_devicehub, args=(self.sender_queue,), daemon=True)
+        self.sender.start()
+        self.attempts = 0
+        """Failed attempts to connect to DeviceHub due a connection error (ex. no WiFi)"""
         app.add_url_rule('/snapshots/<uuid:_uuid>', view_func=self.view_phase, methods=['PATCH', 'GET'])
 
     def view_phase(self, _uuid: str):
@@ -46,27 +53,27 @@ class Snapshots:
                 raise NotFound()
         else:  # PATCH
             snapshot = request.get_json()
-            snapshot['date'] = now()  # The client could have wrong timing so let's override with ours
+            snapshot['date'] = now()  # The client could have wrong timing so let's override it with ours
 
             # We can receive two PATCH at the same time: from Workbench and DeviceHubClient
             # We merge the dictionaries to avoid data loss and to avoid forcing DeviceHubClient
             # to send all full snapshot
-            snapshot = merge(self.snapshots.setdefault(_uuid, {}), snapshot)
+            with self.snapshots_lock.writer_lock():
+                snapshot = merge(self.snapshots[_uuid], snapshot)
+                # We create control variables under lock so modifying them later does not change dict size
+                snapshot['_error'] = snapshot['_uploaded'] = snapshot['_saved'] = None
 
-            if snapshot['_phases'] == snapshot['_totalPhases'] and snapshot.get('_linked'):
+            # Note that _phases might not exist if we link before we get the snapshot from the first phase
+            if snapshot.get('_phases') and snapshot['_phases'] == snapshot['_totalPhases'] and snapshot.get('_linked'):
                 # todo devicehub won't allow us to link again a device that has been already uploaded
                 # as it will have the same _uuid
-                snapshot_to_send = copy(snapshot)
-                self.remove_auxiliary_properties(snapshot_to_send)
-                self.to_json_file(snapshot_to_send)
-                snapshot['_saved'] = True
-                try:
-                    created_snapshot = self.to_devicehub(snapshot_to_send)
-                    snapshot['_uploaded'] = created_snapshot['_id']
-                except HTTPError as e:
-                    self.to_json_file(snapshot_to_send, error=True)
-                    snapshot['_error'] = json.loads(e.response.content.decode())
+                self.sender_queue.put((_uuid,))
+
             return Response(status=204)
+
+    def get_snapshots(self) -> list:
+        with self.snapshots_lock.reader_lock():
+            return list(self.snapshots.values())
 
     @staticmethod
     def remove_auxiliary_properties(snapshot: dict):
@@ -74,17 +81,48 @@ class Snapshots:
         for attr in '_phases', '_totalPhases', '_linked', '_error', '_uploaded', '_saved':
             snapshot.pop(attr, None)
 
-    def to_json_file(self, snapshot: dict, error=False):
+    @staticmethod
+    def to_json_file(snapshot: dict, folder: Path):
         device = snapshot['device']
         un = 'Unknown'
         name = Naming.hid(device['manufacturer'] or un, device['serialNumber'] or un, device['model'] or un)
-        folder = self.snapshot_folder if not error else self.snapshot_error_folder
         with folder.joinpath(name + '.json').open('w') as f:
-            json.dump(snapshot, f, cls=DeviceHubJSONEncoder, indent=2, sort_keys=True)
+            json.dump(snapshot, f, indent=2, sort_keys=True)
 
-    def to_devicehub(self, snapshot: dict):
-        self.session.headers.update({'Authorization': self.app.auth})
+    def to_devicehub(self, queue: Queue):
+        """
+        A separate process that uploads to DeviceHub.
+        If there is a connection error it will try to upload again
+        """
+        session = Session()
+        session.headers.update({'Content-Type': 'application/json'})
+        session.headers.update({'Accept': 'application/json'})
+        while True:
+            _uuid = queue.get()[0]
+            self._to_devicehub(_uuid, session)
+
+    def _to_devicehub(self, _uuid, session):
+        snapshot = self.snapshots[_uuid]
+        snapshot_to_send = copy(snapshot)
+        self.remove_auxiliary_properties(snapshot_to_send)
+
+        session.headers.update({'Authorization': self.app.auth})
         url = '{}/{}/events/devices/snapshot'.format(self.app.deviceHub, self.app.db)
-        r = self.session.post(url, data=json.dumps(snapshot, cls=DeviceHubJSONEncoder))
-        r.raise_for_status()
-        return r.json()
+        try:
+            r = session.post(url, data=json.dumps(snapshot_to_send))
+            r.raise_for_status()
+        except (requests.ConnectionError, Timeout):
+            self.attempts += 1
+            print('Connection error for Snapshot {} and URL {}. Retrying in 4s.'.format(_uuid, url))
+            sleep(4)
+            self._to_devicehub(_uuid, session)  # Try again
+        except HTTPError as e:
+            self.attempts = 0
+            self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
+            snapshot['_error'] = json.loads(e.response.content.decode())
+            snapshot['_saved'] = True
+        else:
+            self.attempts = 0
+            self.to_json_file(snapshot_to_send, self.snapshot_folder)
+            snapshot['_uploaded'] = r.json()['_id']
+            snapshot['_saved'] = True
