@@ -7,7 +7,7 @@ from flask import Response, jsonify, request
 from prwlock import RWLock
 from pydash import find
 from tinydb import Query, TinyDB
-from werkzeug.exceptions import BadRequest, NotFound
+from werkzeug.exceptions import BadRequest
 
 from workbench_server import flaskapp
 
@@ -48,12 +48,12 @@ class USBs:
 
         Pen-drive must be plugged-in in the **machine executing WorkbenchServer**.
         """
-        usb = request.get_json()
-        name = usb['name']
-        usbs_updated = self.named_usbs.update({'name': name}, USB._id == usb['_id'])
+        incoming_usb = request.get_json()
+        name = incoming_usb['name']
+        usbs_updated = self.named_usbs.update({'name': name}, USB._id == incoming_usb['_id'])
         if not usbs_updated:
             # Add new USB to the named_usbs
-            usb = find(list(plugged_usbs()), {'_id': usb['_id']})
+            usb = find(list(plugged_usbs()), {'_id': incoming_usb['_id']})
             if usb is None:
                 raise BadRequest('Only already named USB pen-drives can be named without plugging them in. '
                                  'Plug the pen-drive and try again.')
@@ -76,32 +76,28 @@ class USBs:
                 with self.client_plugged_lock.writer_lock():
                     self.client_plugged[usb_hid] = usb
         else:  # Delete
-            try:
+            with suppress(KeyError):
                 with self.client_plugged_lock.writer_lock():
                     del self.client_plugged[usb_hid]
-            except KeyError:
-                raise NotFound()
         return Response(status=204)
 
     def view_unname_usb(self, usb_hid: str):
+        """Removes the USB from the named list."""
         self.client_plugged.pop(usb_hid, None)
         return Response(status=204)
 
-    def get_named_usb(self, serial_number: str) -> dict:
-        usb = self.named_usbs.search(USB.serialNumber == serial_number)
-        if not usb:
-            raise NotFound('The USB with S/N {} is not named.'.format(serial_number))
-        return usb[0]
-
-    def get_all_named_usbs(self):
+    def get_all_named_usbs(self) -> list:
         return self.named_usbs.all()
 
-    def get_client_plugged_usbs(self):
-        # devices
+    def get_client_plugged_usbs(self) -> list:
+        """Get the pen-drives that are plugged in the """
+
         def add_usb_name(usb):
-            with suppress(NotFound):
-                usb['name'] = self.app.usbs.get_named_usb(usb['serialNumber'])['name']
+            with suppress(IndexError):
+                named_usb = self.named_usbs.search(USB.serialNumber == usb['serialNumber'])[0]
+                usb['name'] = named_usb['name']
             return usb
 
         with self.client_plugged_lock.reader_lock():
-            return [add_usb_name(usb) for _, usb in self.app.usbs.client_plugged.items()]
+            usbs = list(self.client_plugged.values())
+        return [add_usb_name(usb) for usb in usbs]
