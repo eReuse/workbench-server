@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from copy import copy
 from multiprocessing import Queue
@@ -6,9 +7,9 @@ from threading import Thread
 from time import sleep
 
 import requests
-from ereuse_utils import now
+from ereuse_utils import DeviceHubJSONEncoder, now
 from ereuse_utils.naming import Naming
-from flask import Response, json, jsonify, request
+from flask import Response, jsonify, request
 from prwlock import RWLock
 from pydash import merge
 from requests import HTTPError, Session, Timeout
@@ -87,7 +88,7 @@ class Snapshots:
         un = 'Unknown'
         name = Naming.hid(device['manufacturer'] or un, device['serialNumber'] or un, device['model'] or un)
         with folder.joinpath(name + '.json').open('w') as f:
-            json.dump(snapshot, f, indent=2, sort_keys=True)
+            json.dump(snapshot, f, indent=2, sort_keys=True, cls=DeviceHubJSONEncoder)
 
     def to_devicehub(self, queue: Queue):
         """
@@ -109,7 +110,7 @@ class Snapshots:
         session.headers.update({'Authorization': self.app.auth})
         url = '{}/{}/events/devices/snapshot'.format(self.app.deviceHub, self.app.db)
         try:
-            r = session.post(url, data=json.dumps(snapshot_to_send))
+            r = session.post(url, data=json.dumps(snapshot_to_send, cls=DeviceHubJSONEncoder))
             r.raise_for_status()
         except (requests.ConnectionError, Timeout):
             self.attempts += 1
