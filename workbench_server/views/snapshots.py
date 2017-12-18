@@ -119,12 +119,14 @@ class Snapshots:
             sleep(4)
             self._to_devicehub(_uuid, session)  # Try again
         except HTTPError as e:
-            print('HTTPError for Snapshot {} and url {}:\n{}'.format(_uuid, url, e), file=stderr)
+            t = 'HTTPError for Snapshot {}, ID {} and url {}:\n{}'.format(_uuid, snapshot['device'].get('_id'), url, e)
+            print(t, file=stderr)
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
             snapshot['_error'] = json.loads(e.response.content.decode())
             snapshot['_saved'] = True
         else:
+            print('Uploaded Snapshot {}, ID {} to url {}'.format(_uuid, snapshot['device'].get('_id'), url))
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_folder)
             snapshot['_uploaded'] = r.json()['_id']
