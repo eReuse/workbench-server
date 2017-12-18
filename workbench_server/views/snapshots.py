@@ -3,6 +3,7 @@ from collections import defaultdict
 from copy import copy
 from multiprocessing import Queue
 from pathlib import Path
+from sys import stderr
 from threading import Thread
 from time import sleep
 
@@ -118,6 +119,7 @@ class Snapshots:
             sleep(4)
             self._to_devicehub(_uuid, session)  # Try again
         except HTTPError as e:
+            print('HTTPError for Snapshot {} and url {}:\n{}'.format(_uuid, url, e), file=stderr)
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
             snapshot['_error'] = json.loads(e.response.content.decode())
