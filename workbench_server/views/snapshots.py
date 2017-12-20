@@ -1,6 +1,7 @@
 import json
 from collections import defaultdict
 from copy import copy
+from json import JSONDecodeError
 from multiprocessing import Queue
 from pathlib import Path
 from sys import stderr
@@ -123,7 +124,11 @@ class Snapshots:
             print(t, file=stderr)
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
-            snapshot['_error'] = json.loads(e.response.content.decode())
+            error = e.response.content.decode()
+            try:
+                snapshot['_error'] = json.loads(error)
+            except JSONDecodeError:
+                snapshot['_error'] = error
             snapshot['_saved'] = True
         else:
             print('Uploaded Snapshot {}, ID {} to url {}'.format(_uuid, snapshot['device'].get('_id'), url))
