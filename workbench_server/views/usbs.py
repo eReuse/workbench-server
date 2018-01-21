@@ -1,17 +1,14 @@
 from contextlib import suppress
-from pathlib import Path
 
 from cachetools import TTLCache
 from ereuse_utils.usb_flash_drive import plugged_usbs
 from flask import Response, jsonify, request
 from prwlock import RWLock
 from pydash import find
-from tinydb import Query, TinyDB
+from pymongo.collection import Collection
 from werkzeug.exceptions import BadRequest
 
 from workbench_server import flaskapp
-
-USB = Query()
 
 
 class USBs:
@@ -20,10 +17,18 @@ class USBs:
     allowing clients like DeviceHub retrieve such information; and allows clients to name those devices.
     """
 
-    def __init__(self, app: 'flaskapp.WorkbenchServer', settings_path: Path) -> None:
+    def __init__(self, app: 'flaskapp.WorkbenchServer') -> None:
         self.app = app
-        self.named_usbs = TinyDB(str(settings_path.joinpath('usbs.json')))
-        self.client_plugged = TTLCache(maxsize=150, ttl=5)  # Maxsize is just required, we won't have >150 plugged USB
+        self.named_usbs = app.mongo_db.named_usbs  # type: Collection
+        self.client_plugged = TTLCache(maxsize=100, ttl=5)
+        """
+        Clients that have plugged-in USBs. All USBs that have not
+        been reported to still be plugged-in in 5 seconds ore more
+        are removed from the dict, keeping the values updated.
+        
+        Note that `maxsize` is just required, and limits the number
+        of plugged-in USBs to 100. Can safely be increased if needed.  
+        """
         self.client_plugged_lock = RWLock()
         """
         Pen-drives plugged on clients. 
@@ -50,15 +55,15 @@ class USBs:
         """
         incoming_usb = request.get_json()
         name = incoming_usb['name']
-        usbs_updated = self.named_usbs.update({'name': name}, USB._id == incoming_usb['_id'])
-        if not usbs_updated:
+        result = self.named_usbs.update_one({'_id': incoming_usb['_id']}, update={'name': name})
+        if result.modified_count == 0:
             # Add new USB to the named_usbs
             usb = find(list(plugged_usbs()), {'_id': incoming_usb['_id']})
             if usb is None:
                 raise BadRequest('Only already named USB pen-drives can be named without plugging them in. '
                                  'Plug the pen-drive and try again.')
             usb['name'] = name
-            self.named_usbs.insert(usb)
+            self.named_usbs.insert_one(usb)
         return Response(status=204)
 
     def view_client_plug(self, usb_hid: str):
@@ -87,14 +92,14 @@ class USBs:
         return Response(status=204)
 
     def get_all_named_usbs(self) -> list:
-        return self.named_usbs.all()
+        return list(self.named_usbs.find())
 
     def get_client_plugged_usbs(self) -> list:
         """Get the pen-drives that are plugged in the """
 
         def add_usb_name(usb):
             with suppress(IndexError):
-                named_usb = self.named_usbs.search(USB.serialNumber == usb['serialNumber'])[0]
+                named_usb = self.named_usbs.find_one({'serialNumber': usb['serialNumber']})
                 usb['name'] = named_usb['name']
             return usb
 

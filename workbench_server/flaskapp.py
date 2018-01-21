@@ -4,6 +4,8 @@ from typing import Type
 import flask_cors
 from ereuse_utils import DeviceHubJSONEncoder, ensure_utf8
 from flask import Flask
+from pymongo import MongoClient
+from pymongo.database import Database
 
 from workbench_server.views.config import Config
 from workbench_server.views.info import Info
@@ -30,10 +32,12 @@ class WorkbenchServer(Flask):
         images_folder = folder.joinpath('images')
         images_folder.mkdir(exist_ok=True)
 
+        self.mongo_client = MongoClient()
+        self.mongo_db = self.mongo_client.workbench_server  # type: Database
         self.configuration = config(self, settings_folder, images_folder)
         self.info = info(self)
         self.snapshots = snapshots(self, folder)
-        self.usbs = usbs(self, settings_folder)
+        self.usbs = usbs(self)
         self.auth = None
         self.deviceHub = None
         self.db = None

@@ -15,10 +15,10 @@ setup(
         'flask>=0.11',
         'flask-cors',
         'pydash',
-        'tinydb',
         'pyusb',
         'ereuse-utils [usb_flash_drive]',
-        'ereuse-utils [naming]'
+        'ereuse-utils [naming]',
+        'pymongo'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
