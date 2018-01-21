@@ -17,7 +17,8 @@ class Info:
             self.app.auth = request.headers.get('Authorization')
 
         response = {
-            # We need to send snapshots as a list so Javascript can keep the order
+            # We need to send snapshots as a list
+            # so Javascript can keep the order
             'snapshots': self.app.snapshots.get_snapshots(),
             'usbs': self.app.usbs.get_client_plugged_usbs(),
             'names': self.app.usbs.get_all_named_usbs(),
@@ -29,7 +30,10 @@ class Info:
 
     @staticmethod
     def local_ip():
-        """Gets the local IP of the interface that has access to the Internet."""
+        """
+        Gets the local IP of the interface that
+        has access to the Internet.
+        """
         import socket
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))

@@ -14,13 +14,33 @@ from workbench_server.views.usbs import USBs
 
 
 class WorkbenchServer(Flask):
-    def __init__(self, import_name=__name__, static_path=None, static_url_path=None, static_folder='static',
-                 template_folder='templates', instance_path=None, instance_relative_config=False, root_path=None,
-                 folder=Path.home().joinpath('workbench'), info: Type[Info] = Info, config: Type[Config] = Config,
-                 usbs: Type[USBs] = USBs, snapshots: Type[Snapshots] = Snapshots):
+    """
+    Server for Workbench. WorkbenchServer exposes a REST API where
+    clients like Workbench and DeviceHub can interact to augment
+    snapshotting computers.
+
+    When Workbench is started with ``--server {url}`` it connects
+    to an instance of this WorkbenchServer and keeps updating it
+    with information about the computer and the snapshot process,
+    finalizing with sending the full snapshot.
+
+    WorkbenchServer complements Workbench by allowing the user,
+    through a *DeviceHubClient*, introduce information that Workbench
+    cannot take, like identifiers from stuck tags or visual and
+    functional grades.
+
+    WorkbenchServer allows you name USB pen-drives and auto-uploads
+    snapshots to DeviceHub.
+    """
+    def __init__(self, import_name=__name__, static_path=None, static_url_path=None,
+                 static_folder='static', template_folder='templates', instance_path=None,
+                 instance_relative_config=False, root_path=None,
+                 folder=Path.home().joinpath('workbench'), info: Type[Info] = Info,
+                 config: Type[Config] = Config, usbs: Type[USBs] = USBs,
+                 snapshots: Type[Snapshots] = Snapshots):
         ensure_utf8(self.__class__.__name__)
-        super().__init__(import_name, static_path, static_url_path, static_folder, template_folder, instance_path,
-                         instance_relative_config, root_path)
+        super().__init__(import_name, static_path, static_url_path, static_folder, template_folder,
+                         instance_path, instance_relative_config, root_path)
         self.json_encoder = DeviceHubJSONEncoder
         flask_cors.CORS(self,
                         origins='*',

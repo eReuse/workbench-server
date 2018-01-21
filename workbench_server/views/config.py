@@ -7,10 +7,11 @@ from workbench_server import flaskapp
 
 
 class Config:
-    def __init__(self, app: 'flaskapp.WorkbenchServer', settings_path: Path, images_path: Path) -> None:
+    def __init__(self, app: 'flaskapp.WorkbenchServer', settings_path: Path,
+                 images_path: Path) -> None:
         self.config = settings_path.joinpath('config.json')
         self.images_path = images_path
-        app.add_url_rule('/config', view_func=self.view, methods=['GET', 'POST'])
+        app.add_url_rule('/config', view_func=self.view, methods={'GET', 'POST'})
 
     def view(self):
         if request.method == 'GET':

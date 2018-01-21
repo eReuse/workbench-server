@@ -22,7 +22,8 @@ from workbench_server import flaskapp
 
 class Snapshots:
     """
-    Saves incoming snapshots, saving them to a file and uploading them to a DeviceHub when they
+    Saves incoming snapshots,
+    storing them to a file and uploading them to a DeviceHub when they
     are completed (all phases done and linked).
     """
 
@@ -39,13 +40,18 @@ class Snapshots:
         self.sender = Thread(target=self.to_devicehub, args=(self.sender_queue,), daemon=True)
         self.sender.start()
         self.attempts = 0
-        """Failed attempts to connect to DeviceHub due a connection error (ex. no WiFi)"""
-        app.add_url_rule('/snapshots/<uuid:_uuid>', view_func=self.view_phase, methods=['PATCH', 'GET'])
+        """
+        Failed attempts to connect to DeviceHub due a connection error
+        (ex. no WiFi)
+        """
+        app.add_url_rule('/snapshots/<uuid:_uuid>', view_func=self.view_phase,
+                         methods={'PATCH', 'GET'})
 
     def view_phase(self, _uuid: str):
         """
         Updates or creates a Snapshot.
-        When the Snapshot is completed this will save it to a file and upload it to a DeviceHub.
+        When the Snapshot is completed this will save it to a file
+        and upload it to a DeviceHub.
         """
         if request.method == 'GET':
             try:
@@ -56,20 +62,27 @@ class Snapshots:
                 raise NotFound()
         else:  # PATCH
             snapshot = request.get_json()
-            snapshot['date'] = now()  # The client could have wrong timing so let's override it with ours
+            # Client could have wrong timing so we override it with ours
+            snapshot['date'] = now()
 
-            # We can receive two PATCH at the same time: from Workbench and DeviceHubClient
-            # We merge the dictionaries to avoid data loss and to avoid forcing DeviceHubClient
+            # We can receive two PATCH at the same time:
+            # from Workbench and DeviceHubClient
+            # We merge the dictionaries to avoid data loss
+            # and to avoid forcing DeviceHubClient
             # to send all full snapshot
             with self.snapshots_lock.writer_lock():
                 snapshot = merge(self.snapshots[_uuid], snapshot)
-                # We create control variables under lock so modifying them later does not change dict size
+                # We create control variables under
+                # lock so modifying them later does not change dict size
                 snapshot['_error'] = snapshot['_uploaded'] = snapshot['_saved'] = None
 
-            # Note that _phases might not exist if we link before we get the snapshot from the first phase
-            if snapshot.get('_phases') and snapshot['_phases'] == snapshot['_totalPhases'] and snapshot.get('_linked'):
-                # todo devicehub won't allow us to link again a device that has been already uploaded
-                # as it will have the same _uuid
+            # Note that _phases might not exist if we link
+            # before we get the snapshot from the first phase
+            if snapshot.get('_phases') and snapshot['_phases'] == snapshot['_totalPhases'] \
+                    and snapshot.get('_linked'):
+                # todo devicehub won't allow us to link again a device
+                # that has been already uploaded as it will have the
+                # same _uuid
                 self.sender_queue.put((_uuid,))
 
             return Response(status=204)
@@ -80,7 +93,11 @@ class Snapshots:
 
     @staticmethod
     def remove_auxiliary_properties(snapshot: dict):
-        """Removes unwanted properties for DeviceHub from the snapshot. Mutates snapshot."""
+        """
+        Removes unwanted properties for DeviceHub from the snapshot.
+
+        Mutates snapshot.
+        """
         for attr in '_phases', '_totalPhases', '_linked', '_error', '_uploaded', '_saved':
             snapshot.pop(attr, None)
 
@@ -88,7 +105,8 @@ class Snapshots:
     def to_json_file(snapshot: dict, folder: Path):
         device = snapshot['device']
         un = 'Unknown'
-        name = Naming.hid(device['manufacturer'] or un, device['serialNumber'] or un, device['model'] or un)
+        name = Naming.hid(device['manufacturer'] or un, device['serialNumber'] or un,
+                          device['model'] or un)
         with folder.joinpath(name + '.json').open('w') as f:
             json.dump(snapshot, f, indent=2, sort_keys=True, cls=DeviceHubJSONEncoder)
 
@@ -116,11 +134,12 @@ class Snapshots:
             r.raise_for_status()
         except (requests.ConnectionError, Timeout):
             self.attempts += 1
-            print('Connection error for Snapshot {} and URL {}. Retrying in 4s.'.format(_uuid, url))
+            print('Connection error for Snapshot {} & URL {}. Retrying in 4s.'.format(_uuid, url))
             sleep(4)
             self._to_devicehub(_uuid, session)  # Try again
         except HTTPError as e:
-            t = 'HTTPError for Snapshot {}, ID {} and url {}:\n{}'.format(_uuid, snapshot['device'].get('_id'), url, e)
+            t = 'HTTPError for Snapshot {}, ID {} and url {}:\n{}' \
+                .format(_uuid, snapshot['device'].get('_id'), url, e)
             print(t, file=stderr)
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
@@ -131,7 +150,8 @@ class Snapshots:
                 snapshot['_error'] = error
             snapshot['_saved'] = True
         else:
-            print('Uploaded Snapshot {}, ID {} to url {}'.format(_uuid, snapshot['device'].get('_id'), url))
+            print('Uploaded Snapshot {}, ID {} to url {}'
+                  .format(_uuid, snapshot['device'].get('_id'), url))
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_folder)
             snapshot['_uploaded'] = r.json()['_id']
