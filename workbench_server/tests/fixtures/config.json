@@ -4,5 +4,6 @@
   "erase_steps": 1,
   "erase": "EraseBasic",
   "install": "asdf",
-  "erase_leading_zeros": true
+  "erase_leading_zeros": true,
+  "link": true
 }

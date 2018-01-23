@@ -79,7 +79,7 @@ class Snapshots:
             # Note that _phases might not exist if we link
             # before we get the snapshot from the first phase
             if snapshot.get('_phases') and snapshot['_phases'] == snapshot['_totalPhases'] \
-                    and snapshot.get('_linked'):
+                    and (snapshot.get('_linked') or not self.app.configuration.link):
                 # todo devicehub won't allow us to link again a device
                 # that has been already uploaded as it will have the
                 # same _uuid
@@ -140,7 +140,7 @@ class Snapshots:
             self._to_devicehub(_uuid, session)  # Try again
         except HTTPError as e:
             t = 'HTTPError for Snapshot {}, ID {} and url {}:\n{}' \
-                .format(_uuid, snapshot['device'].get('_id'), url, e)
+                .format(_uuid, snapshot['device'].get('_id', '(not linked)'), url, e)
             print(t, file=stderr)
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_error_folder)
@@ -152,7 +152,7 @@ class Snapshots:
             snapshot['_saved'] = True
         else:
             print('Uploaded Snapshot {}, ID {} to url {}'
-                  .format(_uuid, snapshot['device'].get('_id'), url))
+                  .format(_uuid, snapshot['device'].get('_id', '(not linked)'), url))
             self.attempts = 0
             self.to_json_file(snapshot_to_send, self.snapshot_folder)
             snapshot['_uploaded'] = r.json()['_id']
