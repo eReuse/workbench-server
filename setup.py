@@ -18,13 +18,17 @@ setup(
         'pyusb',
         'ereuse-utils [usb_flash_drive]',
         'ereuse-utils [naming]',
+        'ereuse-utils [test]',
         'pymongo'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
+    setup_requires=[
+        'pytest-runner'
+    ],
     tests_require=[
-        'requests_mock',
-        'assertpy'
+        'pytest',
+        'requests_mock'
     ],
     include_package_data=True,
     classifiers=[

@@ -127,6 +127,7 @@ class Snapshots:
         snapshot_to_send = copy(snapshot)
         self.remove_auxiliary_properties(snapshot_to_send)
 
+        assert self.app.auth, 'Authorization must be supplied in'
         session.headers.update({'Authorization': self.app.auth})
         url = '{}/{}/events/devices/snapshot'.format(self.app.deviceHub, self.app.db)
         try:

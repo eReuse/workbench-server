@@ -14,7 +14,7 @@ class Info:
         if 'device-hub' in request.args:
             self.app.deviceHub = request.args['device-hub']
             self.app.db = request.args['db']
-            self.app.auth = request.headers.get('Authorization')
+            self.app.auth = request.headers['Authorization']
 
         response = {
             # We need to send snapshots as a list

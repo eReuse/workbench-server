@@ -3,6 +3,7 @@ from typing import Type
 
 import flask_cors
 from ereuse_utils import DeviceHubJSONEncoder, ensure_utf8
+from ereuse_utils.test import Client
 from flask import Flask
 from pymongo import MongoClient
 from pymongo.database import Database
@@ -32,12 +33,26 @@ class WorkbenchServer(Flask):
     WorkbenchServer allows you name USB pen-drives and auto-uploads
     snapshots to DeviceHub.
     """
+    test_client_class = Client
+
     def __init__(self, import_name=__name__, static_path=None, static_url_path=None,
                  static_folder='static', template_folder='templates', instance_path=None,
                  instance_relative_config=False, root_path=None,
                  folder=Path.home().joinpath('workbench'), info: Type[Info] = Info,
                  config: Type[Config] = Config, usbs: Type[USBs] = USBs,
                  snapshots: Type[Snapshots] = Snapshots):
+        """
+        Instantiates a WorkbenchServer.
+
+        See params from base class Flask. New ones are:
+        :param folder: The Path of the main folder for WorkbenchServer.
+        WorkbenchServer will create configurations and read images from
+        there. By defualt, ~/workbench
+        :param info: Info class. Replace this to extend functionality.
+        :param config: Config class. Replace this to extend func.
+        :param usbs: USB class. Replace this to extend functionality.
+        :param snapshots: Snapshots class. Replace this to extend func.
+        """
         ensure_utf8(self.__class__.__name__)
         super().__init__(import_name, static_path, static_url_path, static_folder, template_folder,
                          instance_path, instance_relative_config, root_path)
