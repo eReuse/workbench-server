@@ -107,8 +107,8 @@ class USBs:
         """
 
         def add_usb_name(usb):
-            with suppress(IndexError):
-                named_usb = self.named_usbs.find_one({'serialNumber': usb['serialNumber']})
+            named_usb = self.named_usbs.find_one({'serialNumber': usb['serialNumber']})
+            if named_usb:
                 usb['name'] = named_usb['name']
             return usb
 
