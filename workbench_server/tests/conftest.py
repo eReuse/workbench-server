@@ -20,7 +20,8 @@ def client(app: WorkbenchServer) -> Client:
     return app.test_client()
 
 
-def jsonf(file_name) -> dict:
+def jsonf(file_name: str) -> dict:
+    """Gets a json fixture and parses it to a dict."""
     with Path(__file__).parent.joinpath('fixtures').joinpath(file_name + '.json').open() as file:
         return json.load(file)
 

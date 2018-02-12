@@ -19,7 +19,8 @@ setup(
         'ereuse-utils [usb_flash_drive]',
         'ereuse-utils [naming]',
         'ereuse-utils [test]',
-        'pymongo'
+        'pymongo',
+        'prwlock'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
