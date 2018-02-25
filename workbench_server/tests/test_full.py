@@ -1,49 +1,11 @@
 import json
 from time import sleep
-from unittest.mock import MagicMock
 
 import pytest
-from ereuse_utils.test import AUTH, BASIC, Client
+from ereuse_utils.test import Client
 from requests_mock import Mocker
 
 from workbench_server.flaskapp import WorkbenchServer
-from workbench_server.tests.conftest import jsonf
-
-
-@pytest.fixture()
-def mock_ip(app: WorkbenchServer):
-    """Mocks :meth:`workbench_server.info.Info.local_ip`."""
-    app.info.local_ip = MagicMock(return_value='X.X.X.X')
-
-
-@pytest.fixture()
-def mock_snapshot_post(request_mock: Mocker) -> (dict, dict, Mocker):
-    """
-    Mocks uploading to snapshot (login and upload).
-    You will need to POST to /login with returned params.
-    """
-    params = {
-        'device-hub': 'https://foo.com',
-        'db': 'db-foo'
-    }
-    headers = {AUTH: BASIC.format('FooToken')}
-    request_mock.post('https://foo.com/db-foo/events/devices/snapshot',
-                      json={'_id': 'new-snapshot-id'},
-                      request_headers=headers)
-
-    return params, headers, request_mock
-
-
-@pytest.fixture()
-def fphases() -> (list, str):
-    """Dictionary with the phases."""
-    return jsonf('phases'), '/snapshots/181826cf-ab46-4498-bc91-4895c9de5016'
-
-
-@pytest.fixture()
-def fusb() -> (dict, str):
-    """Fixture of a plugged-in USB in a Workbench client."""
-    return jsonf('usb'), '/usbs/plugged/kingston-0014780ee3fbf090d52f1286-dt_101_g2'
 
 
 @pytest.mark.usefixtures('mock_ip')
@@ -107,11 +69,11 @@ def test_full(client: Client, fphases: (list, str), fusb: (dict, str),
     client.patch(uri, data={'device': {'_id': 'foo-id'}, '_linked': True}, status=204)
     # Give some time to the sender thread
     # to submit it to the mocked DeviceHub
-    sleep(1)
+    sleep(3)
     # We sent the snapshot
     assert mocked_snapshot.call_count == 1, 'We should have uploaded the device after linking it'
     # We have created a JSON in the Snapshot folder
-    with next(app.snapshots.snapshot_folder.glob('*.json')).open() as f:
+    with next(app.folder.joinpath('Snapshots').glob('*.json')).open() as f:
         snapshot_file = json.load(f)
     assert snapshot_file['device']['_id'] == 'foo-id'
     assert snapshot_file['device']['serialNumber'] == phases[0]['device']['serialNumber']
@@ -140,7 +102,7 @@ def test_full_no_link(client: Client, fphases: (list, str),
     # We sent the snapshot
     assert mocked_snapshot.call_count == 1
     # We have created a JSON in the Snapshot folder
-    with next(app.snapshots.snapshot_folder.glob('*.json')).open() as f:
+    with next(app.folder.joinpath('Snapshots').glob('*.json')).open() as f:
         snapshot_file = json.load(f)
     assert '_id' not in snapshot_file['device'], 'There is no _id because we didn\'t link it'
     assert snapshot_file['device']['serialNumber'] == phases[0]['device']['serialNumber']

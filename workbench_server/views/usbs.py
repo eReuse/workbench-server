@@ -1,9 +1,6 @@
-from contextlib import suppress
-
 from cachetools import TTLCache
 from ereuse_utils.usb_flash_drive import plugged_usbs
 from flask import Response, jsonify, request
-from prwlock import RWLock
 from pydash import find
 from pymongo.collection import Collection
 from werkzeug.exceptions import BadRequest
@@ -30,16 +27,8 @@ class USBs:
         Note that `maxsize` is just required, and limits the number
         of plugged-in USBs to 100. Can safely be increased if needed.  
         """
-        self.client_plugged_lock = RWLock()
-        """
-        Pen-drives plugged on clients. 
-        We will auto-remove the pen-drives in 7 seconds if we don't
-        get any signal from the client.
-        """
         app.add_url_rule('/usbs', view_func=self.view_usbs, methods={'GET'})
         app.add_url_rule('/usbs/named', view_func=self.view_name_usb, methods={'POST'})
-        app.add_url_rule('/usbs/named/<usb_hid>', view_func=self.view_unname_usb,
-                         methods={'DELETE'})
         app.add_url_rule('/usbs/plugged/<usb_hid>', view_func=self.view_client_plug,
                          methods={'POST', 'DELETE'})
 
@@ -81,20 +70,8 @@ class USBs:
         if request.method == 'POST':
             if usb_hid in self.client_plugged:
                 self.client_plugged[usb_hid] = usb
-            else:
-                # Only lock if we need to create a new value
-                # as we are changing the size of the dict
-                with self.client_plugged_lock.writer_lock():
-                    self.client_plugged[usb_hid] = usb
         else:  # Delete
-            with suppress(KeyError):
-                with self.client_plugged_lock.writer_lock():
-                    del self.client_plugged[usb_hid]
-        return Response(status=204)
-
-    def view_unname_usb(self, usb_hid: str):
-        """Removes the USB from the named list."""
-        self.client_plugged.pop(usb_hid, None)
+            self.client_plugged.pop(usb_hid, None)
         return Response(status=204)
 
     def get_all_named_usbs(self) -> list:
@@ -112,6 +89,13 @@ class USBs:
                 usb['name'] = named_usb['name']
             return usb
 
-        with self.client_plugged_lock.reader_lock():
-            usbs = list(self.client_plugged.values())
-        return [add_usb_name(usb) for usb in usbs]
+        def get():
+            # If we plug / unplug an USB while we are iterating
+            # we could get a runtimeError. In that case just try again
+            try:
+                return tuple(self.client_plugged.values())
+            except RuntimeError:
+                print('runtimeError with USBs')
+                return get()
+
+        return [add_usb_name(usb) for usb in get()]

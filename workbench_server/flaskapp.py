@@ -62,17 +62,16 @@ class WorkbenchServer(Flask):
                         allow_headers=['Content-Type', 'Authorization', 'Origin'],
                         expose_headers=['Authorization'],
                         max_age=21600)
+        self.folder = folder
         settings_folder = folder.joinpath('.settings')
         settings_folder.mkdir(parents=True, exist_ok=True)
         images_folder = folder.joinpath('images')
         images_folder.mkdir(exist_ok=True)
 
+        self.auth = self.device_hub = self.db = None
         self.mongo_client = MongoClient()
         self.mongo_db = self.mongo_client.workbench_server  # type: Database
         self.configuration = config(self, settings_folder, images_folder)
         self.info = info(self)
         self.snapshots = snapshots(self, folder)
         self.usbs = usbs(self)
-        self.auth = None
-        self.deviceHub = None
-        self.db = None

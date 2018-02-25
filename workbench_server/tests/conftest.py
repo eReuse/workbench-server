@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
+from typing import List
+from unittest.mock import MagicMock
 
 import pytest
-from ereuse_utils.test import Client
+from ereuse_utils.test import AUTH, BASIC, Client
 from requests_mock import Mocker
 
 from workbench_server.flaskapp import WorkbenchServer
@@ -35,3 +37,39 @@ def request_mock() -> Mocker:
     """
     with Mocker() as m:
         yield m
+
+
+@pytest.fixture()
+def fphases() -> (List[dict], str):
+    """Dictionary with the phases."""
+    return jsonf('phases'), '/snapshots/181826cf-ab46-4498-bc91-4895c9de5016'
+
+
+@pytest.fixture()
+def fusb() -> (dict, str):
+    """Fixture of a plugged-in USB in a Workbench client."""
+    return jsonf('usb'), '/usbs/plugged/kingston-0014780ee3fbf090d52f1286-dt_101_g2'
+
+
+@pytest.fixture()
+def mock_ip(app: WorkbenchServer):
+    """Mocks :meth:`workbench_server.info.Info.local_ip`."""
+    app.info.local_ip = MagicMock(return_value='X.X.X.X')
+
+
+@pytest.fixture()
+def mock_snapshot_post(request_mock: Mocker) -> (dict, dict, Mocker):
+    """
+    Mocks uploading to snapshot (login and upload).
+    You will need to POST to /login with returned params.
+    """
+    params = {
+        'device-hub': 'https://foo.com',
+        'db': 'db-foo'
+    }
+    headers = {AUTH: BASIC.format('FooToken')}
+    request_mock.post('https://foo.com/db-foo/events/devices/snapshot',
+                      json={'_id': 'new-snapshot-id'},
+                      request_headers=headers)
+
+    return params, headers, request_mock

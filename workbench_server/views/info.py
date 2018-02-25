@@ -12,7 +12,7 @@ class Info:
 
     def view_info(self):
         if 'device-hub' in request.args:
-            self.app.deviceHub = request.args['device-hub']
+            self.app.device_hub = request.args['device-hub']
             self.app.db = request.args['db']
             self.app.auth = request.headers['Authorization']
 
