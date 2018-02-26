@@ -94,7 +94,7 @@ class Snapshots:
         while True:
             self.attempts, snapshot = receiver_queue.get()
             if snapshot:
-                self.snapshots[snapshot['_uuid']] = snapshot
+                self.snapshots[str(snapshot['_uuid'])] = snapshot
 
 
 class DeviceHubSubmitter(Process):
