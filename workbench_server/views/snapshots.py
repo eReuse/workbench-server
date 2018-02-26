@@ -6,6 +6,7 @@ from pathlib import Path
 from sys import stderr
 from threading import Thread
 from time import sleep
+from uuid import UUID
 
 import requests
 from ereuse_utils import DeviceHubJSONEncoder, now
@@ -41,12 +42,13 @@ class Snapshots:
         app.add_url_rule('/snapshots/<uuid:_uuid>', view_func=self.view_phase,
                          methods={'PATCH', 'GET'})
 
-    def view_phase(self, _uuid: str):
+    def view_phase(self, _uuid: UUID):
         """
         Updates or creates a Snapshot.
         When the Snapshot is completed this will save it to a file
         and upload it to a DeviceHub.
         """
+        _uuid = str(_uuid)
         if request.method == 'GET':
             try:
                 snapshot_to_send = self.snapshots[_uuid].copy()
