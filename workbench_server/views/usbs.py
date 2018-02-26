@@ -68,8 +68,7 @@ class USBs:
         """
         usb = request.get_json()
         if request.method == 'POST':
-            if usb_hid in self.client_plugged:
-                self.client_plugged[usb_hid] = usb
+            self.client_plugged[usb_hid] = usb
         else:  # Delete
             self.client_plugged.pop(usb_hid, None)
         return Response(status=204)
