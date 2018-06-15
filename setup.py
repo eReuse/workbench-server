@@ -2,11 +2,11 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.2',
+    version='0.3b1',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/eReuse/acelerywb',
     license='AGPLv3 License',
-    author='Garito and eReuse.org team',
+    author='eReuse.org team',
     author_email='x.bustamante@ereuse.org',
     description='Workbench manager for servers',
     # Updated in 2017-07-29
@@ -21,6 +21,9 @@ setup(
         'ereuse-utils [test]',
         'pymongo'
     ],
+    extras_require={
+        'webview': 'cefpython3>=57.0'
+    },
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
     setup_requires=[
