@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.3b1',
+    version='0.3b2',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/eReuse/acelerywb',
     license='AGPLv3 License',
@@ -16,11 +16,13 @@ setup(
         'flask-cors',
         'pydash',
         'pyusb',
-        'ereuse-utils [usb_flash_drive]',
-        'ereuse-utils [naming]',
-        'ereuse-utils [test]',
-        'pymongo'
+        'ereuse-utils [usb_flash_drive, naming, test]'
+        'pymongo',
+        'click',
+        'click-spinner',
+        'pycups'
     ],
+    scripts=['print_tags'],
     extras_require={
         'webview': 'cefpython3>=57.0'
     },
