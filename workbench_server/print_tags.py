@@ -2,6 +2,20 @@
 
 # -*- coding: utf-8 -*-
 
+"""
+Prints tags to QL-570 with well-known working options.
+
+More info:
+
+- http://www.g-loaded.eu/2005/11/10/using-a-cups-printer-from-command-line/
+- https://superuser.com/questions/1026576/how-to-set-the-minimum-margin-in-cups-foomatic-driver
+- https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=98033&p=680511s#p680511
+- https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=180370&p=1147727#p1147727
+- https://www.raspberrypi.org/forums/viewtopic.php?t=195655
+- https://www.cups.org/doc/options.html
+- https://www.cups.org/doc/spec-command.html
+"""
+
 import cups
 import sys
 import time
@@ -30,7 +44,7 @@ def print_tags(pdf: str, printer: str, media: str):
                                         # Correctly parse spaces
                                         pdf.replace('\\', '').strip(),
                                         'Tags',
-                                        {'media': media})
+                                        {'media': media, 'fit-to-page': 'True'})
     except cups.IPPError as e:
         if e.args[0] == 1042:
             print('Error: the file does not exist.', file=sys.stderr)
