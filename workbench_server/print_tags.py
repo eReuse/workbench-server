@@ -19,19 +19,11 @@ More info:
 import cups
 import sys
 import time
+import tkinter
+from tkinter import filedialog, messagebox
 
-import click
-import click_spinner
 
-
-@click.command()
-@click.option('--pdf',
-              type=click.Path(resolve_path=True, dir_okay=False),
-              prompt='Drop the PDF file here and press ENTER:',
-              help='The path of the PDF with the tags to print.')
-@click.option('--printer', default='QL-570', help='The name of the printer.')
-@click.option('--media', default='62x29', help='The type / size of the page.')
-def print_tags(pdf: str, printer: str, media: str):
+def print_tags(pdf: str, printer: str = 'QL-570', media: str = '62x29'):
     """
     Sends to print a PDF with tags to a label printer (by default a QL-570).
 
@@ -52,11 +44,31 @@ def print_tags(pdf: str, printer: str, media: str):
         else:
             raise e
     print('Printing...', end='\t')
-    with click_spinner.spinner():
-        while connection.getJobs().get(print_id, None) is not None:
-            time.sleep(1)
+    while connection.getJobs().get(print_id, None) is not None:
+        time.sleep(0.5)
     print('Done!')
 
 
+class Printer(tkinter.Frame):
+    def __init__(self):
+        super().__init__()
+        self.master.title('Print tags')
+        self.pack()
+        button = tkinter.Button(self, text="Select file and print", command=self.file)
+        button.grid(padx=5, pady=5)
+
+    def file(self):
+        file_path = filedialog.Open(self, filetypes=[('PDF', '*.pdf')]).show()
+        if file_path:
+            try:
+                print_tags(file_path)
+            except Exception as e:
+                messagebox.showerror('Could not print', str(e))
+            else:
+                messagebox.showinfo('Done', 'Printed')
+
+
 if __name__ == '__main__':
-    print_tags()
+    top = tkinter.Tk()
+    app = Printer()
+    top.mainloop()
