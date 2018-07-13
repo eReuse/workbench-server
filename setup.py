@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.3',
+    version='0.4',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/eReuse/acelerywb',
     license='AGPLv3 License',
