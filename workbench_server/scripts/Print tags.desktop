@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Print tags QL-570 & QL-700
+Exec=python3 /opt/workbench_server/workbench_server/print_tags.py
