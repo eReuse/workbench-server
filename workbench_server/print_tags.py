@@ -14,6 +14,8 @@ More info:
 - https://www.raspberrypi.org/forums/viewtopic.php?t=195655
 - https://www.cups.org/doc/options.html
 - https://www.cups.org/doc/spec-command.html
+
+This requires Python Tkinter; in debian do ``apt install python3-tk``.
 """
 
 import cups

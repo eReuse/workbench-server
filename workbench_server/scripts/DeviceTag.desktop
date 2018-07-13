@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=DeviceTag
+Exec=python3 /opt/workbench-server/workbench_server/webview.py
