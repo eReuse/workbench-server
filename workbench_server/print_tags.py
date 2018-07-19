@@ -23,6 +23,11 @@ import sys
 import time
 import tkinter
 from tkinter import filedialog, messagebox
+import subprocess
+
+lpstat_string = subprocess.run(('lpstat', '-p'), stdout=subprocess.PIPE)
+p_index = lpstat_string.stdout.find(b'QL-')
+printer_name = lpstat_string.stdout[p_index:p_index+6]
 
 
 def print_tags(pdf: str, printer: str = 'QL-570', media: str = '62x29'):
@@ -63,7 +68,7 @@ class Printer(tkinter.Frame):
         file_path = filedialog.Open(self, filetypes=[('PDF', '*.pdf')]).show()
         if file_path:
             try:
-                print_tags(file_path)
+                print_tags(file_path, printer=printer_name)
             except Exception as e:
                 messagebox.showerror('Could not print', str(e))
             else:
