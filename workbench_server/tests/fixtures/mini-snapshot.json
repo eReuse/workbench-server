@@ -1,0 +1,8 @@
+{
+  "uuid": "31662723-baf5-4b68-ae8b-303620eb4665",
+  "expectedEvents": [],
+  "device": {
+    "serialNumber": "fooBar"
+  },
+  "_phase": "FOO"
+}

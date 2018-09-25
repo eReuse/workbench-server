@@ -11,24 +11,16 @@ setup(
     description='Workbench manager for servers',
     # Updated in 2017-07-29
     install_requires=[
+        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b6',
         'requests',
         'flask>=0.11',
         'flask-cors',
-        'pydash',
         'pyusb',
-        'ereuse-utils [usb_flash_drive]',
-        'ereuse-utils [naming]',
-        'ereuse-utils [test]',
-        'pymongo'
+        'pymongo',
+        'cefpython3==66.0',
+        'cachetools'
+        'pycups'
     ],
-    extras_require={
-        'tags': [
-            'pycups'
-        ],
-        'webview': [
-            'cefpython'
-        ]
-    },
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
     setup_requires=[

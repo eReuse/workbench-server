@@ -40,15 +40,9 @@ def request_mock() -> Mocker:
 
 
 @pytest.fixture()
-def fphases() -> (List[dict], str):
-    """Dictionary with the phases."""
-    return jsonf('phases'), '/snapshots/181826cf-ab46-4498-bc91-4895c9de5016'
-
-
-@pytest.fixture()
 def fusb() -> (dict, str):
     """Fixture of a plugged-in USB in a Workbench client."""
-    return jsonf('usb'), '/usbs/plugged/kingston-0014780ee3fbf090d52f1286-dt_101_g2'
+    return jsonf('usb'), '/usbs/kingston-0014780ee3fbf090d52f1286-dt_101_g2'
 
 
 @pytest.fixture()
@@ -63,12 +57,12 @@ def mock_snapshot_post(request_mock: Mocker) -> (dict, dict, Mocker):
     Mocks uploading to snapshot (login and upload).
     You will need to POST to /login with returned params.
     """
-    params = {
-        'device-hub': 'https://foo.com',
-        'db': 'db-foo'
-    }
+    params = [
+        ('device-hub', 'https://foo.com'),
+        ('db', 'db-foo')
+    ]
     headers = {AUTH: BASIC.format('FooToken')}
-    request_mock.post('https://foo.com/db-foo/events/devices/snapshot',
+    request_mock.post('https://foo.com/db-foo/snapshot',
                       json={'_id': 'new-snapshot-id'},
                       request_headers=headers)
 

@@ -20,8 +20,7 @@ class Info:
             # We need to send snapshots as a list
             # so Javascript can keep the order
             'snapshots': self.app.snapshots.get_snapshots(),
-            'usbs': self.app.usbs.get_client_plugged_usbs(),
-            'names': self.app.usbs.get_all_named_usbs(),
+            'usbs': self.app.usbs.get_usbs(),
             'attempts': self.app.snapshots.attempts
         }
         with suppress(OSError):  # If no Internet
