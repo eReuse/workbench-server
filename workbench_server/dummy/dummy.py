@@ -1,10 +1,7 @@
 import json
 from time import sleep
 
-from workbench_server.tests.fixtures.phases import phases, phase0, phase5
-from workbench_server.tests.test_worker import TestWorker
-from workbench_server.worker import Worker
-
+# todo redo
 
 def dummy(worker: Worker, timing=5, add_usb=True, remove_usb=True, install_os=True):
     test = TestWorker()

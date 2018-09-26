@@ -5,11 +5,10 @@ snapshotting computers.
 
 ## Installation
 1. Install python3 with pip (in Debian 9 is `apt install python3-pip`).
-2. Install lib-usb or openUSB (in Debian 9 is `apt install libusb-1.0-0`).
-3. Install MongoDB (in Debian 9 is `apt install mongodb`).
-4. Clone WorkbenchServer: 
+2. If you want to use pycups in Debian 9, install `apt install libcups2-dev`.
+3. Clone WorkbenchServer:
    `git clone https://github.com/ereuse/workbench-server && cd workbench-server`.
-5. Install WorkbenchServer: `pip3 install -e . -r requirements.txt`.
+4. Install WorkbenchServer: `pip3 install -e . -r requirements.txt`.
 
 [Workbench](https://github.com/ereuse/workbench) is the main client for WorkbenchServer,
 and you will need a [DeviceHubClient](https://github.com/ereuse/devicehubclient)

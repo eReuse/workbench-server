@@ -43,18 +43,17 @@ class WorkbenchServer(Flask):
                  instance_path=None,
                  instance_relative_config=False,
                  root_path=None,
-                 folder=Path.home().joinpath('workbench')):
-        """
-           Instantiates a WorkbenchServer.
+                 folder=Path.home() / 'workbench'):
+        """Instantiates a WorkbenchServer.
 
-           See params from base class Flask. New ones are:
-           :param folder: The Path of the main folder for WorkbenchServer.
-           WorkbenchServer will create configurations and read images from
-           there. By defualt, ~/workbench
-           :param info: Info class. Replace this to extend functionality.
-           :param config: Config class. Replace this to extend func.
-           :param usbs: USB class. Replace this to extend functionality.
-           :param snapshots: Snapshots class. Replace this to extend func.
+       See params from base class Flask. New ones are:
+       :param folder: The Path of the main folder for WorkbenchServer.
+       WorkbenchServer will create configurations and read images from
+       there. By defualt, ~/workbench
+       :param info: Info class. Replace this to extend functionality.
+       :param config: Config class. Replace this to extend func.
+       :param usbs: USB class. Replace this to extend functionality.
+       :param snapshots: Snapshots class. Replace this to extend func.
        """
         ensure_utf8(self.__class__.__name__)
         super().__init__(import_name, static_url_path, static_folder, static_host, host_matching,

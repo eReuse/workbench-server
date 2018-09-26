@@ -4,22 +4,20 @@ setup(
     name='eReuse-WorkbenchServer',
     version='0.4.1',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
-    url='https://github.com/eReuse/acelerywb',
+    url='https://github.com/ereuse/workbench-server',
     license='AGPLv3 License',
     author='Garito and eReuse.org team',
     author_email='x.bustamante@ereuse.org',
-    description='Workbench manager for servers',
-    # Updated in 2017-07-29
+    description='Workbench manager.',
     install_requires=[
-        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b6',
-        'requests',
-        'flask>=0.11',
-        'flask-cors',
-        'pyusb',
-        'pymongo',
+        'cachetools',
         'cefpython3==66.0',
-        'cachetools'
-        'pycups'
+        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b7',
+        'flask>=1.0.2',
+        'flask-cors',
+        'pycups',
+        'pyusb',
+        'requests'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',
