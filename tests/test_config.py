@@ -1,6 +1,6 @@
 from ereuse_utils.test import Client
 
-from workbench_server.tests.conftest import jsonf
+from tests.conftest import jsonf
 
 
 def test_config(client: Client):

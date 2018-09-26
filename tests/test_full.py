@@ -5,8 +5,8 @@ import pytest
 from ereuse_utils.test import Client
 from requests_mock import Mocker
 
+from tests.conftest import jsonf
 from workbench_server.flaskapp import WorkbenchServer
-from workbench_server.tests.conftest import jsonf
 
 
 @pytest.mark.usefixtures('mock_ip')
@@ -63,7 +63,7 @@ def test_full(client: Client,
                  status=204)
     # Give some time to the sender thread
     # to submit it to the mocked DeviceHub
-    sleep(3)
+    sleep(1)
     # We sent the snapshot
     assert mocked_snapshot.call_count == 1, 'We should have uploaded the device after linking it'
     # We have created a JSON in the Snapshot folder
