@@ -34,6 +34,7 @@ class USBs:
         """
         usb = request.get_json()
         if request.method == 'POST':
+            self.app.logger.debug('POST USB %s: %s', usb_hid, request.data)
             self.client_plugged[usb_hid] = usb
         else:  # Delete
             self.client_plugged.pop(usb_hid, None)

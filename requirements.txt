@@ -1,4 +1,4 @@
-ereuse-utils == 0.4.0b7
+ereuse-utils == 0.4.0b9
 requests==2.19.1
 requests-mock==1.5.2
 requests-toolbelt==0.8.0
@@ -7,3 +7,5 @@ cefpython3==66.0
 pyusb==1.0.2
 cachetools==2.1.0
 pycups==1.9.73
+deepmerge==0.0.4
+more-itertools==4.3.0

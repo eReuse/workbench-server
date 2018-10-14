@@ -4,5 +4,6 @@
   "device": {
     "serialNumber": "fooBar"
   },
-  "_phase": "FOO"
+  "_phase": "FOO",
+  "closed": true
 }

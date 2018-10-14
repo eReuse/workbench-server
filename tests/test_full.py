@@ -59,17 +59,32 @@ def test_full(client: Client,
     # Link computer
     client.patch('snapshots/',
                  item=s['uuid'],
-                 data={'tags': ['foo-tag']},
+                 data={
+                     'device': {
+                         'tags': [{'id': 'foo-tag', 'type': 'Tag'}],
+                         'events': [{
+                             'type': 'WorkbenchRate',
+                             'appearance': 'E',
+                             'bios': 'A',
+                             'functionality': 'B'
+                         }]
+                     }
+                 },
                  status=204)
+    sleep(0.1)
+    i, _ = client.get('/info', query=dh_params, headers=dh_headers)
+    assert i['snapshots'][0]['_uploaded'] == 'new-snapshot-id'
+    assert i['snapshots'][0]['_actualPhase'] == 'Done'
+    assert i['snapshots'][0]['_phase'] == 'Bar'
     # Give some time to the sender thread
     # to submit it to the mocked DeviceHub
-    sleep(1)
     # We sent the snapshot
     assert mocked_snapshot.call_count == 1, 'We should have uploaded the device after linking it'
     # We have created a JSON in the Snapshot folder
     with next(app.folder.joinpath('Snapshots').glob('*.json')).open() as f:
         snapshot_file = json.load(f)
-    assert snapshot_file['tags'] == ['foo-tag']
+    assert snapshot_file['device']['tags'] == [{'id': 'foo-tag', 'type': 'Tag'}]
+    assert len(snapshot_file['device']['events']) == 2
     assert snapshot_file['device']['serialNumber'] == 'LXAZ70X0669112B8DB1601'
 
 
@@ -88,13 +103,14 @@ def test_full_no_link(client: Client,
     client.get('/info', query=dh_params, headers=dh_headers)
 
     config, _ = client.get('/config')
-    config['link'] = False
+    # todo readd this when user can remove link with config config['link'] = False
     client.post('/config', data=config, status=204)
-    assert not app.configuration.link
+    # assert not app.configuration.link
+    app.configuration.link = False
 
     s['_phase'] = 'Bar'
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    sleep(1)
+    sleep(0.1)
     # We sent the snapshot
     assert mocked_snapshot.call_count == 1
     # We have created a JSON in the Snapshot folder

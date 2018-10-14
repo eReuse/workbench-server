@@ -27,6 +27,12 @@ def jsonf(file_name: str) -> dict:
         return json.load(file)
 
 
+def phase(name: str) -> dict:
+    path = Path(__file__).parent.parent / 'workbench_server' / 'phases' / (name + '.json')
+    with path.open() as f:
+        return json.load(f)
+
+
 @pytest.fixture()
 def request_mock() -> Mocker:
     """
@@ -58,11 +64,11 @@ def mock_snapshot_post(request_mock: Mocker) -> (dict, dict, Mocker):
     """
     params = [
         ('device-hub', 'https://foo.com'),
-        ('db', 'db-foo')
+        # ('db', 'db-foo')
     ]
     headers = {AUTH: BASIC.format('FooToken')}
-    request_mock.post('https://foo.com/db-foo/snapshot',
-                      json={'_id': 'new-snapshot-id'},
+    request_mock.post('https://foo.com/snapshots/',
+                      json={'id': 'new-snapshot-id'},
                       request_headers=headers)
 
     return params, headers, request_mock

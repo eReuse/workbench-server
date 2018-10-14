@@ -3,7 +3,10 @@
   "uuid": "00000000-0000-0000-0000-000000000000",
   "software": "Workbench",
   "version": "11.0a1",
-  "expectedEvents": ["Foo", "Bar"],
+  "expectedEvents": [
+    "Foo",
+    "Bar"
+  ],
   "closed": true,
   "endTime": "0001-01-01 00:00:00",
   "_phase": null,
@@ -11,7 +14,13 @@
     "manufacturer": "Acer",
     "model": "Aspire 5737Z",
     "serialNumber": "LXAZ70X0669112B8DB1601",
-    "events": [],
+    "events": [
+      {
+        "rate": 2.1341,
+        "type": "BenchmarkRamSysbench",
+        "elapsed": 2
+      }
+    ],
     "type": "Laptop",
     "chassis": "Netbook"
   },

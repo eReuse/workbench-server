@@ -1,5 +1,6 @@
 from contextlib import suppress
 
+from boltons import urlutils
 from flask import jsonify, request
 
 from workbench_server import flaskapp
@@ -12,8 +13,9 @@ class Info:
 
     def view_info(self):
         if 'device-hub' in request.args:
-            self.app.device_hub = request.args['device-hub']
-            self.app.db = request.args['db']
+            self.app.devicehub = urlutils.URL(request.args['device-hub'])
+            # Just avoid this for now
+            # self.app.devicehub.path_parts = request.args['db'],
             self.app.auth = request.headers['Authorization']
 
         response = {

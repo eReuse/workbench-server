@@ -29,7 +29,7 @@ class Config:
             return jsonify(config)
         else:  # POST
             config = request.get_json()
-            self.link = config['link']
+            # self.link = config['link'] todo re-add in future
             with self.config.open(mode='w') as f:
                 json.dump(config, f)
             return Response(status=204)
