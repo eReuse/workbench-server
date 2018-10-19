@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from boltons import strutils
 from flask import Response, jsonify, request
 
 from workbench_server import flaskapp
@@ -18,6 +19,7 @@ class Config:
         """
         self.images_path = images_path
         app.add_url_rule('/config', view_func=self.view, methods={'GET', 'POST'})
+        app.add_url_rule('/config/images', view_func=self.view_images, methods={'GET'})
 
     def view(self):
         if request.method == 'GET':
@@ -33,3 +35,16 @@ class Config:
             with self.config.open(mode='w') as f:
                 json.dump(config, f)
             return Response(status=204)
+
+    def view_images(self):
+        return jsonify(list(self.images()))
+
+    def images(self):
+        """Returns the images in images_path"""
+        return (
+            {
+                'name': '{} – {}'.format(p.stem, strutils.bytes2human(p.stat().st_size)),
+                'value': p.name
+            }
+            for p in self.images_path.iterdir() if p.suffix == '.fsa'
+        )
