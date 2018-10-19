@@ -152,10 +152,12 @@ class Snapshot(dict):
             (
                 list,
                 [
-                    lambda _, __, orig, new: list(more_itertools.unique_everseen(
-                        chain(orig, new),
-                        key=lambda x: x['type'] if isinstance(x, dict) and 'type' in x else x
-                    ))
+                    lambda _, __, orig, new: list(
+                        more_itertools.unique_everseen(
+                            chain(new, orig),
+                            key=lambda x: x['id' if 'id' in x else 'type']
+                        )
+                    )
                 ]
             ),
             (
@@ -176,11 +178,11 @@ class Snapshot(dict):
             'events': []
         }
         self['_error'] = self['_uploaded'] = self['_saved'] = None
-        self.tags = self.rate = None
 
     def merge(self, new, wait_for_link=False) -> None:
-        other = self.MERGER.merge(self, new)
-        self.update(other)
+        device = self.MERGER.merge(self['device'], new['device'])
+        self.update(new)
+        self['device'] = device
         self.update_actual_phase(wait_for_link)
         assert self['uuid']
         assert self['device']

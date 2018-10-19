@@ -34,7 +34,19 @@
       "speed": 2.0,
       "address": 64,
       "cores": 2,
-      "threads": 2
+      "threads": 2,
+      "events": [
+        {
+          "rate": 6666.18,
+          "elapsed": 0,
+          "type": "BenchmarkProcessor"
+        },
+        {
+          "rate": 166.2514,
+          "elapsed": 166,
+          "type": "BenchmarkProcessorSysbench"
+        }
+      ]
     },
     {
       "manufacturer": "Western Digital",

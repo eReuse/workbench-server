@@ -71,7 +71,7 @@ def test_full(client: Client,
                      }
                  },
                  status=204)
-    sleep(0.1)
+    sleep(0.2)
     i, _ = client.get('/info', query=dh_params, headers=dh_headers)
     assert i['snapshots'][0]['_uploaded'] == 'new-snapshot-id'
     assert i['snapshots'][0]['_actualPhase'] == 'Done'

@@ -23,14 +23,11 @@ def test_snapshots_snapshot_closed():
 
 def test_snapshot_merger():
     s = Snapshot()
-    s['x'] = [1, 2, 3]
     s['closed'] = False
-    s['uuid'] = s['device'] = s['expectedEvents'] = s['_phase'] = 'something'
-    s.merge({'x': [1, 4, 5]})
-    assert s['x'] == [1, 2, 3, 4, 5]
-    s['x'] = [{'type': 'foo'}, {'type': 'bar'}]
-    s.merge({'x': [{'type': 'foo'}, {'type': 'foo'}, {'type': 'barz'}]})
-    assert s['x'] == [{'type': 'foo'}, {'type': 'bar'}, {'type': 'barz'}]
+    s['uuid'] = s['expectedEvents'] = s['_phase'] = 'something'
+    s['device'] = [{'type': 'foo'}, {'type': 'bar'}]
+    s.merge({'device': [{'type': 'foo'}, {'type': 'foo'}, {'type': 'barz'}]})
+    assert s['device'] == [{'type': 'foo'}, {'type': 'barz'}, {'type': 'bar'}]
 
 
 @pytest.mark.usefixtures('mock_ip')
