@@ -17,7 +17,6 @@ from boltons import urlutils
 from ereuse_utils import session
 from ereuse_utils.naming import Naming
 from flask import Response, jsonify, request
-from requests import HTTPError, Timeout
 from werkzeug.exceptions import NotFound
 
 from workbench_server import flaskapp
@@ -122,11 +121,11 @@ class DeviceHubSubmitter(Thread):
         url = devicehub.navigate('snapshots/')
         try:
             r = self.server.post(url.to_text(), json=snapshot_to_send)
-        except (requests.ConnectionError, Timeout):
+        except (requests.ConnectionError, requests.Timeout):
             self.logger.info('ConnectionError for %s to %s', id, url.to_text())
             sleep(5)
             self._to_devicehub(snapshot, auth, devicehub, attempts + 1)  # Try again
-        except HTTPError as e:
+        except requests.HTTPError as e:
             name = snapshot.save_file(self.snapshot_error_folder)
             error = e.response.content.decode()
             try:
@@ -224,9 +223,8 @@ class Snapshot(dict):
     @property
     def hid(self) -> str:
         un = 'Unknown'
-        return Naming.hid(self['device'].get('manufacturer', un),
-                          self['device'].get('serialNumber', un),
-                          self['device'].get('model', un))
+        pc = self['device']
+        return Naming.hid(pc['manufacturer'] or un, pc['serialNumber'] or un, pc['model'] or un)
 
     def save_file(self, directory: Path) -> str:
         """Saves the Snapshot to a file. Returns the file name."""
