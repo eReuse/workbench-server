@@ -22,6 +22,12 @@ var/
 .installed.cfg
 *.egg
 
+
+.pytest_cache/
+blob_storage/
+webrtc_event_logs/
+
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
