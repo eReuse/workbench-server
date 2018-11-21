@@ -31,6 +31,8 @@ class Snapshots:
         self.snapshots = defaultdict(dict)
         self.sender_queue = Queue()
         self.receiver_queue = Queue()
+        self.snapshot_folder = public_folder.joinpath('Snapshots')
+        self.snapshot_folder.mkdir(exist_ok=True)
         self.submitter = DeviceHubSubmitter(public_folder, self.sender_queue, self.receiver_queue)
         self.submitter.start()
         Thread(target=self.update_from_submitter, args=(self.receiver_queue,), daemon=True).start()
@@ -79,6 +81,10 @@ class Snapshots:
                 # that has been already uploaded as it will have the
                 # same _uuid
                 self.sender_queue.put((snapshot, self.app.auth, self.app.device_hub, self.app.db))
+                # Save copy of snapshot
+                snapshot_to_send = snapshot.copy()
+                remove_auxiliary_properties(snapshot_to_send)
+                DeviceHubSubmitter.to_json_file(snapshot_to_send, self.snapshot_folder)
 
             return Response(status=204)
 
@@ -102,7 +108,6 @@ class Snapshots:
 class DeviceHubSubmitter(Process):
     def __init__(self, public_folder: Path, input_queue: Queue, output_queue: Queue):
         self.snapshot_folder = public_folder.joinpath('Snapshots')
-        self.snapshot_folder.mkdir(exist_ok=True)
         self.snapshot_error_folder = public_folder.joinpath('Failed Snapshots')
         self.snapshot_error_folder.mkdir(exist_ok=True)
         self.server = Session()
