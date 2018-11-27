@@ -48,6 +48,10 @@ def test_full(client: Client,
 
     assert mocked_snapshot.call_count == 0, 'Device shouldn\'t have uploaded as we wait for link'
 
+    with next(app.folder.joinpath('Unfinished Snapshots').glob('*.json')).open() as f:
+        temporary_file = json.load(f)
+    assert temporary_file['device']['serialNumber'] == 'LXAZ70X0669112B8DB1601'
+
     # Let's plug an USB
     # As we have finished the phases, plugging the USB will
     # trigger WorkbenchServer to upload to DeviceHub
@@ -86,6 +90,9 @@ def test_full(client: Client,
     assert snapshot_file['device']['tags'] == [{'id': 'foo-tag', 'type': 'Tag'}]
     assert len(snapshot_file['device']['events']) == 2
     assert snapshot_file['device']['serialNumber'] == 'LXAZ70X0669112B8DB1601'
+
+    assert not tuple(app.folder.joinpath('Unfinished Snapshots').glob('*.json')), \
+        'Unfinished snapshot is deleted after a submission attempt'
 
 
 def test_full_no_link(client: Client,

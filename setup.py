@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.5.0a1',
+    version='0.5.0a2',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/ereuse/workbench-server',
     license='AGPLv3 License',
@@ -12,7 +12,7 @@ setup(
     install_requires=[
         'cachetools',
         'cefpython3==66.0',
-        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b9',
+        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b12',
         'flask>=1.0.2',
         'flask-cors',
         'pycups',

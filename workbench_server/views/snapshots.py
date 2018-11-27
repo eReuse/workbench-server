@@ -32,7 +32,12 @@ class Snapshots:
     def __init__(self, app: 'flaskapp.WorkbenchServer', public_folder: Path) -> None:
         self.app = app
         self.snapshots = defaultdict(Snapshot)  # type: Dict[UUID, Snapshot]
-        self.submitter = DeviceHubSubmitter(self.snapshots, public_folder, app.logger)
+        self.unfinished_folder = public_folder / 'Unfinished Snapshots'
+        self.unfinished_folder.mkdir(exist_ok=True)
+        self.submitter = DeviceHubSubmitter(self.snapshots,
+                                            public_folder,
+                                            self.unfinished_folder,
+                                            app.logger)
         self.submitter.start()
         self.attempts = 0
         """
@@ -56,13 +61,17 @@ class Snapshots:
                 raise NotFound()
         elif request.method == 'PATCH':
             self.app.logger.debug('PATCH snapshot %s: %s', _uuid, request.data)
+            # Update internal snapshot
             s = request.get_json()
             snapshot = self.snapshots[_uuid]
             snapshot.merge(s, self.app.configuration.link)
+            snapshot.save_file(self.unfinished_folder)
+            # Upload to Devicehub if ready
             if snapshot.ready_to_upload(self.app.configuration.link):
+                self.app.logger.debug('Enqueued snapshot %s: %s', _uuid, request.data)
                 self.submitter.enqueue(_uuid, self.app.auth, self.app.devicehub)
-        # Submit to Devicehub
-
+            else:
+                self.app.logger.debug('Snapshot %s unready to upload.', _uuid)
         return Response(status=204)
 
     def get_snapshots(self) -> list:
@@ -76,13 +85,14 @@ class Snapshots:
 
 
 class DeviceHubSubmitter(Thread):
-    def __init__(self, snapshots, public_folder: Path, logger: Logger):
+    def __init__(self, snapshots, public_folder: Path, unfinished_folder: Path, logger: Logger):
         self.logger = logger
         self.snapshots = snapshots
-        self.snapshot_folder = public_folder.joinpath('Snapshots')
+        self.snapshot_folder = public_folder / 'Snapshots'
         self.snapshot_folder.mkdir(exist_ok=True)
-        self.snapshot_error_folder = public_folder.joinpath('Failed Snapshots')
+        self.snapshot_error_folder = public_folder / 'Failed Snapshots'
         self.snapshot_error_folder.mkdir(exist_ok=True)
+        self.unfinished_folder = unfinished_folder
         self.server = session.Session()
         self.server.headers.update({'Content-Type': 'application/json'})
         self.server.headers.update({'Accept': 'application/json'})
@@ -123,7 +133,7 @@ class DeviceHubSubmitter(Thread):
             r = self.server.post(url.to_text(), json=snapshot_to_send)
         except (requests.ConnectionError, requests.Timeout):
             self.logger.info('ConnectionError for %s to %s', id, url.to_text())
-            sleep(5)
+            sleep(10)
             self._to_devicehub(snapshot, auth, devicehub, attempts + 1)  # Try again
         except requests.HTTPError as e:
             name = snapshot.save_file(self.snapshot_error_folder)
@@ -142,10 +152,13 @@ class DeviceHubSubmitter(Thread):
             snapshot.save_file(self.snapshot_folder)
             snapshot['_uploaded'] = r.json()['id']
             snapshot['_saved'] = True
+        snapshot.delete_file(self.unfinished_folder)
         snapshot.update_actual_phase(None)  # We don't care about link anymore
 
 
 class Snapshot(dict):
+    # Note that snapshot requires device.S/N, device.manufacturer
+    # and device.model to be present, with a value or None
     MERGER = deepmerge.Merger(
         type_strategies=(
             (
@@ -232,3 +245,6 @@ class Snapshot(dict):
         with directory.joinpath(self.hid + '.json').open('w') as f:
             json.dump(s, f, indent=2, sort_keys=True)
             return f.name
+
+    def delete_file(self, directory: Path):
+        directory.joinpath(self.hid + '.json').unlink()

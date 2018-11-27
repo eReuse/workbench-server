@@ -73,9 +73,9 @@ class WorkbenchServer(Flask):
                         allow_headers=['Content-Type', 'Authorization', 'Origin'],
                         expose_headers=['Authorization'],
                         max_age=21600)
-        settings_folder = folder.joinpath('.settings')
+        settings_folder = folder / '.settings'
         settings_folder.mkdir(parents=True, exist_ok=True)
-        images_folder = folder.joinpath('images')
+        images_folder = folder / 'images'
         images_folder.mkdir(exist_ok=True)
         handler = RotatingFileHandler(str(settings_folder / 'workbench-server.log'),
                                       maxBytes=10000,
