@@ -178,6 +178,7 @@ class DeviceHubSubmitter(Process):
         un = 'Unknown'
         name = Naming.hid(device['manufacturer'] or un, device['serialNumber'] or un,
                           device['model'] or un)
+        name = '{} {}'.format(name, snapshot['_uuid'])
         with folder.joinpath(name + '.json').open('w') as f:
             json.dump(snapshot, f, indent=2, sort_keys=True, cls=DeviceHubJSONEncoder)
 
