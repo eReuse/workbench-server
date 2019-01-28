@@ -4,7 +4,8 @@
   "device": {
     "serialNumber": "fooBar",
     "manufacturer": null,
-    "model": null
+    "model": null,
+    "type": "Computer"
   },
   "_phase": "FOO",
   "closed": true

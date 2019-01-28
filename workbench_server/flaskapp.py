@@ -1,6 +1,7 @@
 import json
 import logging
 import pathlib
+import time
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
@@ -88,6 +89,7 @@ class WorkbenchServer(Flask):
         self.snapshots = Snapshots(self, folder)
         self.usbs = USBs(self)
         self.cli.command('phase')(self.phase)
+        self.cli.command('usb')(self.usb)
 
     @click.argument('phase')
     @click.option('--url', '-u',
@@ -114,3 +116,25 @@ class WorkbenchServer(Flask):
             s = json.load(f)
             url = url.navigate('snapshots/{}'.format(s['uuid'])).to_text()
             requests.patch(url, json=s).raise_for_status()
+
+    @click.option('--seconds', '-s',
+                  type=int,
+                  default=16,
+                  help='The amount of seconds to keep the USB plugged-in.')
+    @click.option('--url', '-u',
+                  type=cli.URL(scheme=True, host=True),
+                  default=urlutils.URL('http://localhost:8091/'),
+                  help='The URL where to make the petition to.')
+    def usb(self, url, seconds):
+        """Plugs an USB for the device being processed in Phase.
+
+        This keeps the USB plugged-in for X seconds.
+
+        Execute at least one phase before executing this.
+        """
+        with (pathlib.Path(__file__).parent / 'phases' / 'usb.json').open() as f:
+            s = json.load(f)
+            url = url.navigate('/usbs/kingston-0014780ee3fbf090d52f1286-dt_101_g2').to_text()
+            for _ in range(seconds // 4):
+                requests.post(url, json=s).raise_for_status()
+                time.sleep(4)

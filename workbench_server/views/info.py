@@ -9,7 +9,7 @@ from workbench_server import flaskapp
 class Info:
     def __init__(self, app: 'flaskapp.WorkbenchServer') -> None:
         self.app = app
-        app.add_url_rule('/info', view_func=self.view_info, methods=['GET'])
+        app.add_url_rule('/info/', view_func=self.view_info, methods=['GET'])
 
     def view_info(self):
         if 'device-hub' in request.args:

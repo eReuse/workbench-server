@@ -190,12 +190,15 @@ class Snapshot(dict):
             'events': []
         }
         self['_error'] = self['_uploaded'] = self['_saved'] = None
+        self['_linked'] = False
+        """Is the device linked? i.e. has the user set a tag?"""
 
     def merge(self, new, wait_for_link=False) -> None:
         device = self.MERGER.merge(self['device'], new['device'])
         self.update(new)
         self['device'] = device
         self.update_actual_phase(wait_for_link)
+        self['_linked'] = bool(self['device'].get('tags', None))
         assert self['uuid']
         assert self['device']
         assert '_phase' in self
@@ -203,7 +206,7 @@ class Snapshot(dict):
 
     def ready_to_upload(self, wait_for_link: bool):
         """Is the Snapshot finished?"""
-        return self['closed'] and (bool(self['device'].get('tags', None)) or not wait_for_link)
+        return self['closed'] and (self['_linked'] or not wait_for_link)
 
     def dump_devicehub(self) -> dict:
         """Creates a suitable dict for Devicehub."""
@@ -220,9 +223,9 @@ class Snapshot(dict):
     def _actual_phase(self, wait_for_link):
         phase = self['_phase']
         if self['_error']:
-            return 'Error. Upload manually.'
+            return 'Error'
         elif self['_uploaded']:
-            return 'Done'
+            return 'Uploaded'
         elif self.ready_to_upload(wait_for_link):
             return 'Uploading'
         elif self['closed'] and wait_for_link:
@@ -237,7 +240,10 @@ class Snapshot(dict):
     def hid(self) -> str:
         un = 'Unknown'
         pc = self['device']
-        return Naming.hid(pc['manufacturer'] or un, pc['serialNumber'] or un, pc['model'] or un)
+        return Naming.hid(pc['type'],
+                          pc['model'] or un,
+                          pc['manufacturer'] or un,
+                          pc['serialNumber'] or un)
 
     def save_file(self, directory: Path) -> str:
         """Saves the Snapshot to a file. Returns the file name."""

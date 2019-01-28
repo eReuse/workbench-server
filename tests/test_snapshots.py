@@ -34,11 +34,11 @@ def test_snapshot_merger():
 def test_snapshots_snapshot_view(client: Client):
     s = jsonf('mini-snapshot')
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['uuid'] == s['uuid']
     s['an update'] = True
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['uuid'] == s['uuid']
     assert d['snapshots'][0]['an update'] is True
 
@@ -47,25 +47,25 @@ def test_snapshots_snapshot_view(client: Client):
 def test_snapshots_phases(client: Client):
     i = phase('info')
     client.patch('snapshots/', item=i['uuid'], data=i, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['_actualPhase'] == 'Benchmark'
 
     i = phase('benchmark')
     client.patch('snapshots/', item=i['uuid'], data=i, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['_actualPhase'] == 'TestDataStorage'
 
     i = phase('data')
     client.patch('snapshots/', item=i['uuid'], data=i, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['_actualPhase'] == 'StressTest'
 
     i = phase('stress')
     client.patch('snapshots/', item=i['uuid'], data=i, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['_actualPhase'] == 'EraseBasic'
 
     i = phase('erase')
     client.patch('snapshots/', item=i['uuid'], data=i, status=204)
-    d, _ = client.get('info')
+    d, _ = client.get('info/')
     assert d['snapshots'][0]['_actualPhase'] == 'Link'

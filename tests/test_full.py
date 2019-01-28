@@ -25,7 +25,7 @@ def test_full(client: Client,
     dh_params, dh_headers, mocked_snapshot = mock_snapshot_post
 
     # Emptiness, before performing anything
-    response, _ = client.get('/info')
+    response, _ = client.get('/info/')
     assert response == {
         "attempts": 0,
         "ip": "X.X.X.X",
@@ -36,15 +36,15 @@ def test_full(client: Client,
     # Let's emulate Workbench submitting snapshot info on every phase
     # Phase 1 (get computer info)
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info')
+    client.get('/info/')
 
     s['_phase'] = "Foo"
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info')
+    client.get('/info/')
 
     s['_phase'] = "Bar"
     client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info')
+    client.get('/info/')
 
     assert mocked_snapshot.call_count == 0, 'Device shouldn\'t have uploaded as we wait for link'
 
@@ -57,7 +57,7 @@ def test_full(client: Client,
     # trigger WorkbenchServer to upload to DeviceHub
     # For that to happen, we need first to set DeviceHub connection
     # parameters. Those are passed through /info by DeviceHubClient
-    client.get('/info', query=dh_params, headers=dh_headers)
+    client.get('/info/', query=dh_params, headers=dh_headers)
     # Plug USB
     client.post(usb_uri, data=usb, status=204)
     # Link computer
@@ -76,9 +76,9 @@ def test_full(client: Client,
                  },
                  status=204)
     sleep(0.2)
-    i, _ = client.get('/info', query=dh_params, headers=dh_headers)
+    i, _ = client.get('/info/', query=dh_params, headers=dh_headers)
     assert i['snapshots'][0]['_uploaded'] == 'new-snapshot-id'
-    assert i['snapshots'][0]['_actualPhase'] == 'Done'
+    assert i['snapshots'][0]['_actualPhase'] == 'Uploaded'
     assert i['snapshots'][0]['_phase'] == 'Bar'
     # Give some time to the sender thread
     # to submit it to the mocked DeviceHub
@@ -107,11 +107,11 @@ def test_full_no_link(client: Client,
 
     # This time let's just to the /info before all phases
     # –it doesn't matter
-    client.get('/info', query=dh_params, headers=dh_headers)
+    client.get('/info/', query=dh_params, headers=dh_headers)
 
-    config, _ = client.get('/config')
+    config, _ = client.get('/config/')
     # todo readd this when user can remove link with config config['link'] = False
-    client.post('/config', data=config, status=204)
+    client.post('/config/', data=config, status=204)
     # assert not app.configuration.link
     app.configuration.link = False
 

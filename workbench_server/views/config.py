@@ -18,8 +18,8 @@ class Config:
         DeviceHub'.
         """
         self.images_path = images_path
-        app.add_url_rule('/config', view_func=self.view, methods={'GET', 'POST'})
-        app.add_url_rule('/config/images', view_func=self.view_images, methods={'GET'})
+        app.add_url_rule('/config/', view_func=self.view, methods={'GET', 'POST'})
+        app.add_url_rule('/config/images/', view_func=self.view_images, methods={'GET'})
 
     def view(self):
         if request.method == 'GET':
