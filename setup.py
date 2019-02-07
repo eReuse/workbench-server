@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.5.0a3',
+    version='0.5.0a4',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/ereuse/workbench-server',
     license='AGPLv3 License',

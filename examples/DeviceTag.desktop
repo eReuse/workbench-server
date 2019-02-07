@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=DeviceTag
-Exec=bash -c 'cd /opt/workbench_server; source venv/bin/activate; python workbench_server/webview.py'
