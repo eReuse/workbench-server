@@ -1,4 +1,4 @@
-ereuse-utils [usb_flash_drive,naming,test,session]==0.4b18
+ereuse-utils [usb_flash_drive,naming,test,session]==0.4b20
 requests==2.19.1
 requests-mock==1.5.2
 requests-toolbelt==0.8.0

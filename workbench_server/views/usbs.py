@@ -32,11 +32,11 @@ class USBs:
         in a client. From this moment, the pen-drive will be shown in
         :attr:`.USBs.view_usbs` inside the `plugged` dict property.
         """
-        usb = request.get_json()
         if request.method == 'POST':
             self.app.logger.debug('POST USB %s: %s', usb_hid, request.data)
-            self.client_plugged[usb_hid] = usb
+            self.client_plugged[usb_hid] = request.get_json()
         else:  # Delete
+            self.app.logger.debug('DELETE USB %s: %s', usb_hid, request.data)
             self.client_plugged.pop(usb_hid, None)
         return Response(status=204)
 

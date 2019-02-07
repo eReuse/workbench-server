@@ -15,7 +15,8 @@ class Info:
         if 'device-hub' in request.args:
             self.app.devicehub = urlutils.URL(request.args['device-hub'])
             # Just avoid this for now
-            # self.app.devicehub.path_parts = request.args['db'],
+            if request.args.get('db', None):
+                self.app.devicehub = self.app.devicehub.navigate(request.args.get('db') + '/')
             self.app.auth = request.headers['Authorization']
 
         response = {

@@ -76,6 +76,8 @@ def test_full(client: Client,
                  },
                  status=204)
     sleep(0.2)
+    # Just to try, let's unplug the usb
+    client.delete(usb_uri, status=204)
     i, _ = client.get('/info/', query=dh_params, headers=dh_headers)
     assert i['snapshots'][0]['_uploaded'] == 'new-snapshot-id'
     assert i['snapshots'][0]['_actualPhase'] == 'Uploaded'

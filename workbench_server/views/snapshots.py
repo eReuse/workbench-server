@@ -128,11 +128,11 @@ class DeviceHubSubmitter(Thread):
         snapshot_to_send = snapshot.dump_devicehub()
 
         self.server.headers.update({'Authorization': auth})
-        url = devicehub.navigate('snapshots/')
+        url = devicehub.to_text() + 'snapshots/'
         try:
-            r = self.server.post(url.to_text(), json=snapshot_to_send)
+            r = self.server.post(url, json=snapshot_to_send)
         except (requests.ConnectionError, requests.Timeout):
-            self.logger.info('ConnectionError for %s to %s', id, url.to_text())
+            self.logger.info('ConnectionError for %s to %s', id, url)
             sleep(10)
             self._to_devicehub(snapshot, auth, devicehub, attempts + 1)  # Try again
         except requests.HTTPError as e:
@@ -146,9 +146,9 @@ class DeviceHubSubmitter(Thread):
 
             self.logger.warning(
                 'HTTPError for Snapshot %s, to %s. File saved as %s. Error %s %s:',
-                id, url.to_text(), name, e, snapshot['_error'])
+                id, url, name, e, snapshot['_error'])
         else:
-            self.logger.info('Submitted Snapshot %s, %s', id, url.to_text())
+            self.logger.info('Submitted Snapshot %s, %s', id, url)
             snapshot.save_file(self.snapshot_folder)
             snapshot['_uploaded'] = r.json()['id']
             snapshot['_saved'] = True

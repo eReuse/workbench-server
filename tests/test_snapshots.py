@@ -17,7 +17,7 @@ def test_snapshots_snapshot_closed():
     assert not s.ready_to_upload(wait_for_link=True)
     assert not s.ready_to_upload(wait_for_link=False)
     s['closed'] = True
-    s['device']['tags'] = ['foo-bar']
+    s['_linked'] = True
     assert s.ready_to_upload(wait_for_link=True)
 
 
@@ -26,8 +26,8 @@ def test_snapshot_merger():
     s['closed'] = False
     s['uuid'] = s['expectedEvents'] = s['_phase'] = 'something'
     s['device'] = [{'type': 'foo'}, {'type': 'bar'}]
-    s.merge({'device': [{'type': 'foo'}, {'type': 'foo'}, {'type': 'barz'}]})
-    assert s['device'] == [{'type': 'foo'}, {'type': 'barz'}, {'type': 'bar'}]
+    s.merge({'device': {'foo': 'bar'}})
+    assert s['device'] == {'foo': 'bar'}
 
 
 @pytest.mark.usefixtures('mock_ip')
