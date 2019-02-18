@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import pathlib
 import time
 from logging.handlers import RotatingFileHandler
@@ -90,6 +91,7 @@ class WorkbenchServer(Flask):
         self.usbs = USBs(self)
         self.cli.command('phase')(self.phase)
         self.cli.command('usb')(self.usb)
+        self.cli.command('get-snapshots')(self.get_snapshots)
 
     @click.argument('phase')
     @click.option('--url', '-u',
@@ -138,3 +140,22 @@ class WorkbenchServer(Flask):
             for _ in range(seconds // 4):
                 requests.post(url, json=s).raise_for_status()
                 time.sleep(4)
+
+    @click.option('--url', '-u',
+                  type=cli.URL(scheme=True, host=True),
+                  default=urlutils.URL('http://localhost:8091/'),
+                  help='The URL where to make the petition to.')
+    @click.option('--dir', '-d',
+                  type=cli.Path(dir_okay=True, file_okay=False),
+                  help='The directory where to save the snapshots. '
+                       'By default the current dir.',
+                  default=pathlib.Path(os.getcwd()))
+    def get_snapshots(self, url: urlutils.URL, dir: pathlib.Path):
+        """Saves all the snapshots that are in Workbench Server's
+        memory as JSON files."""
+        info = requests.get(url.navigate('/info/').to_text()).json()
+        for snapshot in info['snapshots']:
+            _uuid = snapshot['_uuid']
+            endpoint = url.navigate('/snapshots/{}'.format(_uuid)).to_text()
+            with dir.joinpath('{}.json'.format(_uuid)).open('w') as f:
+                json.dump(requests.get(endpoint).json(), f)

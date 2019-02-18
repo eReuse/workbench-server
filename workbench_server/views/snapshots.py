@@ -128,7 +128,7 @@ class DeviceHubSubmitter(Thread):
         snapshot_to_send = snapshot.dump_devicehub()
 
         self.server.headers.update({'Authorization': auth})
-        url = devicehub.to_text() + 'snapshots/'
+        url = devicehub.to_text() + 'events/'
         try:
             r = self.server.post(url, json=snapshot_to_send)
         except (requests.ConnectionError, requests.Timeout):
