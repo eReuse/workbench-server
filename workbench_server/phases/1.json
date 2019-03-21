@@ -1,0 +1,101 @@
+{
+  "software": "Workbench",
+  "uuid": "d5c02a12-2b55-46b9-8f84-5ba338a48211",
+  "version": "11.0b6",
+  "elapsed": null,
+  "device": {
+    "chassis": "Netbook",
+    "serialNumber": "B8OAAS048286",
+    "events": [],
+    "manufacturer": "ASUSTeK Computer INC.",
+    "model": "1001PXD",
+    "type": "Laptop"
+  },
+  "components": [
+    {
+      "serialNumber": "74:2f:68:8b:fd:c8",
+      "wireless": true,
+      "events": [],
+      "manufacturer": "Qualcomm Atheros",
+      "model": "AR9285 Wireless Network Adapter",
+      "type": "NetworkAdapter"
+    },
+    {
+      "serialNumber": "14:da:e9:42:f6:7c",
+      "wireless": false,
+      "events": [],
+      "manufacturer": "Qualcomm Atheros",
+      "speed": 100,
+      "model": "AR8152 v2.0 Fast Ethernet",
+      "type": "NetworkAdapter"
+    },
+    {
+      "serialNumber": null,
+      "address": 64,
+      "events": [],
+      "cores": 1,
+      "manufacturer": "Intel Corp.",
+      "speed": 1.667,
+      "model": "Intel Atom CPU N455 @ 1.66GHz",
+      "threads": 2,
+      "type": "Processor"
+    },
+    {
+      "serialNumber": null,
+      "memory": 256.0,
+      "events": [],
+      "manufacturer": "Intel Corporation",
+      "model": "Atom Processor D4xx/D5xx/N4xx/N5xx Integrated Graphics Controller",
+      "type": "GraphicCard"
+    },
+    {
+      "serialNumber": null,
+      "size": 1024,
+      "events": [],
+      "speed": 667.0,
+      "manufacturer": null,
+      "interface": "DDR2",
+      "model": null,
+      "format": "DIMM",
+      "type": "RamModule"
+    },
+    {
+      "serialNumber": null,
+      "events": [],
+      "manufacturer": "Intel Corporation",
+      "model": "NM10/ICH7 Family High Definition Audio Controller",
+      "type": "SoundCard"
+    },
+    {
+      "serialNumber": "0x0001",
+      "events": [],
+      "manufacturer": "Azurewave",
+      "model": "USB 2.0 UVC VGA WebCam",
+      "type": "SoundCard"
+    },
+    {
+      "serialNumber": "E2024242CV86HJ",
+      "size": 238475,
+      "events": [],
+      "manufacturer": "Hitachi",
+      "interface": "ATA",
+      "model": "HTS54322",
+      "type": "HardDrive"
+    },
+    {
+      "serialNumber": "Eee0123456789",
+      "pcmcia": 0,
+      "firewire": 0,
+      "events": [],
+      "manufacturer": "ASUSTeK Computer INC.",
+      "serial": 1,
+      "model": "1001PXD",
+      "slots": 2,
+      "usb": 5,
+      "type": "Motherboard"
+    }
+  ],
+  "closed": false,
+  "endTime": "2019-03-10T15:09:28.997862+00:00",
+  "type": "Snapshot"
+}

@@ -1,0 +1,14 @@
+{
+  "endTime": "2018-07-13T11:54:55.100581",
+  "steps": [
+    {
+      "endTime": "2018-07-13T11:54:55.096491",
+      "type": "StepRandom",
+      "severity": "Info",
+      "startTime": "2018-07-13T10:52:45.092981"
+    }
+  ],
+  "type": "EraseBasic",
+  "severity": "Info",
+  "startTime": "2018-07-13T10:52:45.092612"
+}

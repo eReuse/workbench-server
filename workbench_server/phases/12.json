@@ -1,0 +1,13 @@
+{
+  "currentPendingSectorCount": 0,
+  "offlineUncorrectable": 0,
+  "length": "Short",
+  "status": "Completed without error",
+  "elapsed": 100,
+  "reallocatedSectorCount": 0,
+  "severity": "Info",
+  "assessment": true,
+  "lifetime": 1348,
+  "type": "TestDataStorage",
+  "powerCycleCount": 2200
+}

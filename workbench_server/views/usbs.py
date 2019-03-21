@@ -12,7 +12,7 @@ class USBs:
     """
 
     def __init__(self, app: 'flaskapp.WorkbenchServer') -> None:
-        self.app = app
+        self.logger = app.logger
         self.client_plugged = TTLCache(maxsize=100, ttl=5)
         """
         Clients that have plugged-in USBs. All USBs that have not
@@ -33,10 +33,10 @@ class USBs:
         :attr:`.USBs.view_usbs` inside the `plugged` dict property.
         """
         if request.method == 'POST':
-            self.app.logger.debug('POST USB %s: %s', usb_hid, request.data)
+            self.logger.debug('POST USB %s: %s', usb_hid, request.data)
             self.client_plugged[usb_hid] = request.get_json()
         else:  # Delete
-            self.app.logger.debug('DELETE USB %s: %s', usb_hid, request.data)
+            self.logger.debug('DELETE USB %s: %s', usb_hid, request.data)
             self.client_plugged.pop(usb_hid, None)
         return Response(status=204)
 

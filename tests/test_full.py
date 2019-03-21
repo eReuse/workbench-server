@@ -2,11 +2,14 @@ import json
 from time import sleep
 
 import pytest
+from ereuse_utils.naming import Naming
 from ereuse_utils.test import Client
+from furl import furl
 from requests_mock import Mocker
 
 from tests.conftest import jsonf
 from workbench_server.flaskapp import WorkbenchServer
+from workbench_server.settings import DevicehubConnection
 
 
 @pytest.mark.usefixtures('mock_ip')
@@ -20,109 +23,216 @@ def test_full(client: Client,
     inserting an USB, linking it and finally uploading it to
     a mocked DeviceHub.
     """
-    s = jsonf('full-snapshot')
-    usb, usb_uri = fusb
-    dh_params, dh_headers, mocked_snapshot = mock_snapshot_post
-
-    # Emptiness, before performing anything
-    response, _ = client.get('/info/')
-    assert response == {
-        "attempts": 0,
-        "ip": "X.X.X.X",
-        "snapshots": [],
-        "usbs": []
-    }
-
-    # Let's emulate Workbench submitting snapshot info on every phase
-    # Phase 1 (get computer info)
-    client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info/')
-
-    s['_phase'] = "Foo"
-    client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info/')
-
-    s['_phase'] = "Bar"
-    client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    client.get('/info/')
-
-    assert mocked_snapshot.call_count == 0, 'Device shouldn\'t have uploaded as we wait for link'
-
-    with next(app.folder.joinpath('Unfinished Snapshots').glob('*.json')).open() as f:
-        temporary_file = json.load(f)
-    assert temporary_file['device']['serialNumber'] == 'LXAZ70X0669112B8DB1601'
-
-    # Let's plug an USB
-    # As we have finished the phases, plugging the USB will
-    # trigger WorkbenchServer to upload to DeviceHub
-    # For that to happen, we need first to set DeviceHub connection
-    # parameters. Those are passed through /info by DeviceHubClient
-    client.get('/info/', query=dh_params, headers=dh_headers)
-    # Plug USB
-    client.post(usb_uri, data=usb, status=204)
-    # Link computer
-    client.patch('snapshots/',
-                 item=s['uuid'],
-                 data={
-                     'device': {
-                         'tags': [{'id': 'foo-tag', 'type': 'Tag'}],
-                         'events': [{
-                             'type': 'WorkbenchRate',
-                             'appearance': 'E',
-                             'bios': 'A',
-                             'functionality': 'B'
-                         }]
-                     }
-                 },
-                 status=204)
-    sleep(0.2)
-    # Just to try, let's unplug the usb
-    client.delete(usb_uri, status=204)
-    i, _ = client.get('/info/', query=dh_params, headers=dh_headers)
-    assert i['snapshots'][0]['_uploaded'] == 'new-snapshot-id'
-    assert i['snapshots'][0]['_actualPhase'] == 'Uploaded'
-    assert i['snapshots'][0]['_phase'] == 'Bar'
-    # Give some time to the sender thread
-    # to submit it to the mocked DeviceHub
-    # We sent the snapshot
-    assert mocked_snapshot.call_count == 1, 'We should have uploaded the device after linking it'
-    # We have created a JSON in the Snapshot folder
-    with next(app.folder.joinpath('Snapshots').glob('*.json')).open() as f:
-        snapshot_file = json.load(f)
-    assert snapshot_file['device']['tags'] == [{'id': 'foo-tag', 'type': 'Tag'}]
-    assert len(snapshot_file['device']['events']) == 2
-    assert snapshot_file['device']['serialNumber'] == 'LXAZ70X0669112B8DB1601'
-
-    assert not tuple(app.folder.joinpath('Unfinished Snapshots').glob('*.json')), \
-        'Unfinished snapshot is deleted after a submission attempt'
 
 
+@pytest.mark.usefixtures('mock_ip')
 def test_full_no_link(client: Client,
-                      mock_snapshot_post: (dict, dict, Mocker),
                       app: WorkbenchServer):
     """Like test full but without linking and lesser checks"""
+    d = 'fixtures/wb'
+    info = jsonf(dir=d, name='info')
 
-    s = jsonf('full-snapshot')
-    dh_params, dh_headers, mocked_snapshot = mock_snapshot_post
+    uuid = info['uuid']
+    url = '/snapshots/{}'.format(uuid)
+    ev_d = url + '/device/event/'
+    ev_c = url + '/components/{}/event/'
+    i = '/info/'
+    progress = '/snapshots/{}/progress/'.format(uuid)
 
-    # Set the config
+    cpu = 3
+    cpu_url = ev_c.format(cpu)
 
-    # This time let's just to the /info before all phases
-    # –it doesn't matter
-    client.get('/info/', query=dh_params, headers=dh_headers)
+    hdd1 = 2
+    hdd1_url = ev_c.format(hdd1)
+    hdd2 = 4
+    hdd2_url = ev_c.format(hdd2)
 
-    config, _ = client.get('/config/')
-    # todo readd this when user can remove link with config config['link'] = False
-    client.post('/config/', data=config, status=204)
-    # assert not app.configuration.link
-    app.configuration.link = False
+    client.post(url, info, status=204)
+    x, _ = client.get(i)
+    assert len(x['snapshots']) == 1
+    assert x['snapshots'][0]['uuid'] == uuid
+    assert x['snapshots'][0]['_phase'] == 'Info'
 
-    s['_phase'] = 'Bar'
-    client.patch('snapshots/', item=s['uuid'], data=s, status=204)
-    sleep(0.1)
-    # We sent the snapshot
-    assert mocked_snapshot.call_count == 1
-    # We have created a JSON in the Snapshot folder
-    with next(app.folder.joinpath('Snapshots').glob('*.json')).open() as f:
-        snapshot_file = json.load(f)
-    assert 'tags' not in snapshot_file, 'No tag as we did not link it'
+    # Benchmarks events
+    b1 = jsonf(dir=d, name='benchmark-processor')
+    client.post(cpu_url, b1, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'Benchmark'
+    assert len(x['snapshots'][0]['components'][cpu]['events'])
+
+    b2 = jsonf(dir=d, name='benchmark-processor-sysbench')
+    client.post(cpu_url, b2, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'Benchmark'
+
+    b3 = jsonf(dir=d, name='benchmark-ram')
+    client.post(ev_d, b3, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'Benchmark'
+
+    # Benchmark data storage for both hdds
+    bds = jsonf(dir=d, name='benchmark-data-storage')
+    client.post(hdd1_url, b2, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'Benchmark'
+
+    bds['logicalName'] = 'dev/sdb'
+    client.post(hdd2_url, b2, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'Benchmark'
+
+    # Stress progress
+    stress = jsonf(dir=d, name='stress.progress')
+    client.post(progress, stress, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'StressTest'
+
+    stress['percentage'] = 50
+    client.post(progress, stress, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'StressTest'
+
+    # StressTest event
+    client.post(ev_d, jsonf(dir=d, name='stress'), status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'StressTest'
+
+    # smart progress
+    smart = jsonf(dir=d, name='smart.progress')
+    smart['component'] = hdd1
+
+    client.post(progress, smart, status=204)  # progess of smart 1 of hdd 1
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    smart['component'] = hdd2
+    client.post(progress, smart, status=204)  # progess of smart 1 of hdd 2
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    smart['percentage'] = 80
+    smart['component'] = hdd1
+    client.post(progress, smart, status=204)  # progess of smart 2 of hdd 1
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    smart['component'] = hdd2
+    client.post(progress, smart, status=204)  # progess of smart 2 of hdd 2
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # smart event
+    smart = jsonf(dir=d, name='smart')
+    client.post(hdd1_url, smart, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    smart['assessment'] = False
+    client.post(hdd2_url, smart, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # erase progress
+    erase = jsonf(dir=d, name='erase.progress')
+    erase['component'] = hdd1
+
+    client.post(progress, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    erase['component'] = hdd2
+    client.post(progress, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    erase['percentage'] = 80
+    erase['component'] = hdd1
+    client.post(progress, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    erase['component'] = hdd2
+    client.post(progress, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # Erase event
+    erase = jsonf(dir=d, name='erase')
+    client.post(hdd1_url, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    erase['severity'] = 'Error'
+    client.post(hdd2_url, erase, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # install
+    install = jsonf(dir=d, name='install.progress')
+    install['component'] = hdd1
+
+    client.post(progress, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    install['component'] = hdd2
+    client.post(progress, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    install['percentage'] = 80
+    install['component'] = hdd1
+    client.post(progress, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    install['component'] = hdd2
+    client.post(progress, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # Install event
+    install = jsonf(dir=d, name='install')
+    client.post(hdd1_url, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    install['severity'] = 'Error'
+    client.post(hdd2_url, install, status=204)
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['_phase'] == 'DataStorage'
+
+    # Last submission with full snapshot
+    closed_event = jsonf(dir=d, name='closed')
+    client.patch(url, closed_event, status=204)
+
+    d = info['device']
+    x, _ = client.get(i)
+    assert x['snapshots'][0]['closed']
+    # We have not sent dh info yet
+    assert x['snapshots'][0]['_phase'] == 'ReadyToUpload'
+
+    hid = Naming.hid(d['type'], d['manufacturer'], d['model'], d['serialNumber']) + '.json'
+    with app.dir.snapshots.joinpath(hid).open() as f:
+        x = json.load(f)
+    assert x['closed']
+
+    # Send devicehub information so manager can post the event
+    x, _ = client.get(i, query=[('devicehub', 'https://foo.com'), ('db', 'bar'),
+                                ('token', 'e376fc02-d312-4ea4-8f12-23d7eb4730ff')])
+    with app.app_context():
+        connection_settings = DevicehubConnection.read()
+    assert connection_settings.devicehub == furl('https://foo.com')
+    assert connection_settings.db == 'bar'
+    assert connection_settings.token == 'e376fc02-d312-4ea4-8f12-23d7eb4730ff'
+
+    sleep(1.2)  # Allow Manager to take action
+
+    x, _ = client.get(i)
+    snapshot = x['snapshots'][0]
+    assert snapshot['_phase'] == 'Uploaded'
+    assert snapshot['id'] == 'new-snapshot-id'  # The result of the mock
+
+    with app.dir.snapshots.joinpath(hid).open() as f:
+        x = json.load(f)
+    assert x['id'] == 'new-snapshot-id'

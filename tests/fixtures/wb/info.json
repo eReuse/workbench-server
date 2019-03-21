@@ -1,0 +1,93 @@
+{
+  "closed": false,
+  "uuid": "48053d1e-66f3-40c4-b2dd-f5bc61dc5188",
+  "components": [
+    {
+      "model": "82801JD/DO HD Audio Controller",
+      "type": "SoundCard",
+      "serialNumber": null,
+      "manufacturer": "Intel Corporation",
+      "events": []
+    },
+    {
+      "speed": 1000,
+      "model": "82567LM-3 Gigabit Network Connection",
+      "type": "NetworkAdapter",
+      "serialNumber": "00:23:7d:49:5e:31",
+      "manufacturer": "Intel Corporation",
+      "wireless": false,
+      "events": []
+    },
+    {
+      "size": 2048,
+      "speed": 800.0,
+      "model": "HYMP125U64CP8-S6",
+      "type": "RamModule",
+      "serialNumber": null,
+      "manufacturer": null,
+      "format": "DIMM",
+      "events": [],
+      "interface": "DDR2"
+    },
+    {
+      "threads": 2,
+      "speed": 3.0,
+      "model": "Intel Core2 Duo CPU E8400 @ 3.00GHz",
+      "type": "Processor",
+      "serialNumber": null,
+      "manufacturer": "Intel Corp.",
+      "address": 64,
+      "cores": 2,
+      "events": []
+    },
+    {
+      "serialNumber": "6RX7AWEZ",
+      "model": "ST3160815AS",
+      "type": "HardDrive",
+      "manufacturer": "Seagate",
+      "size": 152627,
+      "interface": "ATA",
+      "events": []
+    },
+    {
+      "serialNumber": "WD-WCARW0244414",
+      "model": "WDC WD3200AAJS-0",
+      "type": "HardDrive",
+      "manufacturer": "Western Digital",
+      "size": 305245,
+      "interface": "ATA",
+      "events": []
+    },
+    {
+      "model": "4 Series Chipset Integrated Graphics Controller",
+      "type": "GraphicCard",
+      "serialNumber": null,
+      "manufacturer": "Intel Corporation",
+      "events": [],
+      "memory": 256.0
+    },
+    {
+      "slots": 0,
+      "pcmcia": 0,
+      "model": "3031h",
+      "type": "Motherboard",
+      "serialNumber": "CZC901381R",
+      "manufacturer": "Hewlett-Packard",
+      "events": [],
+      "serial": 0,
+      "usb": 8,
+      "firewire": 0
+    }
+  ],
+  "software": "Workbench",
+  "device": {
+    "chassis": "Tower",
+    "model": "HP Compaq dc7900 Small Form Factor",
+    "type": "Desktop",
+    "serialNumber": "CZC901381R",
+    "manufacturer": "Hewlett-Packard",
+    "events": []
+  },
+  "version": "11.0b6",
+  "type": "Snapshot"
+}

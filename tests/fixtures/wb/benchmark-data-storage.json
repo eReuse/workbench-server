@@ -1,0 +1,7 @@
+{
+  "writeSpeed": 20.2,
+  "readSpeed": 77.1,
+  "type": "BenchmarkDataStorage",
+  "elapsed": 17,
+  "logicalName": "/dev/sda"
+}

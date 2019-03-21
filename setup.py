@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='eReuse-WorkbenchServer',
-    version='0.5.0a4',
+    version='0.5.0a5',
     packages=find_packages(exclude=('contrib', 'docs', 'scripts')),
     url='https://github.com/ereuse/workbench-server',
     license='AGPLv3 License',
@@ -12,14 +12,16 @@ setup(
     install_requires=[
         'cachetools',
         'cefpython3==66.0',
-        'ereuse-utils [usb_flash_drive,naming,test,session]>=0.4b20',
+        'ereuse-utils [usb_flash_drive,naming,test,session,cli]>=0.4b45',
         'flask>=1.0.2',
         'flask-cors',
         'pycups',
         'pyusb',
         'requests',
         'deepmerge',
-        'more-itertools'
+        'more-itertools',
+        'psycopg2-binary',
+        'furl'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',

@@ -1,12 +1,13 @@
 import json
-import logging
 import os
 import pathlib
 import time
-from logging.handlers import RotatingFileHandler
+from multiprocessing import Process
 from pathlib import Path
+from types import SimpleNamespace
 
 import click
+import ereuse_utils
 import flask_cors
 import requests
 from boltons import urlutils
@@ -14,8 +15,10 @@ from ereuse_utils import cli, ensure_utf8
 from ereuse_utils.test import Client
 from flask import Flask
 
-from workbench_server.views.config import Config
+from workbench_server import manager
+from workbench_server.db import db
 from workbench_server.views.info import Info
+from workbench_server.views.settings import SettingsView
 from workbench_server.views.snapshots import Snapshots
 from workbench_server.views.usbs import USBs
 
@@ -40,6 +43,8 @@ class WorkbenchServer(Flask):
     snapshots to DeviceHub.
     """
     test_client_class = Client
+    json_encoder = ereuse_utils.JSONEncoder
+    DATABASE_URI = 'postgresql://dhub:ereuse@localhost/ws'
 
     def __init__(self,
                  import_name=__name__,
@@ -65,33 +70,48 @@ class WorkbenchServer(Flask):
        :param snapshots: Snapshots class. Replace this to extend func.
        """
         ensure_utf8(self.__class__.__name__)
-        self.folder = folder
+        self.dir = SimpleNamespace()
+        self.dir.main = folder
+        self.dir.settings = folder / '.settings'
+        self.dir.settings.mkdir(parents=True, exist_ok=True)
+        self.dir.images = folder / 'images'
+        self.dir.images.mkdir(parents=True, exist_ok=True)
+        self.dir.snapshots = folder / 'snapshots'
+        self.dir.snapshots.mkdir(parents=True, exist_ok=True)
+        self.dir.failed_snapshots = folder / 'failed snapshots'
+        self.dir.failed_snapshots.mkdir(parents=True, exist_ok=True)
         super().__init__(import_name, static_url_path, static_folder, static_host, host_matching,
                          subdomain_matching, template_folder, instance_path,
                          instance_relative_config, root_path)
+
+        self.config['SQLALCHEMY_DATABASE_URI'] = self.DATABASE_URI
+        self.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        db.init_app(self)
+
         # self.json_encoder = JSONEncoder
         flask_cors.CORS(self,
                         origins='*',
                         allow_headers=['Content-Type', 'Authorization', 'Origin'],
                         expose_headers=['Authorization'],
                         max_age=21600)
-        settings_folder = folder / '.settings'
-        settings_folder.mkdir(parents=True, exist_ok=True)
-        images_folder = folder / 'images'
-        images_folder.mkdir(exist_ok=True)
-        handler = RotatingFileHandler(str(settings_folder / 'workbench-server.log'),
-                                      maxBytes=10000,
-                                      backupCount=2)
-        self.logger.addHandler(handler)
-        handler.setLevel(logging.DEBUG if self.debug else logging.INFO)
-        self.auth = self.devicehub = None
-        self.configuration = Config(self, settings_folder, images_folder)
+
+        self.settings_view = SettingsView(self)
         self.info = Info(self)
         self.snapshots = Snapshots(self, folder)
         self.usbs = USBs(self)
         self.cli.command('phase')(self.phase)
         self.cli.command('usb')(self.usb)
         self.cli.command('get-snapshots')(self.get_snapshots)
+        self.cli.command('init-db')(self.init_db)
+        self.manager = None
+        self.logger.info('Workbench Server initialized: %s', self)
+
+    def init_manager(self):
+        self.manager = Process(target=manager.main,
+                               args=[self.dir.main],
+                               name='wb-manager',
+                               daemon=True)
+        self.manager.start()
 
     @click.argument('phase')
     @click.option('--url', '-u',
@@ -107,17 +127,30 @@ class WorkbenchServer(Flask):
 
         1. info
         2. benchmark
-        3. data
-        4. stress
-        5. erase
-        6. install
+        3. stress
+        4. smart
+        5. close
 
         i.e. flask phase benchmark will PATCH benchmark.
         """
-        with (pathlib.Path(__file__).parent / 'phases' / (phase + '.json')).open() as f:
-            s = json.load(f)
-            url = url.navigate('snapshots/{}'.format(s['uuid'])).to_text()
-            requests.patch(url, json=s).raise_for_status()
+        dir = pathlib.Path(__file__).parent / 'phases'
+        base = 'http://localhost:8091/snapshots/{}'
+        if phase == 'info':
+            s = json.loads(dir.joinpath('1.json').read_text())
+            url = base.format(s['uuid'])
+            requests.post(url, json=s).raise_for_status()
+        if phase == 'benchmark':
+            b = json.loads(dir.joinpath('4.json').read_text())
+            requests.post(base.format(b['uuid']) + '/device/event', json=b).raise_for_status()
+        if phase == 'stress':
+            s = json.loads(dir.joinpath('6.json').read_text())
+            requests.post(base.format(s['uuid']) + '/device/event', json=s).raise_for_status()
+        if phase == 'smart':
+            s = json.loads(dir.joinpath('12.json').read_text())
+            requests.post(base.format(s['uuid']) + '/device/event', json=s).raise_for_status()
+        if phase == 'close':
+            s = json.loads(dir.joinpath('14.json').read_text())
+            requests.patch(base.format(s['uuid']), json=s).raise_for_status()
 
     @click.option('--seconds', '-s',
                   type=int,
@@ -159,3 +192,8 @@ class WorkbenchServer(Flask):
             endpoint = url.navigate('/snapshots/{}'.format(_uuid)).to_text()
             with dir.joinpath('{}.json'.format(_uuid)).open('w') as f:
                 json.dump(requests.get(endpoint).json(), f)
+
+    def init_db(self):
+        db.drop_all()
+        db.create_all()
+        print(cli.done())
