@@ -1,0 +1,2 @@
+Filesystem                                    Size  Used Avail Use% Mounted on
+/dev/block/platform/msm_sdcc.1/by-name/system 828M  606M  222M  74% /system

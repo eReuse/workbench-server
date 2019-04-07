@@ -1,0 +1,2 @@
+Filesystem                                             1K-blocks   Used Available Use% Mounted on
+/dev/block/platform/omap/omap_hsmmc.0/by-name/userdata  13975888 918100  13057788   7% /data

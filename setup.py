@@ -21,7 +21,9 @@ setup(
         'deepmerge',
         'more-itertools',
         'psycopg2-binary',
-        'furl'
+        'furl',
+        'bitmath',
+        'pyyaml'
     ],
     keywords='eReuse.org Workbench devices reuse recycle it asset management',
     test_suite='workbench_server.tests',

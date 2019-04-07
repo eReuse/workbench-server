@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Creates a database, user, and extensions to use Devicehub
+# Creates a database, user, and extensions to use Workbench Server
 # $1 is the database to create
 # $2 is the user to create and give full permissions on the database
 # This script asks for the password of such user

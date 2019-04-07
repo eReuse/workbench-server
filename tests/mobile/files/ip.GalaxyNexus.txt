@@ -1,0 +1,29 @@
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN group default 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default 
+    link/ether f2:2c:da:6f:43:0c brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::f02c:daff:fe6f:430c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: ifb0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 32
+    link/ether 62:b6:a2:36:0d:18 brd ff:ff:ff:ff:ff:ff
+4: ifb1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 32
+    link/ether 1e:d0:d2:5b:ea:bd brd ff:ff:ff:ff:ff:ff
+5: sit0: <NOARP> mtu 1480 qdisc noop state DOWN group default 
+    link/sit 0.0.0.0 brd 0.0.0.0
+6: ip6tnl0: <NOARP> mtu 1452 qdisc noop state DOWN group default 
+    link/tunnel6 :: brd ::
+7: rmnet0: <POINTOPOINT,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ppp 
+8: rmnet1: <POINTOPOINT,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ppp 
+9: rmnet2: <POINTOPOINT,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ppp 
+10: p2p0: <NO-CARRIER,BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state DORMANT group default qlen 1000
+    link/ether a2:0b:ba:cb:c9:f1 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::a00b:baff:fecb:c9f1/64 scope link 
+       valid_lft forever preferred_lft forever
+11: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state DORMANT group default qlen 1000
+    link/ether a0:0b:ba:cb:c9:f1 brd ff:ff:ff:ff:ff:ff

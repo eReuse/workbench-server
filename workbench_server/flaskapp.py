@@ -17,6 +17,7 @@ from flask import Flask
 
 from workbench_server import manager
 from workbench_server.db import db
+from workbench_server.mobile import mobile
 from workbench_server.views.info import Info
 from workbench_server.views.settings import SettingsView
 from workbench_server.views.snapshots import Snapshots
@@ -104,6 +105,7 @@ class WorkbenchServer(Flask):
         self.cli.command('get-snapshots')(self.get_snapshots)
         self.cli.command('init-db')(self.init_db)
         self.manager = None
+        self.mobile = None
         self.logger.info('Workbench Server initialized: %s', self)
 
     def init_manager(self):
@@ -112,6 +114,13 @@ class WorkbenchServer(Flask):
                                name='wb-manager',
                                daemon=True)
         self.manager.start()
+
+    def init_mobile(self):
+        self.mobile = Process(target=mobile.main,
+                              args=[self.dir.main],
+                              name='wb-mobile',
+                              daemon=True)
+        self.mobile.start()
 
     @click.argument('phase')
     @click.option('--url', '-u',

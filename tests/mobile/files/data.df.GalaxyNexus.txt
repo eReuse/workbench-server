@@ -1,0 +1,2 @@
+Filesystem                                             Size  Used Avail Use% Mounted on
+/dev/block/platform/omap/omap_hsmmc.0/by-name/userdata  13G  0.9G   12G   8% /data

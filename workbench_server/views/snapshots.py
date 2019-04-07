@@ -1,13 +1,14 @@
 import uuid as uuid_mod
 from logging import Logger
 from pathlib import Path
+from typing import Type
 
 from flask import Response, jsonify, request
-from sqlalchemy.orm.attributes import flag_modified
 
 from workbench_server import flaskapp
 from workbench_server.db import db
-from workbench_server.models import Progress, Snapshot, Phases
+from workbench_server.mobile.models import SnapshotMobile
+from workbench_server.models import Progress, Snapshot, SnapshotComputer
 
 
 class Snapshots:
@@ -19,7 +20,7 @@ class Snapshots:
 
     def __init__(self, app: 'flaskapp.WorkbenchServer', public_folder: Path) -> None:
         self.dir = app.dir.main / 'Snapshots'
-        self.logger = app.logger # type: Logger
+        self.logger = app.logger  # type: Logger
         url = '/snapshots/<uuid:uuid>'
         POST = {'POST'}
         app.add_url_rule(url, view_func=self.view_get, methods={'GET', 'POST', 'PATCH'})
@@ -29,24 +30,31 @@ class Snapshots:
                          view_func=self.view_event,
                          methods=POST)
         app.add_url_rule(url + '/form/', view_func=self.view_form, methods=POST)
-        app.add_url_rule('/snapshots/', view_func=self.view_all, methods={'DELETE'})
+        app.add_url_rule('/snapshots/mobile/', view_func=self.view_all_mobile, methods={'DELETE'})
+        app.add_url_rule('/snapshots/computer/', view_func=self.view_all_computer, methods={'DELETE'})
 
-    def view_all(self):
+    def view_all_mobile(self):
+        return self.view_all(SnapshotMobile)
+
+    def view_all_computer(self):
+        return self.view_all(SnapshotComputer)
+
+    def view_all(self, cls: Type[Snapshot]):
         assert request.method == 'DELETE'
-        snapshots = tuple(Snapshot.query.filter(Snapshot.closed != None))
+        snapshots = tuple(cls.query.filter(cls.closed != None))
         for s in snapshots:
             db.session.delete(s)
         db.session.commit()
-        self.logger.info('DELETE snapshots %s', snapshots)
+        self.logger.info('DELETE %s: %s', cls, snapshots)
         return Response(status=204)
 
     def view_get(self, uuid: uuid_mod.UUID):
         if request.method == 'GET':
-            res = jsonify(Snapshot.one(uuid))
+            res = jsonify(SnapshotComputer.one(uuid))
         elif request.method == 'POST':
             self.logger.debug('POSTing a new snapshot %s', uuid)
             s = request.get_json()
-            snapshot = Snapshot(uuid=uuid, data=s)
+            snapshot = SnapshotComputer(uuid=uuid, data=s)
             db.session.add(snapshot)
             db.session.commit()
             self.logger.info('Snapshot %s created.', snapshot)
@@ -54,7 +62,7 @@ class Snapshots:
         else:  # PATCH
             self.logger.debug('PATCHing snapshot %s', uuid)
             s = request.get_json()
-            snapshot = Snapshot.one(uuid)
+            snapshot = SnapshotComputer.one(uuid)
             snapshot.close(s)  # No more events from workbench
             db.session.commit()
             self.logger.info('Snapshot closed %s', snapshot)
@@ -63,7 +71,7 @@ class Snapshots:
 
     def view_event(self, uuid: uuid_mod.UUID, pos: int = None):
         event = request.get_json()
-        snapshot = Snapshot.one(uuid)
+        snapshot = SnapshotComputer.one(uuid)
         snapshot.set_event(event, pos)
         snapshot.conditionally_set_phase_from_event(event['type'])
         db.session.commit()
@@ -72,7 +80,7 @@ class Snapshots:
 
     def view_form(self, uuid: uuid_mod.UUID):
         form = request.get_json()
-        snapshot = Snapshot.one(uuid)
+        snapshot = SnapshotComputer.one(uuid)
         snapshot.from_form(form)
         db.session.commit()
         self.logger.debug('Form for snapshot %s: %s', snapshot, form)

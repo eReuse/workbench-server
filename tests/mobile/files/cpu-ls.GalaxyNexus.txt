@@ -1,0 +1,9 @@
+cpu0
+cpu1
+cpufreq
+cpuidle
+kernel_max
+offline
+online
+possible
+present

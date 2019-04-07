@@ -1,0 +1,32 @@
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN 
+    link/ether 76:28:33:47:92:7f brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::7428:33ff:fe47:927f/64 scope link 
+       valid_lft forever preferred_lft forever
+3: sit0: <NOARP> mtu 1480 qdisc noop state DOWN 
+    link/sit 0.0.0.0 brd 0.0.0.0
+4: rmnet0: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+5: rmnet1: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+6: rmnet2: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+7: rmnet3: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+8: rmnet4: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+9: rmnet5: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+10: rmnet6: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+11: rmnet7: <> mtu 2000 qdisc noop state DOWN qlen 1000
+    link/[530] 
+14: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN qlen 1000
+    link/ether 7c:0b:c6:20:4c:df brd ff:ff:ff:ff:ff:ff
+15: p2p0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN qlen 1000
+    link/ether 7e:0b:c6:20:4c:df brd ff:ff:ff:ff:ff:ff

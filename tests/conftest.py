@@ -20,6 +20,7 @@ def app(tmpdir, mock_snapshot_post: (dict, dict, Mocker)) -> WorkbenchServer:
     with app.app_context():
         app.init_db()
     app.init_manager()
+    app.init_mobile()
     try:
         yield app
     finally:

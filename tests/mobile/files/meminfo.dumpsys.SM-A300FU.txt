@@ -1,0 +1,150 @@
+time,637212,637212
+oom,native,28281
+proc,native,/init,1,641,e
+proc,native,ueventd,214,354,e
+proc,native,vold,253,205,e
+proc,native,healthd,340,208,e
+proc,native,lmkd,342,64,e
+proc,native,servicemanager,343,181,e
+proc,native,surfaceflinger,345,9288,e
+proc,native,rfs_access,349,53,e
+proc,native,qseecomd,353,7,e
+proc,native,rmt_storage,380,119,e
+proc,native,qseecomd,384,82,e
+proc,native,qmuxd,385,128,e
+proc,native,edmaudit,387,85,e
+proc,native,netd,390,357,e
+proc,native,debuggerd,391,7,e
+proc,native,rild,405,1301,e
+proc,native,drmserver,406,218,e
+proc,native,mediaserver,409,5330,e
+proc,native,installd,410,109,e
+proc,native,keystore,421,158,e
+proc,native,ss_conn_daemon,423,71,e
+proc,native,ddexe,427,7,e
+proc,native,smdexe,428,49,e
+proc,native,connfwexe,429,15,e
+proc,native,npsmobex,430,13,e
+proc,native,tftp_server,447,7,e
+proc,native,mm-qcamera-daemon,466,58,e
+proc,native,thermal-engine,483,45,e
+proc,native,wcnss_service,485,25,e
+proc,native,imsqmidaemon,486,11,e
+proc,native,bintvoutservice,487,101,e
+proc,native,zygote,502,2305,e
+proc,native,diag_uart_log,503,7,e
+proc,native,sdp_cryptod,505,67,e
+proc,native,at_distributor,526,158,e
+proc,native,gatekeeperd,527,17,e
+proc,native,loc_launcher,546,55,e
+proc,native,time_daemon,549,28,e
+proc,native,audiod,558,45,e
+proc,native,secure_storage_daemon,615,2004,e
+proc,native,cs,622,14,e
+proc,native,mcDriverDaemon,679,7,e
+proc,native,tlc_server,2172,111,e
+proc,native,otp_server,2267,11,e
+proc,native,auditd,3618,95,e
+proc,native,perfd,4143,131,e
+proc,native,ATFWD-daemon,7154,30,e
+proc,native,wpa_supplicant,12414,3281,e
+proc,native,adbd,13965,248,e
+proc,native,dumpsys,15863,370,e
+oom,sys,104312
+proc,sys,system,1726,104312,e
+oom,pers,78594
+proc,pers,com.android.incallui,3652,2924,e
+proc,pers,com.sec.imsservice,3644,8525,e
+proc,pers,com.sec.android.app.wfdbroker,3624,2041,e
+proc,pers,com.android.phone,3191,12022,e
+proc,pers,com.android.nfc,3176,5958,e
+proc,pers,com.android.systemui,2781,47124,e
+oom,persvc,5062
+proc,persvc,com.android.bluetooth,3607,5062,e
+oom,vis,97254
+proc,vis,com.android.settings,12339,37431,a
+proc,vis,com.android.printspooler,15849,2996,e
+proc,vis,com.google.android.gms.persistent,3292,32104,e
+proc,vis,www.ingdirect.nativeframe,3355,3766,e
+proc,vis,com.samsung.ucs.agent.boot,3593,2173,e
+proc,vis,com.sec.smartcard.manager,3577,2320,e
+proc,vis,com.samsung.ucs.ucspinpad,3559,2078,e
+proc,vis,org.simalliance.openmobileapi.service:remote,3384,2254,e
+proc,vis,com.android.systemui.imagewallpaper,3070,2990,e
+proc,vis,com.google.android.googlequicksearchbox:interactor,3056,4946,e
+proc,vis,com.android.systemui.recents,2907,4196,e
+oom,percept,54861
+proc,percept,com.samsung.android.MtpApplication,15592,7441,a
+proc,percept,com.sec.android.inputmethod,12312,44644,e
+proc,percept,com.samsung.android.beaconmanager,6224,2776,e
+oom,servicea,84997
+proc,servicea,com.google.android.gms,3505,32725,e
+proc,servicea,com.samsung.android.bbc.bbcagent,15685,2476,e
+proc,servicea,com.microsoft.office.outlook,8141,22020,e
+proc,servicea,android.process.media,4216,5767,e
+proc,servicea,com.whatsapp,4634,10901,e
+proc,servicea,com.google.android.talk,7337,11108,e
+oom,home,18403
+proc,home,com.sec.android.app.launcher,3210,18403,a
+oom,serviceb,102199
+proc,serviceb,com.facebook.katana,5272,24861,e
+proc,serviceb,com.sec.android.daemonapp,3024,3886,e
+proc,serviceb,com.vodafone.vodafone360updates,7881,8809,e
+proc,serviceb,com.vodafone.smhs,7897,6955,e
+proc,serviceb,com.airwatch.androidagent,8269,15392,e
+proc,serviceb,com.airwatch.admin.samsungelm,8302,3463,e
+proc,serviceb,com.sec.enterprise.knox.attestation,8357,2151,e
+proc,serviceb,com.google.android.googlequicksearchbox:search,3396,10962,e
+proc,serviceb,com.instagram.android:mqtt,8461,9511,e
+proc,serviceb,com.android.email,6778,7652,e
+proc,serviceb,com.sec.spp.push,7027,2766,e
+proc,serviceb,com.sec.android.app.samsungapps,7158,3425,e
+proc,serviceb,com.qualcomm.telephony,7138,2366,e
+oom,cached,141275
+proc,cached,com.samsung.android.sm.provider,12123,3820,e
+proc,cached,com.android.vending,7531,14028,e
+proc,cached,com.wssnps,15605,2852,e
+proc,cached,com.sec.app.TransmitPowerService,15386,2367,e
+proc,cached,com.sec.android.app.popupuireceiver,15542,2835,e
+proc,cached,com.google.android.apps.photos,15495,16047,e
+proc,cached,com.google.android.apps.plus,15476,13679,e
+proc,cached,com.sec.knox.switcher,12485,2784,e
+proc,cached,com.samsung.android.sm.devicesecurity,15451,3335,e
+proc,cached,com.sec.android.app.videoplayer,15439,5472,e
+proc,cached,com.sec.android.cloudagent,15411,3260,e
+proc,cached,com.google.process.gapps,7186,3860,e
+proc,cached,com.google.android.music:main,15510,23683,e
+proc,cached,com.sec.android.Kies,15463,2345,e
+proc,cached,com.samsung.android.app.watchmanagerstub,13971,2471,e
+proc,cached,com.samsung.android.app.FileShareServer,12440,2545,e
+proc,cached,com.sec.android.gallery3d,8749,4818,e
+proc,cached,android.process.acore,2988,8937,e
+proc,cached,com.sec.android.provider.badge,13880,2549,e
+proc,cached,com.android.mms,5665,6788,e
+proc,cached,com.android.contacts,5566,5947,e
+proc,cached,com.sec.android.app.camera,5532,2138,e
+proc,cached,com.android.managedprovisioning,7281,2133,e
+proc,cached,com.samsung.klmsagent,7246,2582,e
+cat,Native,158289
+cat,Dalvik,217766
+cat,Unknown,5604
+cat,Dalvik Other,36708
+cat,Stack,10108
+cat,Cursor,20
+cat,Ashmem,2196
+cat,Gfx dev,18056
+cat,Other dev,386
+cat,.so mmap,29539
+cat,.jar mmap,0
+cat,.apk mmap,23990
+cat,.ttf mmap,389
+cat,.dex mmap,100373
+cat,.oat mmap,29844
+cat,.art mmap,57245
+cat,Other mmap,4325
+cat,EGL mtrack,20400
+cat,GL mtrack,0
+cat,Other mtrack,0
+ram,1417628,553695,573963
+ksm,0,0,0,0
+tuning,96,256,122880,high-end-gfx

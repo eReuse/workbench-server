@@ -1,0 +1,2 @@
+Filesystem   Size   Used   Free   Blksize
+/data        5.3G   1.6G   3.7G      4.0K

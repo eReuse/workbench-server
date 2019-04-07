@@ -1,0 +1,151 @@
+Unknown argument: -c; use -h for help
+Applications Memory Usage (kB):
+Uptime: 980601 Realtime: 980601
+
+Total PSS by process:
+    33989 kB: system (pid 500)
+    17644 kB: com.google.android.gms (pid 911)
+    16959 kB: com.microsoft.skydrive (pid 1345)
+    15427 kB: com.teslacoilsw.launcher (pid 801)
+    14159 kB: com.google.android.gms.persistent (pid 876)
+    10734 kB: com.mobisystems.editor.office_registered (pid 2549)
+     9673 kB: com.android.systemui (pid 698)
+     9634 kB: com.google.process.gapps (pid 893)
+     9292 kB: com.notabasement.mangarock.android.titan (pid 2407)
+     8614 kB: com.google.android.inputmethod.latin (pid 1136)
+     8535 kB: com.android.MtpApplication (pid 3193)
+     8119 kB: android.process.media (pid 769)
+     7741 kB: com.android.vending (pid 2261)
+     6807 kB: android.process.acore (pid 974)
+     4860 kB: com.android.phone (pid 789)
+     4797 kB: com.sec.android.gallery3d (pid 2728)
+     4673 kB: com.google.android.gms.ui (pid 2464)
+     4629 kB: com.google.process.location (pid 825)
+     4581 kB: com.apusapps.browser:core (pid 1571)
+     3937 kB: com.android.bluetooth (pid 1153)
+     3723 kB: com.sec.factory (pid 1829)
+     3715 kB: com.android.email (pid 1997)
+     3596 kB: com.android.contacts (pid 1605)
+     3559 kB: com.android.settings (pid 2067)
+     3535 kB: com.android.providers.calendar (pid 1981)
+     3397 kB: com.google.android.apps.uploader (pid 2920)
+     3326 kB: com.wssyncmldm (pid 2138)
+     3311 kB: com.samsung.android.providers.context (pid 1190)
+     3214 kB: com.urbandroid.lux:background (pid 2361)
+     3126 kB: com.sec.android.daemonapp (pid 2195)
+     3058 kB: com.apusapps.browser (pid 2375)
+     3045 kB: com.keramidas.TitaniumBackup (pid 2593)
+     3038 kB: com.urbandroid.lux (pid 2337)
+     3001 kB: com.sec.android.app.videoplayer (pid 2935)
+     2982 kB: com.apusapps.browser:download (pid 1644)
+     2961 kB: com.bqreaders.reader.fnac (pid 2633)
+     2892 kB: com.sec.android.provider.logsprovider (pid 940)
+     2874 kB: com.sec.android.app.clockpackage (pid 2086)
+     2851 kB: com.wssnps (pid 2235)
+     2770 kB: com.google.android.gsf.login (pid 2283)
+     2738 kB: com.sec.android.app.samsungapps.una2 (pid 1955)
+     2662 kB: com.sec.android.SimpleWidget (pid 2786)
+     2641 kB: com.sec.esdk.elm (pid 1774)
+     2472 kB: com.android.location.fused (pid 845)
+     2453 kB: com.sec.android.app.keyguard (pid 2652)
+     2414 kB: com.marvell.ppdgadget (pid 1166)
+     2385 kB: com.sec.smartcard.pinservice (pid 2111)
+     2360 kB: com.sec.android.cloudagent (pid 2903)
+     2345 kB: com.sec.phone (pid 1624)
+     2343 kB: com.sec.ims.android (pid 1200)
+     2298 kB: com.sec.android.pagebuddynotisvc (pid 1178)
+     2297 kB: com.sec.android.widgetapp.SPlannerAppWidget (pid 2704)
+     2248 kB: org.adaway (pid 2320)
+     2227 kB: com.sec.android.app.music:service (pid 2757)
+     2203 kB: com.rxnetworks.rxnservicesxybrid (pid 2208)
+     2131 kB: org.simalliance.openmobileapi.service:remote (pid 2125)
+     2095 kB: com.samsung.shareshot (pid 2687)
+     2084 kB: com.marvell.thermal (pid 2182)
+     2059 kB: com.sec.android.Kies (pid 2994)
+
+Total PSS by OOM adjustment:
+    33989 kB: System
+               33989 kB: system (pid 500)
+    34598 kB: Persistent
+                9673 kB: com.android.systemui (pid 698)
+                6807 kB: android.process.acore (pid 974)
+                4860 kB: com.android.phone (pid 789)
+                3311 kB: com.samsung.android.providers.context (pid 1190)
+                2892 kB: com.sec.android.provider.logsprovider (pid 940)
+                2414 kB: com.marvell.ppdgadget (pid 1166)
+                2343 kB: com.sec.ims.android (pid 1200)
+                2298 kB: com.sec.android.pagebuddynotisvc (pid 1178)
+    15427 kB: Foreground
+               15427 kB: com.teslacoilsw.launcher (pid 801)
+    35740 kB: Visible
+               17644 kB: com.google.android.gms (pid 911)
+               14159 kB: com.google.android.gms.persistent (pid 876)
+                3937 kB: com.android.bluetooth (pid 1153)
+    44132 kB: Perceptible
+                9634 kB: com.google.process.gapps (pid 893)
+                8614 kB: com.google.android.inputmethod.latin (pid 1136)
+                8535 kB: com.android.MtpApplication (pid 3193)
+                4629 kB: com.google.process.location (pid 825)
+                4581 kB: com.apusapps.browser:core (pid 1571)
+                3214 kB: com.urbandroid.lux:background (pid 2361)
+                2472 kB: com.android.location.fused (pid 845)
+                2453 kB: com.sec.android.app.keyguard (pid 2652)
+    32127 kB: A Services
+               16959 kB: com.microsoft.skydrive (pid 1345)
+                8119 kB: android.process.media (pid 769)
+                3723 kB: com.sec.factory (pid 1829)
+                3326 kB: com.wssyncmldm (pid 2138)
+    16771 kB: B Services
+                2982 kB: com.apusapps.browser:download (pid 1644)
+                2641 kB: com.sec.esdk.elm (pid 1774)
+                2385 kB: com.sec.smartcard.pinservice (pid 2111)
+                2345 kB: com.sec.phone (pid 1624)
+                2203 kB: com.rxnetworks.rxnservicesxybrid (pid 2208)
+                2131 kB: org.simalliance.openmobileapi.service:remote (pid 2125)
+                2084 kB: com.marvell.thermal (pid 2182)
+   100449 kB: Background
+               10734 kB: com.mobisystems.editor.office_registered (pid 2549)
+                9292 kB: com.notabasement.mangarock.android.titan (pid 2407)
+                7741 kB: com.android.vending (pid 2261)
+                4797 kB: com.sec.android.gallery3d (pid 2728)
+                4673 kB: com.google.android.gms.ui (pid 2464)
+                3715 kB: com.android.email (pid 1997)
+                3596 kB: com.android.contacts (pid 1605)
+                3559 kB: com.android.settings (pid 2067)
+                3535 kB: com.android.providers.calendar (pid 1981)
+                3397 kB: com.google.android.apps.uploader (pid 2920)
+                3126 kB: com.sec.android.daemonapp (pid 2195)
+                3058 kB: com.apusapps.browser (pid 2375)
+                3045 kB: com.keramidas.TitaniumBackup (pid 2593)
+                3038 kB: com.urbandroid.lux (pid 2337)
+                3001 kB: com.sec.android.app.videoplayer (pid 2935)
+                2961 kB: com.bqreaders.reader.fnac (pid 2633)
+                2874 kB: com.sec.android.app.clockpackage (pid 2086)
+                2851 kB: com.wssnps (pid 2235)
+                2770 kB: com.google.android.gsf.login (pid 2283)
+                2738 kB: com.sec.android.app.samsungapps.una2 (pid 1955)
+                2662 kB: com.sec.android.SimpleWidget (pid 2786)
+                2360 kB: com.sec.android.cloudagent (pid 2903)
+                2297 kB: com.sec.android.widgetapp.SPlannerAppWidget (pid 2704)
+                2248 kB: org.adaway (pid 2320)
+                2227 kB: com.sec.android.app.music:service (pid 2757)
+                2095 kB: com.samsung.shareshot (pid 2687)
+                2059 kB: com.sec.android.Kies (pid 2994)
+
+Total PSS by category:
+   169101 kB: Dalvik
+    96655 kB: Unknown
+    17004 kB: Other mmap
+    15876 kB: .so mmap
+     7287 kB: .dex mmap
+     5858 kB: .apk mmap
+     1116 kB: Native
+      332 kB: Other dev
+        4 kB: .ttf mmap
+        0 kB: Cursor
+        0 kB: Ashmem
+        0 kB: .jar mmap
+
+Total PSS: 313233 kB
+      KSM: 0 kB saved from shared 0 kB
+           0 kB unshared; 0 kB volatile

@@ -7,3 +7,4 @@ app = WorkbenchServer()
 with app.app_context():
     db.create_all()
 app.init_manager()
+app.init_mobile()

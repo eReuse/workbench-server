@@ -9,6 +9,7 @@ import ereuse_utils
 from ereuse_utils.naming import Naming
 from flask import current_app
 from sqlalchemy.dialects import postgresql
+from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
@@ -57,13 +58,86 @@ class Phases(enum.Enum):
             return cls.Benchmark
 
 
-class Snapshot(db.Model, ereuse_utils.Dumpeable):
+class SnapshotInheritorMixin:
+    @declared_attr
+    def uuid(cls):
+        return db.Column(postgresql.UUID(as_uuid=True),
+                         db.ForeignKey(Snapshot.uuid, ondelete='CASCADE'),
+                         primary_key=True)
+
+
+class Snapshot(db.Model):
     uuid = db.Column(postgresql.UUID(as_uuid=True), primary_key=True)
-    data = db.Column(MutableDict.as_mutable(postgresql.JSONB), nullable=False)
-    data.comment = """The actual Snapshot that is sent to Devicehub."""
-    phase = db.Column(db.Enum(Phases), nullable=False)
+    phase = db.Column(db.Enum(Phases), nullable=False, index=True)
     closed = db.Column(db.TIMESTAMP(timezone=False))
     closed.comment = """A Snapshot that is closed """
+    type = db.Column(db.Unicode, nullable=False)
+
+    @declared_attr
+    def __mapper_args__(cls):
+        """
+        Defines inheritance.
+
+        From `the guide <http://docs.sqlalchemy.org/en/latest/orm/
+        extensions/declarative/api.html
+        #sqlalchemy.ext.declarative.declared_attr>`_
+        """
+        args = {'polymorphic_identity': cls.__name__}
+        if cls.__name__ == 'Snapshot':
+            args['polymorphic_on'] = cls.type
+        else:
+            args['inherit_condition'] = cls.uuid == Snapshot.uuid
+        return args
+
+    @classmethod
+    def all_client(cls):
+        for snapshot in cls.query:
+            yield snapshot.data_client()
+
+    def write(self, dir: pathlib.Path = None) -> pathlib.Path:
+        dir = dir or current_app.dir.snapshots
+        path = self.path(dir)
+        with path.open('w') as f:
+            json.dump(self.data, f, indent=2, sort_keys=True, cls=ereuse_utils.JSONEncoder)
+        return path
+
+    @classmethod
+    def one(cls, id: uuid_mod.UUID) -> 'Snapshot':
+        return cls.query.filter_by(uuid=id).first_or_404()
+
+    def hid(self) -> str:
+        un = 'Unknown'
+        device = self.data['device']
+        return Naming.hid(device['type'],
+                          device['manufacturer'] or un,
+                          device['model'] or un,
+                          device['serialNumber'] or un)
+
+    def data_client(self):
+        s = self.data.copy()
+        s['_phase'] = self.phase
+        s['_linked'] = False  # todo ??
+        return s
+
+    @classmethod
+    def get_to_clean(cls):
+        """Gets the snapshots that can be cleaned."""
+        return cls.query.filter(cls.closed.isnot(None))
+
+    def path(self, dir: pathlib.Path) -> pathlib.Path:
+        """Returns the path of the file for a given directory."""
+        return dir.joinpath(self.hid() + '.json')
+
+    def delete(self, dir: pathlib.Path):
+        self.path(dir).unlink()
+
+    def __repr__(self) -> str:
+        return '<Snapshot {} phase={} closed={}>'.format(self.uuid, self.phase, self.closed)
+
+
+class SnapshotComputer(SnapshotInheritorMixin, Snapshot):
+    data = db.Column(MutableDict.as_mutable(postgresql.JSONB), nullable=False)
+    data.comment = """The actual Snapshot that is sent to Devicehub."""
 
     def __init__(self, **kw) -> None:
         super().__init__(**kw)
@@ -122,48 +196,6 @@ class Snapshot(db.Model, ereuse_utils.Dumpeable):
     def is_linked(self):
         return bool(len(self.data['device'].get('tags', [])))
 
-    @classmethod
-    def one(cls, id: uuid_mod.UUID) -> 'Snapshot':
-        return cls.query.filter_by(uuid=id).first_or_404()
-
-    def hid(self) -> str:
-        un = 'Unknown'
-        pc = self.data['device']
-        return Naming.hid(pc['type'],
-                          pc['manufacturer'] or un,
-                          pc['model'] or un,
-                          pc['serialNumber'] or un)
-
-    @classmethod
-    def all(cls):
-        for snapshot in cls.query:  # type: Snapshot
-            s = snapshot.data.copy()
-            s['_phase'] = snapshot.phase
-            s['_linked'] = False
-            yield s
-
-    @classmethod
-    def get_to_clean(cls):
-        """Gets the snapshots that can be cleaned."""
-        return cls.query.filter(cls.closed.isnot(None))
-
-    def path(self, dir: pathlib.Path) -> pathlib.Path:
-        """Returns the path of the file for a given directory."""
-        return dir.joinpath(self.hid() + '.json')
-
-    def write(self, dir: pathlib.Path = None) -> pathlib.Path:
-        dir = dir or current_app.dir.snapshots
-        path = self.path(dir)
-        with path.open('w') as f:
-            json.dump(self.data, f, indent=2, sort_keys=True, cls=ereuse_utils.JSONEncoder)
-        return path
-
-    def delete(self, dir: pathlib.Path):
-        self.path(dir).unlink()
-
-    def __repr__(self) -> str:
-        return '<Snapshot {} phase={} closed={}>'.format(self.uuid, self.phase, self.closed)
-
 
 class Progress(db.Model):
     DEVICE = -1
@@ -177,7 +209,7 @@ class Progress(db.Model):
     percentage = db.Column(db.SmallInteger)
     total = db.Column(db.SmallInteger)
 
-    snapshot = db.relationship(Snapshot,
+    snapshot = db.relationship(SnapshotComputer,
                                backref=db.backref('progress',
                                                   lazy=True,
                                                   collection_class=set,
@@ -193,7 +225,7 @@ class Progress(db.Model):
         """
         # We might get passed-in None
         component = component if component is not None else cls.DEVICE
-        snapshot = Snapshot.one(uuid)
+        snapshot = SnapshotComputer.one(uuid)
         try:
             return cls.query.filter_by(snapshot=snapshot, component=component).one()
         except NoResultFound:

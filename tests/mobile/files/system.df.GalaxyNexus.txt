@@ -1,0 +1,2 @@
+Filesystem                                           Size  Used Avail Use% Mounted on
+/dev/block/platform/omap/omap_hsmmc.0/by-name/system 644M  579M   65M  90% /system
