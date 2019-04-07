@@ -4,7 +4,7 @@ from time import sleep
 
 from workbench_server.db import db
 from workbench_server.log import log
-from workbench_server.mobile.models import Mobile, NoDevice, SnapshotMobile
+from workbench_server.mobile.models import NoDevice, SnapshotMobile
 
 
 class WorkbenchMobile:
@@ -14,7 +14,7 @@ class WorkbenchMobile:
         from workbench_server.flaskapp import WorkbenchServer
         assert isinstance(app, WorkbenchServer)
         self.app = app
-        self.androids = app.dir.main / 'mobile' # type: Path
+        self.androids = app.dir.main / 'mobile'  # type: Path
         self.androids.mkdir(exist_ok=True)
         super().__init__()
         logging.info('Workbench Mobile initialized: %s', self)
@@ -27,7 +27,7 @@ class WorkbenchMobile:
                 logging.error('Unhandled exception in Workbench Mobile:')
                 logging.exception(e)
                 with self.app.app_context():
-                    Mobile.query.delete()
+                    SnapshotMobile.query.delete()
                     db.session.commit()
                 logging.info('Deleted all mobiles to clean exception.')
             sleep(self.SLEEP)
@@ -45,10 +45,19 @@ class WorkbenchMobile:
                 db.session.add(snapshot)
                 db.session.commit()
                 logging.info('New snapshot mobile: %s', snapshot)
-                snapshot.run(self.androids)
-                db.session.add(snapshot)
-                db.session.commit()
-                logging.info('Snapshot mobile finished: %s', snapshot)
+                try:
+                    snapshot.run(self.androids)
+                    db.session.add(snapshot)
+                    db.session.commit()
+                except Exception as e:
+                    logging.error('Unhandled exception in run in Workbench Mobile:')
+                    logging.exception(e)
+                    with self.app.app_context():
+                        db.session.delete(snapshot)
+                        db.session.commit()
+                    logging.info('Delete the Snapshot Mobile %s', snapshot)
+                else:
+                    logging.info('Snapshot mobile finished: %s', snapshot)
 
 
 def main(folder):
