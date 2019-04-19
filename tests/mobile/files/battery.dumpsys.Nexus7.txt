@@ -5,11 +5,11 @@ Current Battery Service state:
   Max charging current: 0
   Max charging voltage: 0
   Charge counter: 0
-  status: 2
+  status: 5
   health: 2
   present: true
-  level: 60
+  level: 100
   scale: 100
-  voltage: 3904
-  temperature: 219
+  voltage: 4250
+  temperature: 216
   technology: Li-ion

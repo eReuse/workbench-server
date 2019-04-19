@@ -4,27 +4,27 @@
     inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
 2: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN 
-    link/ether 4e:0f:20:c1:b6:c8 brd ff:ff:ff:ff:ff:ff
+    link/ether d2:42:5f:44:5c:2e brd ff:ff:ff:ff:ff:ff
 3: ifb0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 32
-    link/ether de:ad:ed:31:cb:c6 brd ff:ff:ff:ff:ff:ff
+    link/ether 0e:a5:a9:28:01:4b brd ff:ff:ff:ff:ff:ff
 4: ifb1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 32
-    link/ether ba:ab:4f:23:e2:90 brd ff:ff:ff:ff:ff:ff
+    link/ether 6e:7d:a1:ec:bc:b6 brd ff:ff:ff:ff:ff:ff
 5: rmnet0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN qlen 1000
-    link/ether 6e:2e:20:7c:40:f6 brd ff:ff:ff:ff:ff:ff
+    link/ether 92:92:e6:0e:2f:2e brd ff:ff:ff:ff:ff:ff
 6: rmnet1: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN qlen 1000
-    link/ether 9a:5a:a6:3e:0e:98 brd ff:ff:ff:ff:ff:ff
+    link/ether 8e:b4:f0:fb:ce:b4 brd ff:ff:ff:ff:ff:ff
 7: rmnet2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN qlen 1000
-    link/ether 06:5a:e4:33:2c:8e brd ff:ff:ff:ff:ff:ff
+    link/ether 56:7e:a7:d7:f9:7a brd ff:ff:ff:ff:ff:ff
 8: usb0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN qlen 1000
-    link/ether 16:14:f3:ad:4f:13 brd ff:ff:ff:ff:ff:ff
+    link/ether ca:11:b6:4f:a9:b5 brd ff:ff:ff:ff:ff:ff
 9: sit0: <NOARP> mtu 1480 qdisc noop state DOWN 
     link/sit 0.0.0.0 brd 0.0.0.0
 10: ip6tnl0: <NOARP> mtu 1460 qdisc noop state DOWN 
     link/tunnel6 :: brd ::
 11: gannet0: <BROADCAST,MULTICAST,NOARP> mtu 1000 qdisc noop state DOWN qlen 1000
-    link/ether 06:96:7b:6b:7e:1f brd ff:ff:ff:ff:ff:ff
+    link/ether 56:83:e0:60:7f:7a brd ff:ff:ff:ff:ff:ff
 12: tun: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN qlen 500
-    link/ether 12:88:f0:ba:32:37 brd ff:ff:ff:ff:ff:ff
+    link/ether ee:74:bb:ef:bf:2e brd ff:ff:ff:ff:ff:ff
 13: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
     link/ether 64:a7:69:b6:9b:2e brd ff:ff:ff:ff:ff:ff
     inet 192.168.1.54/24 brd 192.168.1.255 scope global eth0

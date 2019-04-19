@@ -7,7 +7,9 @@ snapshotting computers.
 1. Install the following dependencies:
    - python 3 with pip (Debian 9: `apt install python3-pip`)
    - Postgresql 9.6 or better (Debian 9: `apt install postgresql`)
-   - If you want to process Androids, adb (Debian 9: `apt install adb`)
+   - If you want to process Androids:
+     - adb (Debian 9: `apt install adb`)
+     - Java (Debian 9: `apt install default-jre`)
    - If you want to print tags directly, cups (Debian 9: `apt install libcups2-dev`).
 2. Clone WorkbenchServer:
    `git clone https://github.com/ereuse/workbench-server && cd workbench-server`.

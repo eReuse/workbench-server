@@ -3,14 +3,16 @@ import json
 import logging
 import math
 import pathlib
+import tempfile
 import uuid
 from contextlib import suppress
 from enum import Enum
 from typing import Any
+from xml.etree import ElementTree
 
 import bitmath
 import yaml
-from ereuse_utils import Dumpeable, cmd, text
+from ereuse_utils import DumpeableModel, cmd, text
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.orderinglist import ordering_list
@@ -23,12 +25,16 @@ from workbench_server.models import Phases, Snapshot, SnapshotInheritorMixin
 class Adb:
     def __init__(self, serial_number: str) -> None:
         self.serial_number = serial_number
-        self.sh = 'adb', '-s', self.serial_number, 'shell'
+        self.d = 'adb', '-s', self.serial_number
+        self.sh = self.d + ('shell',)
         self.dumpsys = self.shell('dumpsys')
 
     def shell(self, *params, **kwargs) -> str:
         out = cmd.run(*self.sh, *params, **kwargs).stdout  # type: str
         return out.strip().replace('\t', '')
+
+    def pull(self, origin, destination):
+        cmd.run(*self.d, 'pull', origin, destination)
 
     @classmethod
     def devices(cls) -> str:
@@ -43,7 +49,7 @@ class SnapshotMobile(SnapshotInheritorMixin, Snapshot):
 
     @property
     def data(self):
-        device = json.loads(self.device.to_json())  # type: dict todo not nice
+        device = json.loads(self.device.to_json())  # type: dict
         return {
             'type': 'Snapshot',
             'software': 'WorkbenchAndroid',
@@ -70,6 +76,21 @@ class SnapshotMobile(SnapshotInheritorMixin, Snapshot):
                         return cls(sn)
         raise NoDevice()
 
+    def from_form(self, form: dict):
+        self.device.tags.clear()
+        self.device.tags.update(Tag(id=t['id']) for t in form.get('tags', []))
+        self.device.events.clear()
+        rate = form.get('rate', None)
+        if rate:
+            event = WorkbenchRate(appearanceRange=rate['appearanceRange'],
+                                  functionalityRange=rate['functionalityRange'])
+            self.device.events.add(event)
+
+        super().from_form(form)
+
+    def is_linked(self):
+        return bool(len(self.device.tags))
+
     def __init__(self, serial_number: str):
         super().__init__(device=Mobile(serial_number=serial_number),
                          phase=Phases.Info,
@@ -78,35 +99,24 @@ class SnapshotMobile(SnapshotInheritorMixin, Snapshot):
     def run(self, jsons: pathlib.Path):
         self.device.run()
         self.closed = datetime.datetime.now()
-        self.phase = Phases.ReadyToUpload
+        self.phase = Phases.Link
         self.write(jsons)
 
     def __repr__(self) -> str:
         return '<Snapshot {0.uuid} Mobile {0.device}> '.format(self)
 
 
-class Mobile(db.Model, Dumpeable):
+class Mobile(db.Model, DumpeableModel):
     # Device fields
     serial_number = db.Column(db.Unicode, primary_key=True)
     model = db.Column(db.Unicode)
-    name = db.Column(db.Unicode)
     manufacturer = db.Column(db.Unicode)
+    variant = db.Column(db.Unicode)
     # Mobile fields
-    imei = db.Column(db.Integer)
-    processor_model = db.Column(db.Unicode)
-    processor_cores = db.Column(db.Integer)
-    processor_board = db.Column(db.Unicode)
-    processor_abi = db.Column(db.Unicode)
+    imei = db.Column(db.BigInteger)
     ram_size = db.Column(db.Integer)
     data_storage_size = db.Column(db.Integer)
-    graphic_card_manufacturer = db.Column(db.Unicode)
-    graphic_card_model = db.Column(db.Unicode)
-    macs = db.Column(postgresql.ARRAY(db.Unicode))
-    bluetooth_mac = db.Column(db.Unicode)
-    components = db.relationship('Component',
-                                 cascade='all, delete-orphan',
-                                 order_by=lambda: Component.num,
-                                 collection_class=ordering_list('num'))
+
     snapshot_id = db.Column(postgresql.UUID(as_uuid=True),
                             db.ForeignKey(SnapshotMobile.uuid, ondelete='CASCADE'),
                             unique=True)
@@ -116,31 +126,18 @@ class Mobile(db.Model, Dumpeable):
         return cls.query.filter_by(serial_number=serial_number).one()
 
     def run(self):
+        R = 'ro.product.'
         self._adb = Adb(self.serial_number)
         props = self._get_properties()
+        # Although the model should be more the brand
+        # Is the only really reliable one with the "Supported Play Store devices"
+        self.model = get_prop(props, R + 'model')
+        self.variant = get_prop(props, R + 'subdevice', get_prop(props, R + 'device'))
+        self.manufacturer = get_prop(props, R + 'manufacturer')
 
-        self.model = get_prop(props, 'ro.product.model')
-        self.name = get_prop(props,
-                             'ro.product.subdevice',
-                             get_prop(props, 'ro.product.name', None))
-        self.manufacturer = get_prop(props, 'ro.product.manufacturer')
         self.imei = None
         with suppress(NoImei):
-            self.imei = self._imei()
-
-        self.closed = False
-        self.events = []
-
-        # Android does not report much info
-        # We assume a SOC soldered in the phone
-
-        # Processor
-        cpuinfo = self._adb.shell('cat', '/proc/cpuinfo').splitlines()
-        self.processor_model = get_prop(cpuinfo, 'Hardware')
-        self.processor_cores = len(
-            tuple(text.numbers(self._adb.shell('ls', '/sys/devices/system/cpu'))))
-        self.processor_board = get_prop(props, 'ro.product.board')
-        self.processor_abi = get_prop(props, 'ro.product.cpu.abi')
+            self.imei = self._imei(props)
 
         # RAM
         meminfo = self._adb.shell('cat', '/proc/meminfo')
@@ -157,23 +154,8 @@ class Mobile(db.Model, Dumpeable):
 
         logging.debug('Data Storage for %s', self)
 
-        # Graphic card
-        gpu = next(text.grep(self._adb.dumpsys, 'GLES:'))
-        self.graphic_card_manufacturer, self.graphic_card_model, *_ = gpu.split(':')[1].split(', ')
-        self.graphic_card_manufacturer = self.graphic_card_manufacturer.strip()
-        self.graphic_card_model = self.graphic_card_model.strip()
-
-        logging.debug('Graphic Card for %s', self)
-
-        # Network macs
-        self.macs = set(
-            text.macs(' '.join(text.grep(self._adb.shell('ip', 'addr', 'show'), 'link/ether')))
-        )
-        self.macs.discard('ff:ff:ff:ff:ff:ff')
-        self.bluetooth_mac = self._adb.shell('settings', 'get', 'secure', 'bluetooth_address')
-
-        logging.debug('Specs for %s', self)
-
+        self.components.append(Processor(self._adb, props))
+        self.components.append(GraphicCard(self._adb))
         self.components.append(Display(self._adb))
         self.components.append(Battery(self._adb))
         self.components.extend(Camera.new(self._adb))
@@ -181,9 +163,9 @@ class Mobile(db.Model, Dumpeable):
     def _get_properties(self) -> list:
         return self._adb.shell('getprop').replace('[', '').replace(']', '').splitlines()
 
-    def _imei(self):
+    def _imei(self, props):
         # https://stackoverflow.com/questions/6852106/is-there-an-android-shell-or-adb-command-that-i-could-use-to-get-a-devices-imei/37940140#37940140
-        cmd = 'adb', 'shell', 'service', 'call', 'iphonesubinfo'
+        cmd = 'service', 'call', 'iphonesubinfo'
         imei = self._adb.shell(*cmd, 1)
         if not imei:
             imei = self._adb.shell(*cmd, 16)
@@ -193,7 +175,11 @@ class Mobile(db.Model, Dumpeable):
             imei = imei.replace('.', '').strip()
             return int(imei)
         except ValueError:
-            raise NoImei()
+            try:
+                # Android 2.X can have an imei property
+                return int(get_prop(props, 'ro.gsm.imei'))
+            except Exception:
+                raise NoImei()
 
     def dump(self):
         d = super().dump()
@@ -216,16 +202,62 @@ class Mobile(db.Model, Dumpeable):
         return '<Mobile {0.serial_number} model: {0.model}> '.format(self)
 
 
+def dump_class_name_as_type(cls):
+    def dump(self):
+        d = super(cls, self).dump()
+        d['type'] = self.__class__.__name__
+        return d
+
+    cls.dump = dump
+    return cls
+
+
+@dump_class_name_as_type
+class Tag(db.Model, DumpeableModel):
+    id = db.Column(db.Unicode, primary_key=True)
+    _mobile_sn = db.Column('mobile_sn',
+                           db.Unicode,
+                           db.ForeignKey(Mobile.serial_number, ondelete='CASCADE'))
+    _device = db.relationship(Mobile,
+                              backref=db.backref('tags',
+                                                 collection_class=set,
+                                                 cascade='all, delete-orphan'))
+
+
+@dump_class_name_as_type
+class WorkbenchRate(db.Model, DumpeableModel):
+    _mobile_sn = db.Column('mobile_sn',
+                           db.Unicode,
+                           db.ForeignKey(Mobile.serial_number, ondelete='CASCADE'),
+                           primary_key=True)
+    _device = db.relationship(Mobile,
+                              backref=db.backref('events',
+                                                 collection_class=set,
+                                                 cascade='all, delete-orphan'))
+    appearanceRange = db.Column(db.Unicode(1))
+    functionalityRange = db.Column(db.Unicode(1))
+
+
 class NoImei(Exception):
     pass
 
 
-class Component(db.Model, Dumpeable):
-    mobile_sn = db.Column(db.Unicode,
-                          db.ForeignKey(Mobile.serial_number, ondelete='CASCADE'),
-                          primary_key=True)
-    num = db.Column(db.SmallInteger, primary_key=True)
+class Component(db.Model, DumpeableModel):
+    _mobile_sn = db.Column('mobile_sn',
+                           db.Unicode,
+                           db.ForeignKey(Mobile.serial_number, ondelete='CASCADE'),
+                           primary_key=True)
+    _num = db.Column('num', db.SmallInteger, primary_key=True)
     type = db.Column(db.Unicode, nullable=False, index=True)
+    model = db.Column(db.Unicode)
+    manufacturer = db.Column(db.Unicode)
+
+    _device = db.relationship(Mobile,
+                              backref=db.backref('components',
+                                                 collection_class=ordering_list('_num'),
+                                                 lazy='joined',
+                                                 order_by=_num,
+                                                 cascade='all, delete-orphan'))
 
     @declared_attr
     def __mapper_args__(cls):
@@ -240,22 +272,22 @@ class Component(db.Model, Dumpeable):
         if cls.__name__ == 'Component':
             args['polymorphic_on'] = cls.type
         else:
-            args['inherit_condition'] = (cls.mobile_sn == Component.mobile_sn) & \
-                                        (cls.num == Component.num)
+            args['inherit_condition'] = (cls._mobile_sn == Component._mobile_sn) & \
+                                        (cls._num == Component._num)
         return args
 
     def __repr__(self) -> str:
-        return '<Component {0.num}: {0.__class__.__name__}>'.format(self)
+        return '<Component {0._num}: {0.__class__.__name__}>'.format(self)
 
 
 class InheritanceMixin:
     @declared_attr
-    def mobile_sn(cls):
-        return db.Column(db.Unicode, primary_key=True)
+    def _mobile_sn(cls):
+        return db.Column('mobile_sn', db.Unicode, primary_key=True)
 
     @declared_attr
-    def num(cls):
-        return db.Column(db.SmallInteger, primary_key=True)
+    def _num(cls):
+        return db.Column('num', db.SmallInteger, primary_key=True)
 
     @declared_attr
     def __table__args(cls):
@@ -268,59 +300,142 @@ class InheritanceMixin:
         )
 
 
+class Processor(InheritanceMixin, Component):
+    cores = db.Column(db.Integer)
+    abi = db.Column(db.Unicode)
+
+    def __init__(self, adb, props) -> None:
+        super().__init__()
+
+        # Processor
+        cpuinfo = adb.shell('cat', '/proc/cpuinfo').splitlines()
+        self.model = get_prop(cpuinfo, 'Hardware')
+        self.cores = len(tuple(text.numbers(adb.shell('ls', '/sys/devices/system/cpu'))))
+        self.abi = get_prop(props, 'ro.product.cpu.abi')
+        logging.debug('Processor %s', self)
+
+
+class GraphicCard(InheritanceMixin, Component):
+    def __init__(self, adb) -> None:
+        super().__init__()
+        gpu = next(text.grep(adb.dumpsys, 'GLES:'))
+        manufacturer, model, *_ = gpu.split(':')[1].split(', ')
+        self.manufacturer = manufacturer.strip()
+        self.model = model.strip()
+        logging.debug('Graphic Card %s', self)
+
+
 class Display(InheritanceMixin, Component):
+    size = db.Column(db.Float(decimal_return_scale=2))
     resolution_width = db.Column(db.SmallInteger)
     resolution_height = db.Column(db.SmallInteger)
     refresh_rate = db.Column(db.SmallInteger)
-    density_width = db.Column(db.SmallInteger)
-    density_height = db.Column(db.SmallInteger)
-    size = db.Column(db.Float(decimal_return_scale=2))
     touchable = db.Column(db.Boolean)
-    technology = db.Column(db.Unicode)
-    contrast_ratio = db.Column(db.Float(decimal_return_scale=3))
 
     def __init__(self, adb: Adb) -> None:
         display_info = next(text.grep(adb.dumpsys, 'PhysicalDisplayInfo'))
         self.resolution_width, self.resolution_height, self.refresh_rate, _internal_density, \
-        self.density_width, self.density_height, *_ = text.numbers(display_info)
+        density_width, density_height, *_ = text.numbers(display_info)
 
-        self.density_width = int(self.density_width)
-        self.density_height = int(self.density_height)
+        density_width = int(density_width)
+        density_height = int(density_height)
         self.refresh_rate = int(self.refresh_rate)
 
         self.size = round(math.sqrt(
-            (self.resolution_width / self.density_width) ** _internal_density +
-            (self.resolution_height / self.density_height) ** _internal_density
+            (self.resolution_width / density_width) ** _internal_density +
+            (self.resolution_height / density_height) ** _internal_density
         ), ndigits=2)
         """Size. From https://stackoverflow.com/a/19446138/2710757."""
-        self.technology = None
-        self.contrast_ratio = None
         self.touchable = True
         logging.debug('Display %s', self)
 
 
 class Battery(InheritanceMixin, Component):
     wireless = db.Column(db.Boolean)
-    health = db.Column(db.SmallInteger)
-    status = db.Column(db.SmallInteger)
-    voltage = db.Column(db.Integer)
     technology = db.Column(db.Unicode)
-    charge_counter = db.Column(db.Integer)
-    size = db.Column(db.Integer)
+    size = db.Column(db.Integer, nullable=False)
+    events = db.relationship('MeasureBattery',
+                             cascade='all, delete-orphan',
+                             primaryjoin=lambda: (
+                                     (Battery._mobile_sn == MeasureBattery._battery_sn) &
+                                     (Battery._num == MeasureBattery._num)
+                             ),
+                             collection_class=set)
 
     def __init__(self, adb: Adb) -> None:
         props = adb.shell('dumpsys', 'battery').splitlines()
         self.wireless = get_prop(props, 'Wireless powered')
-        self.status = get_prop(props, 'status')
-        self.health = get_prop(props, 'health')
-        self.voltage = get_prop(props, 'voltage')
         self.technology = get_prop(props, 'technology')
-        self.charge_counter = get_prop(props, 'Charge counter', None)
-        self.size = get_prop(adb.dumpsys.splitlines(), 'Estimated battery capacity', None)  # mAh
-        if self.size:
-            self.size, *_ = self.size.split()
-            self.size = int(self.size)
+        self.size = self.get_size(adb)
+        with suppress(NoMeasure):
+            self.events.add(MeasureBattery(adb, props))
         logging.debug('Battery %s', self)
+
+    @staticmethod
+    def get_size(adb: Adb):
+        """Gets battery size."""
+        # From https://android.stackexchange.com/a/145798
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            dir = pathlib.Path(tmpdirname)
+            apk = dir / 'result'
+            adb.pull('system/framework/framework-res.apk', tmpdirname)
+            cmd.run('java', '-jar', pathlib.Path(__file__).parent / 'apktool_2.4.0.jar',
+                    'd', dir / 'framework-res.apk',
+                    '-o', apk)
+            root = ElementTree.parse(str(apk / 'res' / 'xml' / 'power_profile.xml'))
+            return next(int(i.text) for i in root.findall('item')
+                        if i.get('name') == 'battery.capacity')
+
+
+@dump_class_name_as_type
+class MeasureBattery(db.Model, DumpeableModel):
+    class BatteryHealth(Enum):
+        """The battery health status as in Android."""
+        Unknown = 1
+        Good = 2
+        Overheat = 3
+        Dead = 4
+        OverVoltage = 5
+        UnspecifiedValue = 6
+        Cold = 7
+
+    _battery_sn = db.Column('battery_sn',
+                            db.Unicode,
+                            primary_key=True)
+    _num = db.Column('num',
+                     db.SmallInteger,
+                     primary_key=True)
+    size = db.Column(db.Integer, nullable=False)
+    voltage = db.Column(db.Integer, nullable=False)
+    cycle_count = db.Column(db.Integer)
+    health = db.Column(db.Enum(BatteryHealth))
+    __table_args__ = (
+        db.ForeignKeyConstraint(
+            ['battery_sn', 'num'],
+            ['battery.mobile_sn', 'battery.num'],
+            ondelete='CASCADE'
+        ),
+    )
+
+    def __init__(self, adb, props) -> None:
+        super().__init__()
+        # todo try if no size to not return this event
+        try:
+            size = get_prop(adb.dumpsys.splitlines(), 'Estimated battery capacity')  # mAh
+        except IndexError:
+            raise NoMeasure()
+
+        size, *_ = size.split()
+        self.size = int(size)
+        self.cycle_count = get_prop(props, 'Charge counter', None)
+        if self.cycle_count == 0:  # 0 is a wrong measure
+            self.cycle_count = None
+        self.voltage = get_prop(props, 'voltage')
+        self.health = self.BatteryHealth(get_prop(props, 'health'))
+
+
+class NoMeasure(Exception):
+    pass
 
 
 class Camera(InheritanceMixin, Component):
@@ -332,8 +447,6 @@ class Camera(InheritanceMixin, Component):
         def from_dumpsys(cls, value):
             return cls.Front if value.split(':')[1].strip() == 'FRONT' else cls.Back
 
-    manufacturer = db.Column(db.Unicode)
-    model = db.Column(db.Unicode)
     height = db.Column(db.Integer)
     width = db.Column(db.Integer)
     focal_length = db.Column(db.SmallInteger)
@@ -411,8 +524,6 @@ class Camera(InheritanceMixin, Component):
 
 
 def get_prop(values, name: str, default: Any = -1):
-    if name == 'voltage':
-        x = 1
     for line in values:
         try:
             n, value, *_ = line.strip().split(':')
@@ -420,7 +531,7 @@ def get_prop(values, name: str, default: Any = -1):
             continue
         else:
             if name == n:
-                return yaml.load(value.strip())
+                return yaml.load(value.strip(), Loader=yaml.SafeLoader)
     if default == -1:
         raise IndexError('Value {} not found.'.format(name))
     else:

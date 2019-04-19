@@ -11,6 +11,7 @@ from flask import current_app
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -91,7 +92,7 @@ class Snapshot(db.Model):
 
     @classmethod
     def all_client(cls):
-        for snapshot in cls.query:
+        for snapshot in cls.query.options(joinedload('*')):
             yield snapshot.data_client()
 
     def write(self, dir: pathlib.Path = None) -> pathlib.Path:
@@ -130,6 +131,19 @@ class Snapshot(db.Model):
 
     def delete(self, dir: pathlib.Path):
         self.path(dir).unlink()
+
+    def from_form(self, form: dict):
+        """Sets data submitted from a DHC form, conditionally setting it to upload."""
+        # If this form submission has some tags and we already finished, set to upload
+        if self.phase == Phases.Link and self.is_linked():
+            # todo if we change this while / after uploading we should
+            #    set it to Phases.ReadyToUpload again?
+            self.phase = Phases.ReadyToUpload
+        self.write()
+
+    def is_linked(self) -> bool:
+        """Whether the device is considered linked / tagged."""
+        raise NotImplementedError()
 
     def __repr__(self) -> str:
         return '<Snapshot {} phase={} closed={}>'.format(self.uuid, self.phase, self.closed)
@@ -187,10 +201,8 @@ class SnapshotComputer(SnapshotInheritorMixin, Snapshot):
 
         self.data['description'] = form.get('description', None)
 
-        # If this form submission has some tags and we already finished, set to upload
-        if self.phase == Phases.Link and self.is_linked():
-            self.phase = Phases.ReadyToUpload
-            self.write()
+        super().from_form(form)
+
         flag_modified(self, 'data')
 
     def is_linked(self):

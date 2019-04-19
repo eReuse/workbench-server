@@ -1,0 +1,136 @@
+time,80899914,101916943
+oom,native,98984
+proc,native,/init,1,835,e
+proc,native,ueventd,186,646,e
+proc,native,logd,206,3292,e
+proc,native,vold,213,941,e
+proc,native,healthd,241,17344,e
+proc,native,lmkd,242,290,e
+proc,native,servicemanager,243,356,e
+proc,native,surfaceflinger,244,34421,e
+proc,native,rmt_storage,245,522,e
+proc,native,rfs_access,246,413,e
+proc,native,qseecomd,247,224,e
+proc,native,netd,250,1113,e
+proc,native,debuggerd,251,705,e
+proc,native,rild,252,4027,e
+proc,native,drmserver,253,1455,e
+proc,native,mediaserver,254,10500,e
+proc,native,installd,255,506,e
+proc,native,keystore,256,720,e
+proc,native,qmuxd,257,1154,e
+proc,native,netmgrd,258,2211,e
+proc,native,thermal-engine,261,1424,e
+proc,native,adsprpcd,263,346,e
+proc,native,wcnss_service,264,968,e
+proc,native,zygote,265,2130,e
+proc,native,gatekeeperd,266,553,e
+proc,native,sensors.qcom,267,1558,e
+proc,native,loc_launcher,268,350,e
+proc,native,mm-qcamera-daemon,269,2822,e
+proc,native,time_daemon,270,843,e
+proc,native,audiod,271,970,e
+proc,native,qseecomd,282,356,e
+proc,native,sdcard,2682,2171,e
+proc,native,mpdecision,4199,455,e
+proc,native,adbd,19165,484,e
+proc,native,dumpsys,19679,667,e
+proc,native,wpa_supplicant,21443,1212,e
+oom,sys,146152
+proc,sys,system,811,146152,e
+oom,pers,114425
+proc,pers,com.android.phone,3487,21880,e
+proc,pers,com.cyngn.stats,3470,4488,e
+proc,pers,com.cyanogenmod.voicewakeup,3457,3530,e
+proc,pers,com.android.nfc,3423,8591,e
+proc,pers,com.android.systemui,16371,75936,a
+oom,fore,67291
+proc,fore,com.android.settings,18800,67291,a
+oom,vis,110927
+proc,vis,com.cyanogen.ambient.core,3526,11554,e
+proc,vis,com.google.android.gms.persistent,3185,61548,e
+proc,vis,com.skype.android.spice,7527,11939,e
+proc,vis,org.cyanogenmod.profiles,4941,2687,e
+proc,vis,com.android.smspush,3631,2584,e
+proc,vis,com.cyngn.livelockscreen.service,3337,2740,e
+proc,vis,com.google.android.googlequicksearchbox:interactor,3328,9765,e
+proc,vis,com.cyngn.theme.chooser,3315,8110,e
+oom,percept,33297
+proc,percept,com.android.inputmethod.latin,3357,30517,e
+proc,percept,com.cyanogen.app.suggest,4191,2780,e
+oom,servicea,137474
+proc,servicea,com.google.android.gms,3569,60453,e
+proc,servicea,com.google.android.googlequicksearchbox:search,3754,77021,e
+oom,home,45139
+proc,home,com.cyanogenmod.trebuchet,3510,45139,a
+oom,serviceb,573693
+proc,serviceb,com.whatsapp,1095,74157,a
+proc,serviceb,org.telegram.messenger,3773,74322,a
+proc,serviceb,com.boxer.email,4114,223113,a
+proc,serviceb,com.navigation.navigator,4485,24603,e
+proc,serviceb,android.process.media,32312,10848,e
+proc,serviceb,com.cyngn.logger,6416,5842,e
+proc,serviceb,com.google.android.apps.maps,19849,117337,e
+proc,serviceb,com.cyngn.audiofx,3716,3680,e
+proc,serviceb,org.retroshare.android.qml_app:nf,9339,5069,e
+proc,serviceb,org.retroshare.android.qml_app:rs,9327,10295,e
+proc,serviceb,net.inverline.bancosabadell.officelocator.android,9261,21483,e
+proc,serviceb,com.qualcomm.qcrilmsgtunnel,6684,2944,e
+oom,cached,957417
+proc,cached,com.android.chrome,11128,74075,a
+proc,cached,com.cyngn.gallerynext,23604,9172,e
+proc,cached,com.google.android.music:main,22170,26069,e
+proc,cached,com.android.chrome:sandboxed_process15,23566,20869,e
+proc,cached,com.twitter.android,17861,125397,a
+proc,cached,com.android.chrome:sandboxed_process14,21285,5637,e
+proc,cached,com.android.chrome:sandboxed_process12,20724,18855,e
+proc,cached,com.android.chrome:privileged_process1,5184,23553,e
+proc,cached,com.google.android.music:ui,22154,63468,a
+proc,cached,com.android.deskclock,10450,40563,a
+proc,cached,com.android.chrome:sandboxed_process1,16258,49591,e
+proc,cached,com.android.chrome:sandboxed_process7,26107,29283,e
+proc,cached,com.socialnmobile.dictapps.notepad.color.note,17564,35655,a
+proc,cached,com.linkedin.android,12335,96610,a
+proc,cached,com.meetmaps.eventsbox,26804,94392,a
+proc,cached,com.android.chrome:sandboxed_process6,28412,55995,e
+proc,cached,com.google.android.tts,20208,4906,e
+proc,cached,com.android.printspooler,19650,4076,e
+proc,cached,org.cyanogenmod.providers.datausage,31856,3911,e
+proc,cached,org.fdroid.fdroid,19295,12758,e
+proc,cached,com.android.vending,19185,32569,e
+proc,cached,com.microsoft.office.word,19259,11959,e
+proc,cached,com.google.process.gapps,13546,4597,e
+proc,cached,android.process.acore,675,8185,e
+proc,cached,org.cyanogenmod.bugreport,19152,2898,e
+proc,cached,com.ryanair.cheapflights,17857,17214,e
+proc,cached,com.wikiloc.wikilocandroid,17775,7661,e
+proc,cached,com.google.android.apps.photos,17651,30702,e
+proc,cached,com.google.android.apps.plus,17460,15927,e
+proc,cached,com.nextcloud.client,32252,13066,e
+proc,cached,com.android.contacts,18899,4118,e
+proc,cached,com.google.android.gms.ui,18834,10471,e
+proc,cached,com.android.cellbroadcastreceiver,18818,3215,e
+cat,Native,755322
+cat,Dalvik,723466
+cat,Unknown,137584
+cat,Dalvik Other,76036
+cat,Stack,23804
+cat,Cursor,636
+cat,Ashmem,13074
+cat,Gfx dev,83586
+cat,Other dev,511
+cat,.so mmap,52233
+cat,.jar mmap,0
+cat,.apk mmap,12741
+cat,.ttf mmap,155
+cat,.dex mmap,59306
+cat,.oat mmap,20546
+cat,.art mmap,63228
+cat,Other mmap,4107
+cat,EGL mtrack,258464
+cat,GL mtrack,0
+cat,Other mtrack,0
+ram,2949980,1393225,1327382
+lostram,52005
+ksm,0,0,0,0
+tuning,192,512,174948,high-end-gfx

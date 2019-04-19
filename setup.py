@@ -12,7 +12,7 @@ setup(
     install_requires=[
         'cachetools',
         'cefpython3==66.0',
-        'ereuse-utils [usb_flash_drive,naming,test,session,cli]>=0.4b45',
+        'ereuse-utils [usb_flash_drive,naming,test,session,cli]>=0.4b47',
         'flask>=1.0.2',
         'flask-cors',
         'pycups',

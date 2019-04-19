@@ -199,7 +199,7 @@
 [ro.radio.noril]: [yes]
 [ro.recovery_id]: [0xfe47d44cf52d03fcc59d1c81c59d1c812a03c513158cdc4bb100ef5000000000]
 [ro.revision]: [0]
-[ro.runtime.firstboot]: [1554390588786]
+[ro.runtime.firstboot]: [1555569212410]
 [ro.secure]: [1]
 [ro.serialno]: [0aa2f2a1]
 [ro.sf.lcd_density]: [320]

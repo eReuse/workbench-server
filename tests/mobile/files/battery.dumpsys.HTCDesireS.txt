@@ -5,8 +5,8 @@ Current Battery Service state:
   status: 2
   health: 2
   present: true
-  level: 76
+  level: 26
   scale: 100
-  voltage:4207
-  temperature: 301
+  voltage:3694
+  temperature: 213
   technology: Li-ion

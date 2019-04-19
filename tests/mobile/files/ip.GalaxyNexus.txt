@@ -4,13 +4,13 @@
     inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
 2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default 
-    link/ether f2:2c:da:6f:43:0c brd ff:ff:ff:ff:ff:ff
-    inet6 fe80::f02c:daff:fe6f:430c/64 scope link 
+    link/ether 9a:cd:df:00:ff:42 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::98cd:dfff:fe00:ff42/64 scope link 
        valid_lft forever preferred_lft forever
 3: ifb0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 32
-    link/ether 62:b6:a2:36:0d:18 brd ff:ff:ff:ff:ff:ff
+    link/ether 16:df:09:65:b2:0f brd ff:ff:ff:ff:ff:ff
 4: ifb1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 32
-    link/ether 1e:d0:d2:5b:ea:bd brd ff:ff:ff:ff:ff:ff
+    link/ether d2:f4:c4:72:81:6a brd ff:ff:ff:ff:ff:ff
 5: sit0: <NOARP> mtu 1480 qdisc noop state DOWN group default 
     link/sit 0.0.0.0 brd 0.0.0.0
 6: ip6tnl0: <NOARP> mtu 1452 qdisc noop state DOWN group default 
@@ -25,5 +25,8 @@
     link/ether a2:0b:ba:cb:c9:f1 brd ff:ff:ff:ff:ff:ff
     inet6 fe80::a00b:baff:fecb:c9f1/64 scope link 
        valid_lft forever preferred_lft forever
-11: wlan0: <NO-CARRIER,BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state DORMANT group default qlen 1000
+11: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
     link/ether a0:0b:ba:cb:c9:f1 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.50/24 brd 192.168.1.255 scope global wlan0
+    inet6 fe80::a20b:baff:fecb:c9f1/64 scope link 
+       valid_lft forever preferred_lft forever

@@ -31,7 +31,8 @@ class Snapshots:
                          methods=POST)
         app.add_url_rule(url + '/form/', view_func=self.view_form, methods=POST)
         app.add_url_rule('/snapshots/mobile/', view_func=self.view_all_mobile, methods={'DELETE'})
-        app.add_url_rule('/snapshots/computer/', view_func=self.view_all_computer, methods={'DELETE'})
+        app.add_url_rule('/snapshots/computer/', view_func=self.view_all_computer,
+                         methods={'DELETE'})
 
     def view_all_mobile(self):
         return self.view_all(SnapshotMobile)
@@ -80,7 +81,7 @@ class Snapshots:
 
     def view_form(self, uuid: uuid_mod.UUID):
         form = request.get_json()
-        snapshot = SnapshotComputer.one(uuid)
+        snapshot = Snapshot.one(uuid)
         snapshot.from_form(form)
         db.session.commit()
         self.logger.debug('Form for snapshot %s: %s', snapshot, form)

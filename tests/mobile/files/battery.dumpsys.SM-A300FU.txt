@@ -7,10 +7,10 @@ Current Battery Service state:
   status: 2
   health: 2
   present: true
-  level: 6
+  level: 18
   scale: 100
-  voltage: 3812
-  temperature: 251
+  voltage: 3838
+  temperature: 232
   technology: Li-ion
   batterySWSelfDischarging: false
   batteryMiscEvent: 0
@@ -28,5 +28,5 @@ BatteryInfoBackUp
   mSavedBatteryAsoc: 0
   mSavedBatteryMaxTemp: 566
   mSavedBatteryMaxCurrent: 0
-  mSavedBatteryUsage: 30157
+  mSavedBatteryUsage: 30330
   FEATURE_SAVE_BATTERY_CYCLE: false

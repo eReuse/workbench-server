@@ -1,94 +1,101 @@
 version,1
-time,2138473,185193570
-oom,native,73892,N/A
-proc,native,/init,1,936,N/A,e
-proc,native,ueventd,111,504,N/A,e
-proc,native,logd,134,3287,N/A,e
-proc,native,debuggerd,143,338,N/A,e
-proc,native,vold,144,1151,N/A,e
-proc,native,debuggerd:signaller,146,238,N/A,e
-proc,native,healthd,152,409,N/A,e
-proc,native,lmkd,155,635,N/A,e
-proc,native,servicemanager,156,533,N/A,e
-proc,native,surfaceflinger,157,30311,N/A,e
-proc,native,sh,158,487,N/A,e
-proc,native,adbd,159,711,N/A,e
-proc,native,zygote,166,9297,N/A,e
-proc,native,audioserver,167,3325,N/A,e
-proc,native,drmserver,169,1335,N/A,e
-proc,native,installd,170,692,N/A,e
-proc,native,media.codec,172,2337,N/A,e
-proc,native,mediadrmserver,173,1716,N/A,e
-proc,native,media.extractor,174,2581,N/A,e
-proc,native,mediaserver,175,2712,N/A,e
-proc,native,netd,176,1124,N/A,e
-proc,native,rild,178,1064,N/A,e
-proc,native,gatekeeperd,181,634,N/A,e
-proc,native,perfprofd,183,374,N/A,e
-proc,native,tf_daemon,330,436,N/A,e
-proc,native,keystore,331,799,N/A,e
-proc,native,cameraserver,519,2808,N/A,e
-proc,native,sdcard,601,1273,N/A,e
-proc,native,wpa_supplicant,681,1323,N/A,e
-proc,native,dumpsys,11209,522,N/A,e
-oom,sys,99821,N/A
-proc,sys,system,463,99821,N/A,e
-oom,pers,65805,N/A
-proc,pers,com.android.nfc,972,6424,N/A,e
-proc,pers,com.android.phone,738,11184,N/A,e
-proc,pers,com.android.systemui,589,48197,N/A,e
-oom,persvc,9666,N/A
-proc,persvc,com.android.bluetooth,569,9666,N/A,e
-oom,fore,34972,N/A
-proc,fore,com.android.launcher3,997,34972,N/A,a
-oom,vis,68805,N/A
-proc,vis,com.android.printspooler,1244,4653,N/A,e
-proc,vis,com.google.android.gms.persistent,724,56453,N/A,e
-proc,vis,com.android.smspush,1017,3756,N/A,e
-proc,vis,com.google.android.ext.services,850,3943,N/A,e
-oom,percept,6788,N/A
-proc,percept,com.android.inputmethod.latin,583,6788,N/A,e
-oom,servicea,4913,N/A
-proc,servicea,com.android.shell,9919,4913,N/A,e
-oom,prev,37586,N/A
-proc,prev,com.android.camera2,8840,30624,N/A,a
-proc,prev,com.google.process.gapps,892,6962,N/A,e
-oom,serviceb,6019,N/A
-proc,serviceb,me.twrp.twrpapp,1857,6019,N/A,e
-oom,cached,175998,N/A
-proc,cached,com.android.settings,10039,15600,N/A,a
-proc,cached,com.google.android.gms,1199,51343,N/A,e
-proc,cached,android.process.media,1263,8353,N/A,e
-proc,cached,com.android.deskclock,1181,5208,N/A,e
-proc,cached,com.android.vending,5025,34093,N/A,e
-proc,cached,com.google.android.gms.unstable,6763,12127,N/A,e
-proc,cached,com.android.providers.calendar,4549,5481,N/A,e
-proc,cached,android.process.acore,933,7977,N/A,e
-proc,cached,com.google.android.syncadapters.calendar,10003,11580,N/A,e
-proc,cached,com.google.process.gapps,9990,4845,N/A,e
-proc,cached,com.android.vending:instant_app_installer,2774,14097,N/A,e
-proc,cached,com.android.calendar,4528,5294,N/A,e
-cat,Native,130184,N/A
-cat,Dalvik,87111,N/A
-cat,Unknown,29524,N/A
-cat,Dalvik Other,22148,N/A
-cat,Stack,8800,N/A
+time,61908,61904
+oom,native,80834,N/A
+proc,native,/init,1,1094,N/A,e
+proc,native,ueventd,114,613,N/A,e
+proc,native,logd,138,1638,N/A,e
+proc,native,debuggerd,146,275,N/A,e
+proc,native,vold,147,1314,N/A,e
+proc,native,debuggerd:signaller,148,241,N/A,e
+proc,native,healthd,155,413,N/A,e
+proc,native,lmkd,158,637,N/A,e
+proc,native,servicemanager,159,543,N/A,e
+proc,native,surfaceflinger,160,26848,N/A,e
+proc,native,sh,161,525,N/A,e
+proc,native,adbd,162,727,N/A,e
+proc,native,zygote,166,18447,N/A,e
+proc,native,audioserver,167,4209,N/A,e
+proc,native,drmserver,169,1412,N/A,e
+proc,native,installd,170,700,N/A,e
+proc,native,media.codec,172,2495,N/A,e
+proc,native,mediadrmserver,173,1887,N/A,e
+proc,native,media.extractor,178,2671,N/A,e
+proc,native,mediaserver,179,2957,N/A,e
+proc,native,netd,180,1291,N/A,e
+proc,native,rild,181,1302,N/A,e
+proc,native,gatekeeperd,183,667,N/A,e
+proc,native,perfprofd,185,447,N/A,e
+proc,native,tf_daemon,272,457,N/A,e
+proc,native,keystore,312,953,N/A,e
+proc,native,cameraserver,521,2732,N/A,e
+proc,native,sdcard,581,1294,N/A,e
+proc,native,wpa_supplicant,659,1523,N/A,e
+proc,native,dumpsys,2059,522,N/A,e
+oom,sys,66155,N/A
+proc,sys,system,464,66155,N/A,e
+oom,pers,73019,N/A
+proc,pers,com.android.nfc,938,6597,N/A,e
+proc,pers,com.android.phone,720,14732,N/A,e
+proc,pers,com.android.systemui,570,51690,N/A,e
+oom,fore,75949,N/A
+proc,fore,com.android.launcher3,967,42700,N/A,a
+proc,fore,me.twrp.twrpapp,2044,3293,N/A,e
+proc,fore,com.android.vending,1753,29956,N/A,e
+oom,vis,130017,N/A
+proc,vis,com.google.process.gapps,1631,4526,N/A,e
+proc,vis,com.google.process.gapps,913,7189,N/A,e
+proc,vis,android.process.acore,1402,9182,N/A,e
+proc,vis,com.google.android.gms.persistent,704,36261,N/A,e
+proc,vis,com.google.android.gms.unstable,1807,17077,N/A,e
+proc,vis,com.google.android.gms,1122,30782,N/A,e
+proc,vis,com.android.printspooler,1266,4139,N/A,e
+proc,vis,com.android.providers.calendar,1437,4748,N/A,e
+proc,vis,com.google.android.syncadapters.calendar,1431,9862,N/A,e
+proc,vis,com.android.smspush,974,3074,N/A,e
+proc,vis,com.google.android.ext.services,886,3177,N/A,e
+oom,percept,8594,N/A
+proc,percept,com.android.inputmethod.latin,564,8594,N/A,e
+oom,servicea,4592,N/A
+proc,servicea,com.google.android.partnersetup,2002,4592,N/A,e
+oom,prev,18232,N/A
+proc,prev,android.process.media,1234,8888,N/A,e
+proc,prev,com.google.android.play.games.ui,1497,9344,N/A,e
+oom,serviceb,4747,N/A
+proc,serviceb,com.android.calendar,1372,4747,N/A,e
+oom,cached,71760,N/A
+proc,cached,com.google.android.onetimeinitializer,1963,3174,N/A,e
+proc,cached,com.google.android.configupdater,1890,5557,N/A,e
+proc,cached,com.android.messaging,1593,6916,N/A,e
+proc,cached,com.android.onetimeinitializer,1651,2851,N/A,e
+proc,cached,com.android.managedprovisioning,1556,3362,N/A,e
+proc,cached,com.android.email,1475,7459,N/A,e
+proc,cached,com.android.deskclock,1196,5754,N/A,e
+proc,cached,com.android.carrierconfig,1379,3285,N/A,e
+proc,cached,com.android.dialer,1306,5440,N/A,e
+proc,cached,com.android.cellbroadcastreceiver,1096,3717,N/A,e
+proc,cached,com.android.settings,730,20845,N/A,e
+proc,cached,com.android.keychain,997,3400,N/A,e
+cat,Native,99429,N/A
+cat,Dalvik,78350,N/A
+cat,Unknown,26208,N/A
+cat,Dalvik Other,19983,N/A
+cat,Stack,9068,N/A
 cat,Cursor,0,N/A
-cat,Ashmem,1620,N/A
+cat,Ashmem,300,N/A
 cat,Gfx dev,0,N/A
-cat,Other dev,105751,N/A
-cat,.so mmap,39465,N/A
-cat,.jar mmap,64,N/A
-cat,.apk mmap,15777,N/A
-cat,.ttf mmap,343,N/A
-cat,.dex mmap,77719,N/A
-cat,.oat mmap,30939,N/A
-cat,.art mmap,30406,N/A
-cat,Other mmap,4414,N/A
+cat,Other dev,73683,N/A
+cat,.so mmap,41540,N/A
+cat,.jar mmap,172,N/A
+cat,.apk mmap,25218,N/A
+cat,.ttf mmap,2056,N/A
+cat,.dex mmap,82260,N/A
+cat,.oat mmap,38602,N/A
+cat,.art mmap,29633,N/A
+cat,Other mmap,7397,N/A
 cat,EGL mtrack,0,N/A
 cat,GL mtrack,0,N/A
 cat,Other mtrack,0,N/A
-ram,1020436,410870,408267
-lostram,142779
-ksm,24236,2628,61364,117224
+ram,1016236,387492,462139
+lostram,111481
+ksm,1640,72,5000,23068
 tuning,96,256,184320,high-end-gfx

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Generates the fixture files required to emulate a device in the test suite
 echo 'This requires "adb" installed.'
 echo 'If it says "no devices/emulators... it means that the Android:'
 echo '- Is not plugged in or it had a micro cut. Check cable and try again.'
@@ -24,4 +25,5 @@ adb shell service call iphonesubinfo 1 > "files/iphonesubinfo.1.$model.txt"
 adb shell service call iphonesubinfo 16 > "files/iphonesubinfo.16.$model.txt"
 adb shell df -h /data > "files/data.df.$model.txt"
 adb shell df -h /system > "files/system.df.$model.txt"
+adb pull system/framework/framework-res.apk files/framework-res.${model}.apk
 echo "Done. Files are in 'files' directory."
