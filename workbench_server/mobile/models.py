@@ -79,12 +79,12 @@ class SnapshotMobile(SnapshotInheritorMixin, Snapshot):
     def from_form(self, form: dict):
         self.device.tags.clear()
         self.device.tags.update(Tag(id=t['id']) for t in form.get('tags', []))
-        self.device.events.clear()
+        self.device.actions.clear()
         rate = form.get('rate', None)
         if rate:
-            event = WorkbenchRate(appearanceRange=rate['appearanceRange'],
-                                  functionalityRange=rate['functionalityRange'])
-            self.device.events.add(event)
+            action = WorkbenchRate(appearanceRange=rate['appearanceRange'],
+                                   functionalityRange=rate['functionalityRange'])
+            self.device.actions.add(action)
 
         super().from_form(form)
 
@@ -231,7 +231,7 @@ class WorkbenchRate(db.Model, DumpeableModel):
                            db.ForeignKey(Mobile.serial_number, ondelete='CASCADE'),
                            primary_key=True)
     _device = db.relationship(Mobile,
-                              backref=db.backref('events',
+                              backref=db.backref('actions',
                                                  collection_class=set,
                                                  cascade='all, delete-orphan'))
     appearanceRange = db.Column(db.Unicode(1))
@@ -354,13 +354,13 @@ class Battery(InheritanceMixin, Component):
     wireless = db.Column(db.Boolean)
     technology = db.Column(db.Unicode)
     size = db.Column(db.Integer, nullable=False)
-    events = db.relationship('MeasureBattery',
-                             cascade='all, delete-orphan',
-                             primaryjoin=lambda: (
-                                     (Battery._mobile_sn == MeasureBattery._battery_sn) &
-                                     (Battery._num == MeasureBattery._num)
-                             ),
-                             collection_class=set)
+    actions = db.relationship('MeasureBattery',
+                              cascade='all, delete-orphan',
+                              primaryjoin=lambda: (
+                                      (Battery._mobile_sn == MeasureBattery._battery_sn) &
+                                      (Battery._num == MeasureBattery._num)
+                              ),
+                              collection_class=set)
 
     def __init__(self, adb: Adb) -> None:
         props = adb.shell('dumpsys', 'battery').splitlines()
@@ -368,7 +368,7 @@ class Battery(InheritanceMixin, Component):
         self.technology = get_prop(props, 'technology')
         self.size = self.get_size(adb)
         with suppress(NoMeasure):
-            self.events.add(MeasureBattery(adb, props))
+            self.actions.add(MeasureBattery(adb, props))
         logging.debug('Battery %s', self)
 
     @staticmethod
@@ -419,7 +419,7 @@ class MeasureBattery(db.Model, DumpeableModel):
 
     def __init__(self, adb, props) -> None:
         super().__init__()
-        # todo try if no size to not return this event
+        # todo try if no size to not return this action
         try:
             size = get_prop(adb.dumpsys.splitlines(), 'Estimated battery capacity')  # mAh
         except IndexError:
@@ -499,12 +499,11 @@ class Camera(InheritanceMixin, Component):
             with suppress(StopIteration):
                 manufacturer = next(manufacturers).split(':')[1].strip()
 
-            video = next(videos, next(previews))
-            v_width, v_height, *_ = text.numbers(video)
-
-            picture = next(pictures)
-            p_width, p_height, *_ = text.numbers(picture)
             try:
+                video = next(videos, next(previews))
+                v_width, v_height, *_ = text.numbers(video)
+                picture = next(pictures)
+                p_width, p_height, *_ = text.numbers(picture)
                 yield Camera(
                     model=model,
                     manufacturer=manufacturer,
@@ -520,7 +519,7 @@ class Camera(InheritanceMixin, Component):
                     flash='torch' in next(flash_mode_values, '')
                 )
             except StopIteration as e:
-                raise ValueError('Stopped iteration') from e
+                return
 
 
 def get_prop(values, name: str, default: Any = -1):

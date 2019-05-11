@@ -45,7 +45,7 @@ def test_galaxy_nexus(tmpdir, mocked_adb):
     assert battery.technology == 'Li-ion'  # todo normalize to dh enum
     assert not battery.wireless
 
-    measure_battery = next(iter(battery.events))
+    measure_battery = next(iter(battery.actions))
     assert isinstance(measure_battery, MeasureBattery)
     assert measure_battery.size == 1750
     assert measure_battery.cycle_count is None
@@ -122,7 +122,7 @@ def test_nexus_7(tmpdir, mocked_adb: MagicMock):
     assert battery.technology == 'Li-ion'
     assert not battery.wireless
 
-    measure_battery = next(iter(battery.events))
+    measure_battery = next(iter(battery.actions))
     assert isinstance(measure_battery, MeasureBattery)
     assert measure_battery.size == 3448
     assert measure_battery.voltage == 4250
@@ -195,6 +195,22 @@ def test_oneplus_a5000(tmpdir, mocked_adb: MagicMock):
 @pytest.mark.xfail(reason='phone has gpu but not in dumpsys?')
 def test_htc_desire_s(tmpdir, mocked_adb: MagicMock):
     mocked_adb.set('HTCDesireS')
+    s = SnapshotMobile('1234')
+    s.run(Path(tmpdir.strpath))
+    m = s.device
+    assert s.data
+
+
+def test_sm_t555(tmpdir, mocked_adb: MagicMock):
+    mocked_adb.set('SM-T555')
+    s = SnapshotMobile('1234')
+    s.run(Path(tmpdir.strpath))
+    m = s.device
+    assert s.data
+
+
+def test_oneplus_a6013(tmpdir, mocked_adb: MagicMock):
+    mocked_adb.set('ONEPLUSA6013')
     s = SnapshotMobile('1234')
     s.run(Path(tmpdir.strpath))
     m = s.device

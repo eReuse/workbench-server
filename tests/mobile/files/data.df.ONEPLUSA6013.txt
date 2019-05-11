@@ -1,0 +1,2 @@
+Filesystem       Size  Used Avail Use% Mounted on
+/dev/block/sda17 108G   22G   86G  21% /data

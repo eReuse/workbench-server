@@ -150,13 +150,13 @@ class WorkbenchServer(Flask):
             requests.post(url, json=s).raise_for_status()
         if phase == 'benchmark':
             b = json.loads(dir.joinpath('4.json').read_text())
-            requests.post(base.format(b['uuid']) + '/device/event', json=b).raise_for_status()
+            requests.post(base.format(b['uuid']) + '/device/action', json=b).raise_for_status()
         if phase == 'stress':
             s = json.loads(dir.joinpath('6.json').read_text())
-            requests.post(base.format(s['uuid']) + '/device/event', json=s).raise_for_status()
+            requests.post(base.format(s['uuid']) + '/device/action', json=s).raise_for_status()
         if phase == 'smart':
             s = json.loads(dir.joinpath('12.json').read_text())
-            requests.post(base.format(s['uuid']) + '/device/event', json=s).raise_for_status()
+            requests.post(base.format(s['uuid']) + '/device/action', json=s).raise_for_status()
         if phase == 'close':
             s = json.loads(dir.joinpath('14.json').read_text())
             requests.patch(base.format(s['uuid']), json=s).raise_for_status()

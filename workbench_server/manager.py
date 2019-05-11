@@ -62,7 +62,7 @@ class Manager:
     def _upload_one(self, dh: DevicehubClient, snapshot: Snapshot):
         logging.debug('Going to upload snapshot %s to %s', snapshot, dh)
         try:
-            new_snapshot, r = dh.post('events/', snapshot.data)
+            new_snapshot, r = dh.post('actions/', snapshot.data)
         except (requests.ConnectionError, requests.Timeout) as e:
             logging.warning('ConnectionError for %s to %s: %s', snapshot, dh, e)
         except requests.HTTPError as e:

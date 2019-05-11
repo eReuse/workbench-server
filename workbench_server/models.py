@@ -20,7 +20,7 @@ from workbench_server.settings import WorkbenchSettings
 
 
 @enum.unique
-class ProgressEvents(enum.Enum):
+class ProgressActions(enum.Enum):
     StressTest = 'StressTest'
     TestDataStorage = 'TestDataStorage'
     EraseBasic = 'EraseBasic'
@@ -47,15 +47,15 @@ class Phases(enum.Enum):
     Error = 'Error'
 
     @classmethod
-    def get_phase_from_progress_event(cls, event: ProgressEvents) -> 'Phases':
-        if event == ProgressEvents.StressTest:
+    def get_phase_from_progress_action(cls, action: ProgressActions) -> 'Phases':
+        if action == ProgressActions.StressTest:
             return cls.StressTest
         else:
             return cls.DataStorage
 
     @classmethod
-    def get_phase_from_event(cls, event: str):
-        if 'Benchmark' in event:
+    def get_phase_from_action(cls, action: str):
+        if 'Benchmark' in action:
             return cls.Benchmark
 
 
@@ -157,8 +157,8 @@ class SnapshotComputer(SnapshotInheritorMixin, Snapshot):
         super().__init__(**kw)
         self.phase = Phases.Info
 
-    def conditionally_set_phase_from_event(self, event: str):
-        phase = Phases.get_phase_from_event(event)
+    def conditionally_set_phase_from_action(self, action: str):
+        phase = Phases.get_phase_from_action(action)
         if phase:
             self.phase = phase
 
@@ -176,28 +176,28 @@ class SnapshotComputer(SnapshotInheritorMixin, Snapshot):
         self.write()
         flag_modified(self, 'data')
 
-    def set_event(self, event: dict, component: int = None):
-        """Sets an event to the device (default) or component defined
+    def set_action(self, action: dict, component: int = None):
+        """Sets an action to the device (default) or component defined
         by pos.
         """
         if component is None:
-            self.data['device']['events'].append(event)
+            self.data['device']['actions'].append(action)
         else:
-            self.data['components'][component]['events'].append(event)
+            self.data['components'][component]['actions'].append(action)
         flag_modified(self, 'data')
 
     def from_form(self, form: dict):
         """Sets data submitted from a DHC form, conditionally setting it to upload."""
         self.data['device']['tags'] = form.get('tags', [])
         # Always delete old rate
-        events = self.data['device']['events']
+        actions = self.data['device']['actions']
         with suppress(StopIteration):
-            pos = next(i for i, e in enumerate(events) if e['type'] == 'WorkbenchRate')
-            del events[pos]
+            pos = next(i for i, e in enumerate(actions) if e['type'] == 'WorkbenchRate')
+            del actions[pos]
 
         rate = form.get('rate', None)
         if rate:
-            events.append(rate)
+            actions.append(rate)
 
         self.data['description'] = form.get('description', None)
 
@@ -217,7 +217,7 @@ class Progress(db.Model):
                               primary_key=True)
     component = db.Column(db.SmallInteger, primary_key=True, default=DEVICE)
     component.comment = '"-1" means that is the device. >= 0 means the pos of the component.'
-    event = db.Column(db.Enum(ProgressEvents))
+    action = db.Column(db.Enum(ProgressActions))
     percentage = db.Column(db.SmallInteger)
     total = db.Column(db.SmallInteger)
 
@@ -244,10 +244,10 @@ class Progress(db.Model):
             return cls(snapshot=snapshot, component=component)
 
     @classmethod
-    def set(cls, uuid, component, event, percentage, total):
+    def set(cls, uuid, component, action, percentage, total):
         progress = cls.get(uuid, component)
-        progress.event = ProgressEvents(event)
+        progress.action = ProgressActions(action)
         progress.percentage = percentage
         progress.total = total
-        progress.snapshot.phase = Phases.get_phase_from_progress_event(progress.event)
+        progress.snapshot.phase = Phases.get_phase_from_progress_action(progress.action)
         return progress

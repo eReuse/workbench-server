@@ -79,7 +79,7 @@ def mock_snapshot_post(request_mock: Mocker) -> (dict, dict, Mocker):
         ('db', 'bar')
     ]
     headers = {AUTH: BASIC.format('e376fc02-d312-4ea4-8f12-23d7eb4730ff')}
-    request_mock.post('https://foo.com/bar/events/',
+    request_mock.post('https://foo.com/bar/actions/',
                       status_code=201,
                       json={'id': 'new-snapshot-id'},
                       request_headers=headers)

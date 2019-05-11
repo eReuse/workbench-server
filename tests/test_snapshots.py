@@ -7,12 +7,12 @@ from workbench_server.views.snapshots import Snapshot
 
 def test_snapshots_snapshot_closed():
     s = Snapshot()
-    # We don't expect any event, so it will be closed when linked
+    # We don't expect any action, so it will be closed when linked
     s['closed'] = True
     assert not s.ready_to_upload(wait_for_link=True)
     assert s.ready_to_upload(wait_for_link=False)
 
-    # We expect an event, so it will be closed when event1 and linked
+    # We expect an action, so it will be closed when action1 and linked
     s['closed'] = False
     assert not s.ready_to_upload(wait_for_link=True)
     assert not s.ready_to_upload(wait_for_link=False)
@@ -24,7 +24,7 @@ def test_snapshots_snapshot_closed():
 def test_snapshot_merger():
     s = Snapshot()
     s['closed'] = False
-    s['uuid'] = s['expectedEvents'] = s['_phase'] = 'something'
+    s['uuid'] = s['expectedActions'] = s['_phase'] = 'something'
     s['device'] = [{'type': 'foo'}, {'type': 'bar'}]
     s.merge({'device': {'foo': 'bar'}})
     assert s['device'] == {'foo': 'bar'}

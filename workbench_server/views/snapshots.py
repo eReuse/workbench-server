@@ -25,9 +25,9 @@ class Snapshots:
         POST = {'POST'}
         app.add_url_rule(url, view_func=self.view_get, methods={'GET', 'POST', 'PATCH'})
         app.add_url_rule(url + '/progress/', view_func=self.view_progress, methods=POST)
-        app.add_url_rule(url + '/device/event/', view_func=self.view_event, methods=POST)
-        app.add_url_rule(url + '/components/<int:pos>/event/',
-                         view_func=self.view_event,
+        app.add_url_rule(url + '/device/action/', view_func=self.view_action, methods=POST)
+        app.add_url_rule(url + '/components/<int:pos>/action/',
+                         view_func=self.view_action,
                          methods=POST)
         app.add_url_rule(url + '/form/', view_func=self.view_form, methods=POST)
         app.add_url_rule('/snapshots/mobile/', view_func=self.view_all_mobile, methods={'DELETE'})
@@ -64,19 +64,19 @@ class Snapshots:
             self.logger.debug('PATCHing snapshot %s', uuid)
             s = request.get_json()
             snapshot = SnapshotComputer.one(uuid)
-            snapshot.close(s)  # No more events from workbench
+            snapshot.close(s)  # No more actions from workbench
             db.session.commit()
             self.logger.info('Snapshot closed %s', snapshot)
             res = Response(status=204)
         return res
 
-    def view_event(self, uuid: uuid_mod.UUID, pos: int = None):
-        event = request.get_json()
+    def view_action(self, uuid: uuid_mod.UUID, pos: int = None):
+        action = request.get_json()
         snapshot = SnapshotComputer.one(uuid)
-        snapshot.set_event(event, pos)
-        snapshot.conditionally_set_phase_from_event(event['type'])
+        snapshot.set_action(action, pos)
+        snapshot.conditionally_set_phase_from_action(action['type'])
         db.session.commit()
-        self.logger.info('Event for snapshot %s and pos %s: %s', snapshot, pos, event)
+        self.logger.info('Action for snapshot %s and pos %s: %s', snapshot, pos, action)
         return Response(status=204)
 
     def view_form(self, uuid: uuid_mod.UUID):

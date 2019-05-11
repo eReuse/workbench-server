@@ -34,8 +34,8 @@ def test_full_no_link(client: Client,
 
     uuid = info['uuid']
     url = '/snapshots/{}'.format(uuid)
-    ev_d = url + '/device/event/'
-    ev_c = url + '/components/{}/event/'
+    ev_d = url + '/device/action/'
+    ev_c = url + '/components/{}/action/'
     i = '/info/'
     progress = '/snapshots/{}/progress/'.format(uuid)
 
@@ -53,12 +53,12 @@ def test_full_no_link(client: Client,
     assert x['snapshots'][0]['uuid'] == uuid
     assert x['snapshots'][0]['_phase'] == 'Info'
 
-    # Benchmarks events
+    # Benchmarks actions
     b1 = jsonf(dir=d, name='benchmark-processor')
     client.post(cpu_url, b1, status=204)
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'Benchmark'
-    assert len(x['snapshots'][0]['components'][cpu]['events'])
+    assert len(x['snapshots'][0]['components'][cpu]['actions'])
 
     b2 = jsonf(dir=d, name='benchmark-processor-sysbench')
     client.post(cpu_url, b2, status=204)
@@ -92,7 +92,7 @@ def test_full_no_link(client: Client,
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'StressTest'
 
-    # StressTest event
+    # StressTest action
     client.post(ev_d, jsonf(dir=d, name='stress'), status=204)
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'StressTest'
@@ -121,7 +121,7 @@ def test_full_no_link(client: Client,
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'DataStorage'
 
-    # smart event
+    # smart action
     smart = jsonf(dir=d, name='smart')
     client.post(hdd1_url, smart, status=204)
     x, _ = client.get(i)
@@ -156,7 +156,7 @@ def test_full_no_link(client: Client,
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'DataStorage'
 
-    # Erase event
+    # Erase action
     erase = jsonf(dir=d, name='erase')
     client.post(hdd1_url, erase, status=204)
     x, _ = client.get(i)
@@ -191,7 +191,7 @@ def test_full_no_link(client: Client,
     x, _ = client.get(i)
     assert x['snapshots'][0]['_phase'] == 'DataStorage'
 
-    # Install event
+    # Install action
     install = jsonf(dir=d, name='install')
     client.post(hdd1_url, install, status=204)
     x, _ = client.get(i)
@@ -203,8 +203,8 @@ def test_full_no_link(client: Client,
     assert x['snapshots'][0]['_phase'] == 'DataStorage'
 
     # Last submission with full snapshot
-    closed_event = jsonf(dir=d, name='closed')
-    client.patch(url, closed_event, status=204)
+    closed_action = jsonf(dir=d, name='closed')
+    client.patch(url, closed_action, status=204)
 
     d = info['device']
     x, _ = client.get(i)
@@ -217,7 +217,7 @@ def test_full_no_link(client: Client,
         x = json.load(f)
     assert x['closed']
 
-    # Send devicehub information so manager can post the event
+    # Send devicehub information so manager can post the action
     x, _ = client.get(i, query=[('devicehub', 'https://foo.com'), ('db', 'bar'),
                                 ('token', 'e376fc02-d312-4ea4-8f12-23d7eb4730ff')])
     with app.app_context():
