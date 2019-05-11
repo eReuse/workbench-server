@@ -192,12 +192,12 @@ class SnapshotComputer(SnapshotInheritorMixin, Snapshot):
         # Always delete old rate
         events = self.data['device']['events']
         with suppress(StopIteration):
-            pos = next(i for i, e in enumerate(events) if e['type'] == 'Workbenchrate')
+            pos = next(i for i, e in enumerate(events) if e['type'] == 'WorkbenchRate')
             del events[pos]
 
         rate = form.get('rate', None)
         if rate:
-            events.append(form)
+            events.append(rate)
 
         self.data['description'] = form.get('description', None)
 
