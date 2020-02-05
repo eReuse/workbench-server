@@ -1,4 +1,5 @@
 import os
+import shutil
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -45,9 +46,10 @@ def _return_file_factory(model: str):
 
 def _pull_factory(model: str):
     def _pull(_, destination: str):
-        os.link(str(PATH.joinpath('framework-res.{}.apk'.format(model))),
-                destination + '/framework-res.apk')
-
+        # os.rename(str(PATH.joinpath('framework-res.{}.apk'.format(model))),
+        #          destination + '/framework-res.apk')
+        shutil.copy(str(PATH.joinpath('framework-res.{}.apk'.format(model))),
+                  destination + '/framework-res.apk')
     return _pull
 
 
@@ -56,6 +58,7 @@ def mocked_adb():
     """Fixture that mocks the ADB class returning fixture files instead
     of connecting to an adb service itself.
     """
+
     class MockedAdb():
         def __init__(self, *args, **kwargs) -> None:
             super().__init__()

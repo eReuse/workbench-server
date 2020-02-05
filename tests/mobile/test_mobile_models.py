@@ -183,7 +183,7 @@ def test_sma300fu(tmpdir, mocked_adb: MagicMock):
     m = s.device
     assert s.data
 
-
+@pytest.mark.xfail(reason='we need the framework of this model?')
 def test_oneplus_a5000(tmpdir, mocked_adb: MagicMock):
     mocked_adb.set('ONEPLUSA5000')
     s = SnapshotMobile('1234')

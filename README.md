@@ -15,7 +15,14 @@ snapshotting computers.
    `git clone https://github.com/ereuse/workbench-server && cd workbench-server`.
 3. Install WorkbenchServer: `pip3 install -e . -r requirements.txt`.
 4. Execute the `examples/create-db.sh` scrpit, which creates the required database. 
-   Read the file for more info.
+    -  In Linux, execute the following two commands (adapt them to your distro):
+
+      1. ``sudo su - postgres``.
+      2. ``bash /home/{$USER}/workbench-server/examples/create-db.sh ws dhub``, and password
+         ``ereuse``.
+
+   -  In MacOS: ``bash examples/create-db.sh devicehub dhub``, and password
+      ``ereuse``.
 
 Run `examples/app.py` to run the server.
 
